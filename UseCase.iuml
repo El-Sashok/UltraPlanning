@@ -22,5 +22,6 @@ Enseignant -- (Consulter la liste des élèves pour un cours)
 Etudiant -- (Trouver une salle libre)
 Enseignant -- (Trouver une salle libre)
 Gérant -- (Trouver une salle libre)
+Admin -- (Ajouter une salle)
 
 @enduml
