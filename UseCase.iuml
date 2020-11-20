@@ -5,17 +5,19 @@ Etudiant -up-|> Utilisateur
 Admin -up-|> Utilisateur
 Gérant -up-|> Utilisateur
 
+left to right direction
+
 Admin --> (Faire la maintenance)
 Gérant --> (Modifier l'emploi du temps)
-(Ajouter un module) .up..> (Modifier l'emploi du temps) : <<extends>>
+(Ajouter un module) .left.> (Modifier l'emploi du temps) : <<extends>>
 Etudiant --> (Consulter l'emploi du temps personnel)
 Enseignant --> (Consulter l'emploi du temps personnel)
-Utilisateur ----> (Consulter l'emploi du temps par formation)
-Utilisateur --> (Consulter l'emploi du temps d'une salle)
-Enseignant --left-> (Réserver du matériel)
-Etudiant ----> (Faire une demande de changement d'emploi du temps)
-Admin ---> (Ajouter un Utilisateur)
+Utilisateur ---> (Consulter l'emploi du temps par formation)
+Utilisateur ---> (Consulter l'emploi du temps d'une salle)
+Enseignant --> (Réserver du matériel)
+Etudiant --> (Faire une demande de changement d'emploi du temps)
+Admin --> (Ajouter un Utilisateur)
 Enseignant --> (Ajouter une contrainte d'emploi du temps)
-Enseignant ---> (Consulter la liste des élèves pour un cours)
+Enseignant --> (Consulter la liste des élèves pour un cours)
 
 @enduml
