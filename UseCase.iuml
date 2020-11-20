@@ -19,5 +19,8 @@ Etudiant -- (Faire une demande de changement d'emploi du temps)
 Admin -- (Ajouter un Utilisateur)
 Enseignant -- (Ajouter une contrainte d'emploi du temps)
 Enseignant -- (Consulter la liste des élèves pour un cours)
+Etudiant -- (Trouver une salle libre)
+Enseignant -- (Trouver une salle libre)
+Gérant -- (Trouver une salle libre)
 
 @enduml
