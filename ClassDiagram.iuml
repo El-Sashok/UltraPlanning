@@ -1,0 +1,41 @@
+@startuml
+
+title Diagramme de classes
+
+
+class Salle {
+    +String batiment
+    +int numero
+    +int capacite
+    +String intitule
+}
+
+class Cours {
+    +Date date
+    +Hour? heure
+    +String module
+}
+
+class Etudiant
+
+class Enseignant
+
+class Promotion
+
+class Module
+
+class Materiel
+
+Salle "1" -- "*" Cours
+
+Etudiant "*" --* "*" Promotion
+
+Cours "*" -- "*" Enseignant
+
+Cours "*" -- "*" Promotion
+
+Cours "*" -- "1" Module
+
+Enseignant "1" -- "*" Materiel
+
+@enduml
