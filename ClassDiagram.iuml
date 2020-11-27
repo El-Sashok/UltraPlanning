@@ -44,7 +44,7 @@ class Etudiant
 
 class Enseignant {
     -String laboratoire
-    -Enum MC/Prof
+    -Enum MC/Prof/Vacataire
 }
 
 class Reservation {
