@@ -1,41 +1,97 @@
 @startuml
 
-title Diagramme de classes
-
-
 class Salle {
-    +String batiment
-    +int numero
-    +int capacite
-    +String intitule
+    -String batiment
+    -int numero
+    -int capacite
+    -String intitule
 }
 
 class Cours {
-    +Date date
-    +Hour? heure
-    +String module
+    -String module
+    -Enum TD/TP/CM/CC/CT
+}
+
+class Personne {
+    -String nom
+    -String prenom
+    -Date dateDeNaissance
+}
+
+class Promotion {
+    -String intitule
+}
+
+class Module {
+    -String intitule
+    -int nbHeures
+}
+
+class Materiel {
+    -String intitule
+}
+
+class Contrainte {
+    -Date dateDeb
+    -Date dateFin
+}
+
+class Groupe {
+    -String numero
 }
 
 class Etudiant
 
-class Enseignant
+class Enseignant {
+    -String laboratoire
+    -Enum MC/Prof
+}
 
-class Promotion
+class Reservation {
+    -Date dateDeb
+    -Date dateFin
+}
 
-class Module
+class Jury
 
-class Materiel
+class Concours {
+    -String intitule
+}
 
-Salle "1" -- "*" Cours
+Salle "1" -- "*" Reservation
 
-Etudiant "*" --* "*" Promotion
+Etudiant "*" --* "*" Groupe
+
+Groupe "*" --* "1" Promotion 
 
 Cours "*" -- "*" Enseignant
 
-Cours "*" -- "*" Promotion
+Cours "*" ---- "*" Groupe
 
-Cours "*" -- "1" Module
+Cours "*" -- "*" Module
 
 Enseignant "1" -- "*" Materiel
+
+Enseignant "1" -- "*" Contrainte
+
+Cours -up-|> Reservation
+
+Soutenance -up-|> Reservation
+
+Jury -up-|> Reservation
+
+Concours -up-|> Reservation
+
+Etudiant --|> Personne
+
+Enseignant --|> Personne
+
+Concours "*" -- "*" Etudiant
+
+Reservation "*" -- "*" Enseignant
+
+Jury "1" -- "1" Promotion
+
+Soutenance "*" -- "1" Etudiant
 
 @enduml
