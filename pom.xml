@@ -28,6 +28,22 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>ideauidesigner-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <goals>
+                <goal>javac2</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <fork>true</fork>
+            <debug>true</debug>
+            <failOnError>true</failOnError>
+          </configuration>
+        </plugin>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
