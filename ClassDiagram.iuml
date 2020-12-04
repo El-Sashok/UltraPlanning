@@ -8,7 +8,6 @@ class Salle {
 }
 
 class Cours {
-    -String module
     -Enum TD/TP/CM/CC/CT
 }
 
@@ -23,7 +22,6 @@ class Promotion {
 }
 
 class Module {
-    -String intitule
     -int nbHeures
 }
 
@@ -50,21 +48,18 @@ class Enseignant {
 class Reservation {
     -Date dateDeb
     -Date dateFin
+    -String intitule
 }
 
 class Jury
 
-class Concours {
-    -String intitule
-}
+class Concours 
 
 Salle "1" -- "*" Reservation
 
 Etudiant "*" --* "*" Groupe
 
 Groupe "*" --* "1" Promotion 
-
-Cours "*" -- "*" Enseignant
 
 Cours "*" ---- "*" Groupe
 
