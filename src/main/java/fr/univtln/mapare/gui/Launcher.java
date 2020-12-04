@@ -1,0 +1,19 @@
+package fr.univtln.mapare.gui;
+
+import javax.swing.*;
+
+public class Launcher extends JFrame {
+    private JPanel rootPanel;
+    private JPasswordField PasswordField;
+    private JTextField emailTextField;
+    private JLabel email;
+    private JLabel password;
+
+    public Launcher(){
+        setTitle("Login");
+        setSize(300, 100);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        add(rootPanel);
+    }
+}
