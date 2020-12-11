@@ -3,6 +3,7 @@ target/
 .project
 .settings/
 Thumbs.db
+database.trace.db
 
 # built application files
 *.apk
