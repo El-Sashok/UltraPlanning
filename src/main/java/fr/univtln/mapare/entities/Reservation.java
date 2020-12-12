@@ -1,7 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Reservation {
     private Date startDate;
