@@ -6,12 +6,14 @@ public class Teacher extends Person {
     private String laboratory;
     private Role type;
 
-    public Teacher(String lastName, String firstName, Date birthdate, String laboratory, Role type) {
-        super(lastName, firstName, birthdate);
+    //Constructors
+    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role type) {
+        super(lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
         this.type = type;
     }
 
+    //Getters & Setters
     public String getLaboratory() {
         return laboratory;
     }

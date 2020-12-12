@@ -8,13 +8,17 @@ public abstract class Person implements Comparable<Person> {
     private final String lastName;
     private final  String firstName;
     private final Date birthdate;
+    private final String email;
 
-    public Person(String lastName, String firstName, Date birthdate) {
+    //Constructors
+    public Person(String lastName, String firstName, Date birthdate, String email) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthdate = birthdate;
+        this.email = email;
     }
 
+    //Getters & Setters
     public long getId() {
         return id;
     }
@@ -35,6 +39,7 @@ public abstract class Person implements Comparable<Person> {
         return birthdate;
     }
 
+    //Methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
