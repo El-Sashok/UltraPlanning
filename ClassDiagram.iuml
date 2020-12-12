@@ -50,6 +50,7 @@ class Reservation {
     -Date dateDeb
     -Date dateFin
     -String intitule
+    -String memo
     -Enum NP/Annule/Reporte
 }
 
