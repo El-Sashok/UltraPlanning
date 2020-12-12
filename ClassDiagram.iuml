@@ -65,8 +65,6 @@ Cours "*" ---- "*" Groupe
 
 Cours "*" -- "*" Module
 
-Enseignant "1" -- "*" Materiel
-
 Enseignant "1" -- "*" Contrainte
 
 Cours -up-|> Reservation
