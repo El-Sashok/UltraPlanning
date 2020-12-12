@@ -1,14 +1,10 @@
-package fr.univtln.mapare;
+package fr.univtln.mapare.gui;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class Mockup extends JFrame{
-    private JLabel semaineLabel;
+public class Timetable extends JFrame{
     private JPanel rootPanel;
     private JPanel panel2;
     private JButton a10Button;
@@ -100,11 +96,53 @@ public class Mockup extends JFrame{
     private JLabel s1617Label;
     private JLabel s1718Label;
     private JLabel s1819Label;
-    private JLabel label1;
     private JButton a6Button;
     private JButton a7Button;
     private JButton a8Button;
     private JButton a9Button;
+    private JButton a51Button;
+    private JButton a12Button;
+    private JButton a11Button;
+    private JButton a17Button;
+    private JButton a16Button;
+    private JButton a15Button;
+    private JButton a14Button;
+    private JButton a13Button;
+    private JButton a28Button;
+    private JButton a27Button;
+    private JButton a26Button;
+    private JButton a25Button;
+    private JButton a24Button;
+    private JButton a23Button;
+    private JButton a22Button;
+    private JButton a21Button;
+    private JButton a20Button;
+    private JButton a19Button;
+    private JButton a18Button;
+    private JButton a42Button;
+    private JButton a41Button;
+    private JButton a40Button;
+    private JButton a39Button;
+    private JButton a38Button;
+    private JButton a37Button;
+    private JButton a36Button;
+    private JButton a35Button;
+    private JButton a34Button;
+    private JButton a33Button;
+    private JButton a32Button;
+    private JButton a31Button;
+    private JButton a30Button;
+    private JButton a29Button;
+    private JButton a53Button;
+    private JButton a50Button;
+    private JButton a49Button;
+    private JButton a48Button;
+    private JButton a47Button;
+    private JButton a46Button;
+    private JButton a45Button;
+    private JButton a44Button;
+    private JButton a43Button;
+    private JButton a52Button;
     private JLabel[] Lundi = {l89Label, l910Label, l1011Label, l1112Label, l1213Label, l1314Label, l1415Label,
                               l1516Label, l1617Label, l1718Label, l1819Label};
     private JLabel[] Mardi = {m89Label, m910Label, m1011Label, m1112Label, m1213Label, m1314Label, m1415Label,
@@ -119,24 +157,36 @@ public class Mockup extends JFrame{
             s1516Label, s1617Label, s1718Label, s1819Label};
     private JLabel[][] Semaine = {Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi};
     private JButton[] boutons = {a1Button, a2Button, a3Button, a4Button, a5Button, a6Button, a7Button, a8Button,
-            a9Button, a10Button};
+            a9Button, a10Button, a11Button, a12Button, a13Button, a14Button, a15Button, a16Button, a17Button, a18Button,
+            a19Button, a20Button, a21Button, a22Button, a23Button, a24Button, a25Button, a26Button, a27Button,
+            a28Button, a29Button, a30Button, a31Button, a32Button, a33Button, a34Button, a35Button, a36Button,
+            a37Button, a38Button, a39Button, a40Button, a41Button, a42Button, a43Button, a44Button, a45Button,
+            a46Button, a47Button, a48Button, a49Button, a50Button, a51Button, a52Button, a53Button};
 
-    public Mockup() {
+    public Timetable() {
         setTitle("EDT");
-        setSize(800, 800);
+        setSize(1400, 800);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
-        for (int i = 0; i < 10; i++) {
+
+        for (JButton j:boutons) {
+            j.setBorder(null);
+        }
+        a53Button.setVisible(false);
+
+        for (int i = 0; i < boutons.length; i++) {
             final int finalI = i + 1;
             boutons[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    for (int j = 0; j < 6; j++) {
-                        for (int k = 0; k < 11; k++) {
-                            Semaine[j][k].setText("COURS_" + ((((finalI - 1) * 6 + j)) * 11 + k));
+                    int SL = Semaine.length;
+                    int JL = Jeudi.length;
+                    for (int j = 0; j < SL; j++) {
+                        for (int k = 0; k < JL; k++) {
+                            Semaine[j][k].setText("COURS_" + ((((finalI - 1) * SL + j)) * JL + k));
                         }
                     }
                 }
@@ -146,7 +196,7 @@ public class Mockup extends JFrame{
 
 
     public static void main(String[] args) {
-        Mockup M = new Mockup();
+        Timetable M = new Timetable();
         M.setVisible(true);
     }
 }
