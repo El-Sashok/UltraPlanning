@@ -15,6 +15,7 @@ class Personne {
     -String nom
     -String prenom
     -Date dateDeNaissance
+    -String email
 }
 
 class Promotion {
@@ -49,6 +50,7 @@ class Reservation {
     -Date dateDeb
     -Date dateFin
     -String intitule
+    -Enum NP/Annule/Reporte
 }
 
 class Jury
