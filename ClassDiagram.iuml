@@ -5,6 +5,7 @@ class Salle {
     -int numero
     -int capacite
     -String intitule
+    -String infos
 }
 
 class Cours {
@@ -24,10 +25,6 @@ class Promotion {
 
 class Module {
     -int nbHeures
-}
-
-class Materiel {
-    -String intitule
 }
 
 class Contrainte {
