@@ -1,10 +1,8 @@
 package fr.univtln.mapare.entities;
 
 import java.util.Date;
-import java.util.Objects;
 
-public abstract class Person implements Comparable<Person> {
-    private int id = -1;
+public abstract class Person {
     private final String lastName;
     private final  String firstName;
     private final Date birthdate;
@@ -19,14 +17,6 @@ public abstract class Person implements Comparable<Person> {
     }
 
     //Getters & Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getLastName() {
         return lastName;
     }
@@ -39,30 +29,7 @@ public abstract class Person implements Comparable<Person> {
         return birthdate;
     }
 
-    //Methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return id == person.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public int compareTo(Person o) {
-        return id - o.id;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                '}';
+    public String getEmail() {
+        return email;
     }
 }

@@ -30,6 +30,7 @@ public class Teacher extends Person {
         this.type = type;
     }
 
+
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF
     }
