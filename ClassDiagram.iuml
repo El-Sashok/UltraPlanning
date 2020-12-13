@@ -76,9 +76,9 @@ ExamBoard -up-|> Reservation
 
 AdmissionExam -up-|> Reservation
 
-Student --|> Personn
+Student --|> Person
 
-Teacher --|> Personn
+Teacher --|> Person
 
 AdmissionExam "*" -- "*" Student
 
