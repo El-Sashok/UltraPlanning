@@ -19,4 +19,13 @@ public class ExamBoard extends Reservation {
     public void setYeargroup(Yeargroup yeargroup) {
         this.yeargroup = yeargroup;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "ExamBoard{" +
+                super.toString() +
+                ", yeargroup=" + yeargroup +
+                '}';
+    }
 }

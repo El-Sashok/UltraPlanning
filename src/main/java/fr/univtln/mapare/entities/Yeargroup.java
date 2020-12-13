@@ -1,5 +1,7 @@
 package fr.univtln.mapare.entities;
 
+import java.util.Arrays;
+
 public class Yeargroup {
     private String label;
     private Group[] groups;
@@ -25,5 +27,14 @@ public class Yeargroup {
 
     public void setGroups(Group[] groups) {
         this.groups = groups;
+    }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Yeargroup{" +
+                "label='" + label + '\'' +
+                ", groups=" + Arrays.toString(groups) +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Teacher extends Person {
@@ -40,6 +41,18 @@ public class Teacher extends Person {
     public void setConstraints(Constraint[] constraints) {
         this.constraints = constraints;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return  "Teacher{" +
+                super.toString() +
+                ", laboratory='" + laboratory + '\'' +
+                ", role=" + role +
+                ", constraints=" + Arrays.toString(constraints) +
+                '}';
+    }
+
 
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF

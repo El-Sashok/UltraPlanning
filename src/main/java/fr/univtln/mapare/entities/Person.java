@@ -32,4 +32,15 @@ public abstract class Person {
     public String getEmail() {
         return email;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Person{" +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", birthdate=" + birthdate +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

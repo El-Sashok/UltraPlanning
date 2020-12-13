@@ -28,4 +28,13 @@ public class Constraint {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Constraint{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
+    }
 }

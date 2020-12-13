@@ -26,4 +26,13 @@ public class Course {
     public void setNbHour(int nbHour) {
         this.nbHour = nbHour;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Course{" +
+                "label='" + label + '\'' +
+                ", nbHour=" + nbHour +
+                '}';
+    }
 }

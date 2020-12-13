@@ -1,5 +1,7 @@
 package fr.univtln.mapare.entities;
 
+import java.util.Arrays;
+
 public class Group {
     private String label;
     private Student[] students;
@@ -25,5 +27,14 @@ public class Group {
 
     public void setStudents(Student[] students) {
         this.students = students;
+    }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Group{" +
+                "label='" + label + '\'' +
+                ", students=" + Arrays.toString(students) +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package fr.univtln.mapare.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class Lesson extends Reservation {
@@ -38,6 +39,17 @@ public class Lesson extends Reservation {
 
     public void setGoups(Group[] goups) {
         this.goups = goups;
+    }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                super.toString() +
+                ", type=" + type +
+                ", courses=" + Arrays.toString(courses) +
+                ", goups=" + Arrays.toString(goups) +
+                '}';
     }
 
 

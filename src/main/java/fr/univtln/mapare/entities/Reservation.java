@@ -1,5 +1,6 @@
 package fr.univtln.mapare.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class Reservation {
@@ -78,6 +79,21 @@ public class Reservation {
     public void setTeachers(Teacher[] teachers) {
         this.teachers = teachers;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", label='" + label + '\'' +
+                ", memo='" + memo + '\'' +
+                ", state=" + state +
+                ", room=" + room +
+                ", teachers=" + Arrays.toString(teachers) +
+                '}';
+    }
+
 
     public enum State {
         NP, CANCELED, POSTPONED

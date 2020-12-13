@@ -1,5 +1,6 @@
 package fr.univtln.mapare.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class AdmissionExam extends Reservation {
@@ -18,5 +19,14 @@ public class AdmissionExam extends Reservation {
 
     public void setStudents(Student[] students) {
         this.students = students;
+    }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "AdmissionExam{" +
+                super.toString() +
+                ", students=" + Arrays.toString(students) +
+                '}';
     }
 }

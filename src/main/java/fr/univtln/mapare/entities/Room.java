@@ -56,4 +56,16 @@ public class Room {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Room{" +
+                "building='" + building + '\'' +
+                ", number=" + number +
+                ", seats=" + seats +
+                ", label='" + label + '\'' +
+                ", info='" + info + '\'' +
+                '}';
+    }
 }

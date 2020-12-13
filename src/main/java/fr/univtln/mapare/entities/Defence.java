@@ -12,12 +12,20 @@ public class Defence extends Reservation {
     }
 
     //Getters & Setters
-
     public Student getStudent() {
         return student;
     }
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    //Methods
+    @Override
+    public String toString() {
+        return "Defence{" +
+                super.toString() +
+                ", student=" + student +
+                '}';
     }
 }
