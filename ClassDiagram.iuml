@@ -1,90 +1,91 @@
 @startuml
 
-class Salle {
-    -String batiment
-    -int numero
-    -int capacite
-    -String intitule
-    -String infos
+class Room {
+    -String building
+    -int number
+    -int seats
+    -String label
+    -String info
 }
 
-class Cours {
+class Lesson {
     -Enum TD/TP/CM/CC/CT
 }
 
-class Personne {
-    -String nom
-    -String prenom
-    -Date dateDeNaissance
+class Person {
+    -String lastname
+    -String firstName
+    -Date birthDate
     -String email
 }
 
-class Promotion {
-    -String intitule
+class Yeargroup {
+    -String label
 }
 
-class Module {
-    -int nbHeures
+class Course {
+    -String label
+    -int nbHour
 }
 
-class Contrainte {
-    -Date dateDeb
-    -Date dateFin
+class Constraint {
+    -Date startDate
+    -Date endDate
 }
 
-class Groupe {
-    -String numero
+class Group {
+    -String label
 }
 
-class Etudiant
+class Student
 
-class Enseignant {
-    -String laboratoire
-    -Enum MC/Prof/Vacataire
+class Teacher {
+    -String laboratory
+    -Enum Lecturer/Prof/Adjunct_Prof
 }
 
 class Reservation {
-    -Date dateDeb
-    -Date dateFin
-    -String intitule
+    -Date startDate
+    -Date endDate
+    -String label
     -String memo
-    -Enum NP/Annule/Reporte
+    -Enum NP/Canceled/Postponed
 }
 
-class Jury
+class ExamBoard
 
-class Concours 
+class AdmissionExam 
 
-Salle "1" -- "*" Reservation
+Room "1" -- "*" Reservation
 
-Etudiant "*" --* "*" Groupe
+Student "*" --* "*" Group
 
-Groupe "*" --* "1" Promotion 
+Group "*" --* "1" Yeargroup 
 
-Cours "*" ---- "*" Groupe
+Lesson "*" ---- "*" Group
 
-Cours "*" -- "*" Module
+Lesson "*" -- "*" Course
 
-Enseignant "1" -- "*" Contrainte
+Teacher "1" -- "*" Constraint
 
-Cours -up-|> Reservation
+Lesson -up-|> Reservation
 
-Soutenance -up-|> Reservation
+Defence -up-|> Reservation
 
-Jury -up-|> Reservation
+ExamBoard -up-|> Reservation
 
-Concours -up-|> Reservation
+AdmissionExam -up-|> Reservation
 
-Etudiant --|> Personne
+Student --|> Personne
 
-Enseignant --|> Personne
+Teacher --|> Personne
 
-Concours "*" -- "*" Etudiant
+AdmissionExam "*" -- "*" Student
 
-Reservation "*" -- "*" Enseignant
+Reservation "*" -- "*" Teacher
 
-Jury "1" -- "1" Promotion
+ExamBoard "1" -- "1" Yeargroup
 
-Soutenance "*" -- "1" Etudiant
+Defence "*" -- "1" Student
 
 @enduml
