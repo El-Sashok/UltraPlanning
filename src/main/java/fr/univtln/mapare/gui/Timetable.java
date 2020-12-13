@@ -1,6 +1,8 @@
 package fr.univtln.mapare.gui;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -253,6 +255,8 @@ public class Timetable extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
+        final Border lineBorder = BorderFactory.createLineBorder(Color.black);
+        final JButton[] lastButton = {null};
 
         for (JButton j:boutons) {
             j.setBorder(null);
@@ -260,20 +264,30 @@ public class Timetable extends JFrame{
         a53Button.setVisible(false);
 
         for (int i = 0; i < boutons.length; i++) {
-            final int finalI = i + 1;
+            final int finalI = i;
             boutons[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    int SL = Semaine.length;
-                    int JL = Jeudi.length;
-                    for (int j = 0; j < SL; j++) {
-                        for (int k = 0; k < JL; k++) {
-                            Semaine[j][k].setText("COURS_" + ((((finalI - 1) * SL + j)) * JL + k));
+                    // doesn't pass if last button is the same as this button
+                    if(!(lastButton[0] != null && lastButton[0].equals(boutons[finalI]))) {
+                        if(lastButton[0] != null)
+                            lastButton[0].setBorder(lineBorder);
+
+                        int SL = Semaine.length;
+                        int JL = Jeudi.length;
+                        for (int j = 0; j < SL; j++) {
+                            for (int k = 0; k < JL; k++) {
+                                Semaine[j][k].setText("COURS_" + (((finalI * SL + j)) * JL + k));
+                            }
                         }
+                        boutons[finalI].setBorder(null);
+                        lastButton[0] = boutons[finalI];
                     }
                 }
             });
+
+            boutons[i].setBorder(lineBorder);
         }
     }
 
