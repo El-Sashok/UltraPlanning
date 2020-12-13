@@ -5,23 +5,21 @@ import java.util.Date;
 public class Reservation {
     private Date startDate;
     private Date endDate;
-    private String label = "";
-    private Classroom classroom;
-    private Teacher[] teachers;
+    private String label;
+    private String memo;
     private State state;
+    private Room room;
+    private Teacher[] teachers;
 
-    //Constructors
-    public Reservation(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state) {
+    //Constructor
+    public Reservation(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.classroom = classroom;
-        this.teachers = teachers;
-        this.state = state;
-    }
-
-    public Reservation(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state, String label) {
-        this(startDate, endDate, classroom, teachers, state);
         this.label = label;
+        this.memo = memo;
+        this.state = state;
+        this.room = room;
+        this.teachers = teachers;
     }
 
     //Getters & Setters
@@ -49,20 +47,12 @@ public class Reservation {
         this.label = label;
     }
 
-    public Classroom getClassroom() {
-        return classroom;
+    public String getMemo() {
+        return memo;
     }
 
-    public void setClassroom(Classroom classroom) {
-        this.classroom = classroom;
-    }
-
-    public Teacher[] getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(Teacher[] teachers) {
-        this.teachers = teachers;
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     public State getState() {
@@ -73,6 +63,21 @@ public class Reservation {
         this.state = state;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public Teacher[] getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Teacher[] teachers) {
+        this.teachers = teachers;
+    }
 
     public enum State {
         NP, CANCELED, POSTPONED

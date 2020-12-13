@@ -4,11 +4,11 @@ import java.util.Date;
 
 public abstract class Person {
     private final String lastName;
-    private final  String firstName;
+    private final String firstName;
     private final Date birthdate;
     private final String email;
 
-    //Constructors
+    //Constructor
     public Person(String lastName, String firstName, Date birthdate, String email) {
         this.lastName = lastName;
         this.firstName = firstName;

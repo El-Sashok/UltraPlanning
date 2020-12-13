@@ -2,21 +2,17 @@ package fr.univtln.mapare.entities;
 
 import java.util.Date;
 
-public class Lesson extends Reservation{
+public class Lesson extends Reservation {
     private Type type;
     private Course[] courses;
+    private Group[] goups;
 
-    //Constructors
-    public Lesson(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state, Type type, Course[] courses) {
-        super(startDate, endDate, classroom, teachers, state);
+    //Constructor
+    public Lesson(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers, Type type, Course[] courses, Group[] goups) {
+        super(startDate, endDate, label, memo, state, room, teachers);
         this.type = type;
         this.courses = courses;
-    }
-
-    public Lesson(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state, String label, Type type, Course[] courses) {
-        super(startDate, endDate, classroom, teachers, state, label);
-        this.type = type;
-        this.courses = courses;
+        this.goups = goups;
     }
 
     //Getters & Setters
@@ -34,6 +30,14 @@ public class Lesson extends Reservation{
 
     public void setCourses(Course[] courses) {
         this.courses = courses;
+    }
+
+    public Group[] getGoups() {
+        return goups;
+    }
+
+    public void setGoups(Group[] goups) {
+        this.goups = goups;
     }
 
 

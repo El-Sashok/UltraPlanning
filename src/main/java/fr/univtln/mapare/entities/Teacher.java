@@ -1,16 +1,19 @@
 package fr.univtln.mapare.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Teacher extends Person {
     private String laboratory;
-    private Role type;
+    private Role role;
+    private Constraint[] constraints;
 
-    //Constructors
-    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role type) {
+    //Constructor
+    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role role, Constraint[] constraints) {
         super(lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
-        this.type = type;
+        this.role = role;
+        this.constraints = constraints;
     }
 
     //Getters & Setters
@@ -22,14 +25,21 @@ public class Teacher extends Person {
         this.laboratory = laboratory;
     }
 
-    public Role getType() {
-        return type;
+    public Role getRole() {
+        return role;
     }
 
-    public void setType(Role type) {
-        this.type = type;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
+    public Constraint[] getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(Constraint[] constraints) {
+        this.constraints = constraints;
+    }
 
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF

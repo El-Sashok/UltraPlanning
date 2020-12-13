@@ -1,21 +1,19 @@
 package fr.univtln.mapare.entities;
 
-public class Classroom {
+public class Room {
     private String building;
     private int number;
     private int seats;
-    private String label = "";
+    private String label;
+    private String info;
 
-    //Constructors
-    public Classroom(String building, int number, int seats) {
+    //Constructor
+    public Room(String building, int number, int seats, String label, String info) {
         this.building = building;
         this.number = number;
         this.seats = seats;
-    }
-
-    public Classroom(String building, int number, int seats, String label) {
-        this(building, number, seats);
         this.label = label;
+        this.info = info;
     }
 
     //Getters & Setters
@@ -49,5 +47,13 @@ public class Classroom {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

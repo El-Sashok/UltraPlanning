@@ -2,17 +2,12 @@ package fr.univtln.mapare.entities;
 
 import java.util.Date;
 
-public class Defence extends Reservation{
+public class Defence extends Reservation {
     private Student student;
 
-    //Constructors
-    public Defence(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state, Student student) {
-        super(startDate, endDate, classroom, teachers, state);
-        this.student = student;
-    }
-
-    public Defence(Date startDate, Date endDate, Classroom classroom, Teacher[] teachers, State state, String label, Student student) {
-        super(startDate, endDate, classroom, teachers, state, label);
+    //Constructor
+    public Defence(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers, Student student) {
+        super(startDate, endDate, label, memo, state, room, teachers);
         this.student = student;
     }
 
