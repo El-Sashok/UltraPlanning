@@ -2,7 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 
-public class Yeargroup {
+public class Yeargroup implements Entity {
     private final long id;
     private String label;
     private ArrayList<Group> groups;
@@ -15,6 +15,7 @@ public class Yeargroup {
     }
 
     //Getters & Setters
+    @Override
     public long getId() {
         return id;
     }

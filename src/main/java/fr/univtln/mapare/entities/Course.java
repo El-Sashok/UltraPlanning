@@ -1,6 +1,6 @@
 package fr.univtln.mapare.entities;
 
-public class Course {
+public class Course implements Entity {
     private final long id;
     private String label;
     private int nbHour;
@@ -13,6 +13,7 @@ public class Course {
     }
 
     //Getters & Setters
+    @Override
     public long getId() {
         return id;
     }

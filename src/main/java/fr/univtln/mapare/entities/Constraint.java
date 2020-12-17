@@ -2,7 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.Date;
 
-public class Constraint {
+public class Constraint implements Entity {
     private final long id;
     private Date startDate;
     private Date endDate;
@@ -15,6 +15,11 @@ public class Constraint {
     }
 
     //Getters & Setters
+    @Override
+    public long getId() {
+        return id;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

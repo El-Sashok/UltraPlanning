@@ -14,7 +14,7 @@ public class App
 {
     public static void main( String[] args ) throws DataAccessException {
         StudentDAO studentDAO = new StudentDAO();
-
         System.out.println(studentDAO.findAll());
+
     }
 }
