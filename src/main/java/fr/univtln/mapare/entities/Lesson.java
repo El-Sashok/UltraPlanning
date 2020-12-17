@@ -9,8 +9,8 @@ public class Lesson extends Reservation {
     private ArrayList<Group> groups;
 
     //Constructor
-    public Lesson(Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
-        super(startDate, endDate, label, memo, state, room);
+    public Lesson(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
+        super(id, startDate, endDate, label, memo, state, room);
         this.type = type;
         this.courses = new ArrayList<Course>();
         this.groups = new ArrayList<Group>();

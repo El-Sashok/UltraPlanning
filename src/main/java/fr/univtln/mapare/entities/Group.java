@@ -3,16 +3,22 @@ package fr.univtln.mapare.entities;
 import java.util.ArrayList;
 
 public class Group {
+    private final long id;
     private String label;
     private ArrayList<Student> students;
 
     //Constructors
-    public Group(String label) {
+    public Group(long id, String label) {
+        this.id = id;
         this.label = label;
         this.students = new ArrayList<Student>();
     }
 
     //Getters & Setters
+    public long getId() {
+        return id;
+    }
+
     public String getLabel() {
         return label;
     }

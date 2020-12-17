@@ -3,11 +3,13 @@ package fr.univtln.mapare.entities;
 import java.util.Date;
 
 public class Constraint {
+    private final long id;
     private Date startDate;
     private Date endDate;
 
     //Constructors
-    public Constraint(Date startDate, Date endDate) {
+    public Constraint(long id, Date startDate, Date endDate) {
+        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
     }

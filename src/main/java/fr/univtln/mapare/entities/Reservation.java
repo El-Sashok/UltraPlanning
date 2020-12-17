@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Reservation {
+    private final long id;
     private Date startDate;
     private Date endDate;
     private String label;
@@ -13,7 +14,8 @@ public class Reservation {
     private ArrayList<Teacher> teachers;
 
     //Constructor
-    public Reservation(Date startDate, Date endDate, String label, String memo, State state, Room room) {
+    public Reservation(long id, Date startDate, Date endDate, String label, String memo, State state, Room room) {
+        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.label = label;
@@ -24,6 +26,10 @@ public class Reservation {
     }
 
     //Getters & Setters
+    public long getId() {
+        return id;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

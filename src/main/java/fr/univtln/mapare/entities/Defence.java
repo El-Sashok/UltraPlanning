@@ -6,8 +6,8 @@ public class Defence extends Reservation {
     private Student student;
 
     //Constructor
-    public Defence(Date startDate, Date endDate, String label, String memo, State state, Room room, Student student) {
-        super(startDate, endDate, label, memo, state, room);
+    public Defence(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Student student) {
+        super(id, startDate, endDate, label, memo, state, room);
         this.student = student;
     }
 

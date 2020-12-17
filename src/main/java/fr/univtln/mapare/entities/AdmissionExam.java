@@ -7,8 +7,8 @@ public class AdmissionExam extends Reservation {
     private ArrayList<Student> students;
 
     //Constructor
-    public AdmissionExam(Date startDate, Date endDate, String label, String memo, State state, Room room) {
-        super(startDate, endDate, label, memo, state, room);
+    public AdmissionExam(long id, Date startDate, Date endDate, String label, String memo, State state, Room room) {
+        super(id, startDate, endDate, label, memo, state, room);
         this.students = new ArrayList<Student>();
     }
 

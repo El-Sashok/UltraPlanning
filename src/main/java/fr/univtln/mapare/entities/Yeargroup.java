@@ -3,16 +3,22 @@ package fr.univtln.mapare.entities;
 import java.util.ArrayList;
 
 public class Yeargroup {
+    private final long id;
     private String label;
     private ArrayList<Group> groups;
 
     //Constructors
-    public Yeargroup(String label) {
+    public Yeargroup(long id, String label) {
+        this.id = id;
         this.label = label;
         this.groups = new ArrayList<Group>();
     }
 
     //Getters & Setters
+    public long getId() {
+        return id;
+    }
+
     public String getLabel() {
         return label;
     }

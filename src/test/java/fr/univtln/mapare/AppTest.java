@@ -17,7 +17,7 @@ public class AppTest
      */
     //Defines constraint
     Date date = new Date();
-    Constraint c1 = new Constraint(date, date);
+    Constraint c1 = new Constraint(1, date, date);
     //Creates persons
     Teacher teacher1 = new Teacher(
             123,
@@ -44,20 +44,22 @@ public class AppTest
             "123456");
     //Creates reservation
     Reservation r1 = new Reservation(
+            3,
             new Date(),
             new Date(),
             "NO IDEA",
             "NO IDEA 2",
             Reservation.State.NP,
-            new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
+            new Room(2, "U1", 111, 15, "Salle info", "3 pc en panne"));
     //Creates a admission exam
     AdmissionExam a1 = new AdmissionExam(
+            4,
             new Date(),
             new Date(),
             "NO IDEA3",
             "NO IDEA4",
             Reservation.State.NP,
-            new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
+            new Room(6, "U1", 111, 15, "Salle info", "3 pc en panne"));
     @Test
     public void testCreationCronstraint() {
         assertEquals(c1.getStartDate(), date);

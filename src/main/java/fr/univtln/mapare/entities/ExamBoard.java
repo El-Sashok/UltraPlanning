@@ -6,8 +6,8 @@ public class ExamBoard extends Reservation {
     private Yeargroup yeargroup;
 
     //Constructor
-    public ExamBoard(Date startDate, Date endDate, String label, String memo, State state, Room room, Yeargroup yeargroup) {
-        super(startDate, endDate, label, memo, state, room);
+    public ExamBoard(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Yeargroup yeargroup) {
+        super(id, startDate, endDate, label, memo, state, room);
         this.yeargroup = yeargroup;
     }
 

@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
 public class Room {
+    private final long id;
     private String building;
     private int number;
     private int seats;
@@ -8,7 +9,8 @@ public class Room {
     private String info;
 
     //Constructor
-    public Room(String building, int number, int seats, String label, String info) {
+    public Room(long id, String building, int number, int seats, String label, String info) {
+        this.id = id;
         this.building = building;
         this.number = number;
         this.seats = seats;
@@ -17,6 +19,10 @@ public class Room {
     }
 
     //Getters & Setters
+    public long getId() {
+        return id;
+    }
+
     public String getBuilding() {
         return building;
     }
