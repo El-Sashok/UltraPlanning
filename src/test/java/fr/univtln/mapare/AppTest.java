@@ -1,7 +1,6 @@
 package fr.univtln.mapare;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import fr.univtln.mapare.entities.*;
 import org.junit.Test;
@@ -20,29 +19,34 @@ public class AppTest
     Date date = new Date();
     Constraint c1 = new Constraint(date, date);
     //Creates persons
-    Teacher teacher1 = new Teacher("Marley",
+    Teacher teacher1 = new Teacher(
+            "Marley",
             "Bob",
             new Date(1945, 2, 6),
             "bobm@gmail.com",
             "marijuana",
             Teacher.Role.ADJUNCT_PROF);
-    Student student1 = new Student("Réaubourg",
+    Student student1 = new Student(
+            "Réaubourg",
             "Alexandre",
             new Date(),
             "sasha@gmail.com");
-    Student student2 = new Student("Palma",
+    Student student2 = new Student(
+            "Palma",
             "François",
             new Date(),
             "フランソワ@gmail.com");
     //Creates reservation
-    Reservation r1 = new Reservation(new Date(),
+    Reservation r1 = new Reservation(
+            new Date(),
             new Date(),
             "NO IDEA",
             "NO IDEA 2",
             Reservation.State.NP,
             new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
     //Creates a admission exam
-    AdmissionExam a1 = new AdmissionExam(new Date(),
+    AdmissionExam a1 = new AdmissionExam(
+            new Date(),
             new Date(),
             "NO IDEA3",
             "NO IDEA4",
