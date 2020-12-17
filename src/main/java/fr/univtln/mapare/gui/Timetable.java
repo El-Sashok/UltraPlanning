@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Timetable extends JFrame{
     private JPanel rootPanel;
@@ -435,14 +436,14 @@ public class Timetable extends JFrame{
             m1516Label, m1617Label, m1718Label, m1819Label};
     private JLabel[] Mercredi = {w89Label, w910Label, w1011Label, w1112Label, w1213Label, w1314Label, w1415Label,
             w1516Label, w1617Label, w1718Label, w1819Label};
-    private JLabel[] Jeudi = {j89Label, j910Label, j1011Label, j1112Label, j1213Label, j1314Label, j1415Label,
+    private final JLabel[] Jeudi = {j89Label, j910Label, j1011Label, j1112Label, j1213Label, j1314Label, j1415Label,
             j1516Label, j1617Label, j1718Label, j1819Label};
     private JLabel[] Vendredi = {v89Label, v910Label, v1011Label, v1112Label, v1213Label, v1314Label, v1415Label,
             v1516Label, v1617Label, v1718Label, v1819Label};
     private JLabel[] Samedi = {s89Label, s910Label, s1011Label, s1112Label, s1213Label, s1314Label, s1415Label,
             s1516Label, s1617Label, s1718Label, s1819Label};
-    private JLabel[][] Semaine = {Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi};
-    private JButton[] boutons = {a1Button, a2Button, a3Button, a4Button, a5Button, a6Button, a7Button, a8Button,
+    private final JLabel[][] Semaine = {Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi};
+    private final JButton[] boutons = {a1Button, a2Button, a3Button, a4Button, a5Button, a6Button, a7Button, a8Button,
             a9Button, a10Button, a11Button, a12Button, a13Button, a14Button, a15Button, a16Button, a17Button, a18Button,
             a19Button, a20Button, a21Button, a22Button, a23Button, a24Button, a25Button, a26Button, a27Button,
             a28Button, a29Button, a30Button, a31Button, a32Button, a33Button, a34Button, a35Button, a36Button,
@@ -457,6 +458,35 @@ public class Timetable extends JFrame{
             panel184, panel186, panel188, panel190, panel192, panel194, panel196, panel198, panel200, panel202,
             panel204, panel206, panel208, panel210, panel212, panel214, panel216};
 
+    private JLabel[] jourLabels = {lundiLabel, mardiLabel, mercrediLabel, jeudiLabel, vendrediLabel, samediLabel};
+
+    private Border lineBorder = BorderFactory.createLineBorder(Color.black);
+    private Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
+    private Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
+    private Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
+
+    private JButton lastButton;
+
+    private Calendar calendar = Calendar.getInstance();
+
+    private void buttonFunc(int i) {
+        // doesn't pass if last button is the same as this button
+        if(!(lastButton != null && lastButton.equals(boutons[i]))) {
+            if(lastButton != null)
+                lastButton.setBorder(lineBorder);
+
+            int SL = Semaine.length;
+            int JL = Jeudi.length;
+            for (int j = 0; j < SL; j++) {
+                for (int k = 0; k < JL; k++) {
+                    Semaine[j][k].setText("COURS_" + (((i * SL + j)) * JL + k));
+                }
+            }
+            boutons[i].setBorder(null);
+            lastButton = boutons[i];
+        }
+    }
+
     public Timetable() {
         setTitle("Emploi Du Temps");
         setSize(1400, 800);
@@ -464,12 +494,9 @@ public class Timetable extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
-        final Border lineBorder = BorderFactory.createLineBorder(Color.black);
-        Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
-        Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
-        Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
         final JButton[] lastButton = {null};
-        int year = Calendar.getInstance().get(Calendar.YEAR);;
+        int year = calendar.get(Calendar.YEAR);
+        int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
         boolean is53weekYear = LocalDate.of(year, 1, 1).getDayOfWeek() == DayOfWeek.THURSDAY ||
                 LocalDate.of(year, 12, 31).getDayOfWeek() == DayOfWeek.THURSDAY;
         if(!is53weekYear)
@@ -479,32 +506,34 @@ public class Timetable extends JFrame{
             jp.setVisible(false);
         }
 
-        for (int i = 0; i < boutons.length; i++) {
-            final int finalI = i;
+        JMenu menu = new JMenu("Menu");
+        JMenuItem addLesson = new JMenuItem("Add Lesson");
+        JMenuBar mb = new JMenuBar();
+        menu.add(addLesson);
+        mb.add(menu);
+        setJMenuBar(mb);
+        addLesson.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                ReservationPopup rp = new ReservationPopup();
+                rp.setVisible(true);
+            }
+        });
+
+            for (int i = 0; i < boutons.length; i++) {
+            int finalI = i;
             boutons[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    // doesn't pass if last button is the same as this button
-                    if(!(lastButton[0] != null && lastButton[0].equals(boutons[finalI]))) {
-                        if(lastButton[0] != null)
-                            lastButton[0].setBorder(lineBorder);
-
-                        int SL = Semaine.length;
-                        int JL = Jeudi.length;
-                        for (int j = 0; j < SL; j++) {
-                            for (int k = 0; k < JL; k++) {
-                                Semaine[j][k].setText("COURS_" + (((finalI * SL + j)) * JL + k));
-                            }
-                        }
-                        boutons[finalI].setBorder(null);
-                        lastButton[0] = boutons[finalI];
-                    }
+                    buttonFunc(finalI);
                 }
             });
 
             boutons[i].setBorder(lineBorder);
         }
+        buttonFunc(weekNumber);
     }
 
 

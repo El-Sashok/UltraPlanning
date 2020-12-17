@@ -17,5 +17,6 @@ public class Launcher extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
+        setLocationRelativeTo(null);
     }
 }
