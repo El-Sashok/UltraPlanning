@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.entities.Student;
 import fr.univtln.mapare.exceptions.DataAccessException;
 import lombok.extern.java.Log;
 
