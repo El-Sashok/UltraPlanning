@@ -60,16 +60,16 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
     public void remove(long id) throws DataAccessException {
         try {
             connection.createStatement().execute("DELETE FROM " + getTableName() + " WHERE ID=" + id);
-        } catch (SQLException throwables) {
-            throw new DataAccessException(throwables.getLocalizedMessage());
+        } catch (SQLException throwable) {
+            throw new DataAccessException(throwable.getLocalizedMessage());
         }
     }
 
     public void clean() throws DataAccessException {
         try {
             connection.createStatement().execute("DELETE FROM " + getTableName());
-        } catch (SQLException throwables) {
-            throw new DataAccessException(throwables.getLocalizedMessage());
+        } catch (SQLException throwable) {
+            throw new DataAccessException(throwable.getLocalizedMessage());
         }
     }
 
