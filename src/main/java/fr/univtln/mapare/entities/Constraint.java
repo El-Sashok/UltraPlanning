@@ -44,4 +44,9 @@ public class Constraint implements Entity {
                 ", endDate=" + endDate +
                 '}';
     }
+
+    @Override
+    public long getId() {
+        return id;
+    }
 }

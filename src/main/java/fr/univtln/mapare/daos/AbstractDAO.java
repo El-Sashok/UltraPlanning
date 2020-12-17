@@ -16,8 +16,8 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
     protected final Connection connection;
     protected final PreparedStatement persistPS;
     protected final PreparedStatement updatePS;
-    private final PreparedStatement findPS;
-    private final PreparedStatement findAllPS;
+    protected final PreparedStatement findPS;
+    protected final PreparedStatement findAllPS;
 
     public AbstractDAO(String persistPS, String updatePS) throws DataAccessException {
         Connection _connection = null;
@@ -29,8 +29,8 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
             _persistPS = _connection.prepareStatement(persistPS, Statement.RETURN_GENERATED_KEYS);
             _updatePS = _connection.prepareStatement(updatePS);
 
-        } catch (SQLException throwables) {
-            throw new DataAccessException(throwables.getLocalizedMessage());
+        } catch (SQLException throwable) {
+            throw new DataAccessException(throwable.getLocalizedMessage());
         }
         this.connection = _connection;
         this.findPS = _findPS;
