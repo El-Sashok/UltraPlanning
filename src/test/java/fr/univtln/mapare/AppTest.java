@@ -20,22 +20,28 @@ public class AppTest
     Constraint c1 = new Constraint(date, date);
     //Creates persons
     Teacher teacher1 = new Teacher(
+            123,
             "Marley",
             "Bob",
             new Date(1945, 2, 6),
             "bobm@gmail.com",
+            "1234",
             "marijuana",
             Teacher.Role.ADJUNCT_PROF);
     Student student1 = new Student(
+            125,
             "Réaubourg",
             "Alexandre",
             new Date(),
-            "sasha@gmail.com");
+            "sasha@gmail.com",
+            "12345");
     Student student2 = new Student(
+            165,
             "Palma",
             "François",
             new Date(),
-            "フランソワ@gmail.com");
+            "フランソワ@gmail.com",
+            "123456");
     //Creates reservation
     Reservation r1 = new Reservation(
             new Date(),

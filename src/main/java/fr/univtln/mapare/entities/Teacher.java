@@ -9,8 +9,8 @@ public class Teacher extends Person {
     private ArrayList<Constraint> constraints;
 
     //Constructor
-    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role role) {
-        super(lastName, firstName, birthdate, email);
+    public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
+        super(id, lastName, firstName, birthdate, email, password);
         this.laboratory = laboratory;
         this.role = role;
         this.constraints = new ArrayList<Constraint>();
