@@ -12,6 +12,7 @@ public class Reservation implements Entity {
     private State state;
     private Room room;
     private ArrayList<Teacher> teachers;
+    private static final ArrayList<Reservation> reservations = new ArrayList<>();
 
     //Constructor
     public Reservation(long id, Date startDate, Date endDate, String label, String memo, State state, Room room) {
@@ -23,6 +24,7 @@ public class Reservation implements Entity {
         this.state = state;
         this.room = room;
         this.teachers = new ArrayList<Teacher>();
+        reservations.add(this);
     }
 
     //Getters & Setters
@@ -30,6 +32,8 @@ public class Reservation implements Entity {
     public long getId() {
         return id;
     }
+
+    public ArrayList<Reservation> getReservationList() { return reservations; }
 
     public Date getStartDate() {
         return startDate;
