@@ -41,8 +41,15 @@ public class AppTest
             "NO IDEA 2",
             Reservation.State.NP,
             new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
+    //Creates a admission exam
+    AdmissionExam a1 = new AdmissionExam(new Date(),
+            new Date(),
+            "NO IDEA3",
+            "NO IDEA4",
+            Reservation.State.NP,
+            new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
     @Test
-    public void testCreationCrontrainte() {
+    public void testCreationCronstraint() {
         assertEquals(c1.getStartDate(), date);
         assertEquals(c1.getEndDate(), date);
     }
@@ -51,16 +58,23 @@ public class AppTest
         assertEquals(teacher1.getFirstName(), "Bob");
     }
     @Test
-    public void testCeationStudent() {
+    public void testCeationStudents() {
         assertEquals(student1.getEmail(), "sasha@gmail.com");
+        assertEquals(student2.getEmail(), "フランソワ@gmail.com");
     }
     @Test
     public void testCreationReservation() {
         assertEquals(r1.getLabel(), "NO IDEA");
     }
     @Test
+    public void testCreationAdmisionExam() {
+        assertEquals(a1.getLabel(), "NO IDEA3");
+    }
+    @Test
     public void testAjoutDivers() {
         assertEquals(teacher1.addConstraint(c1).getConstraints(), teacher1.getConstraints());
         assertEquals(r1.addTeacher(teacher1).getTeachers(), r1.getTeachers());
+        assertEquals(a1.addStudent(student1).addStudent(student2).getStudents(), a1.getStudents());
+        assertEquals(a1.addTeacher(teacher1).getTeachers(), a1.getTeachers());
     }
 }
