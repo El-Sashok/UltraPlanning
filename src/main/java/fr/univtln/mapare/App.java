@@ -1,6 +1,8 @@
 package fr.univtln.mapare;
 
+import fr.univtln.mapare.daos.StudentDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.DataAccessException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,22 +17,11 @@ import java.util.Properties;
  */
 public class App {
 
-    public static Properties properties = new Properties();
+    public static void main( String[] args ) throws IOException, DataAccessException {
 
-    private static void loadProperties(String propFileName) throws IOException {
-        InputStream inputstream = App.class.getClassLoader().getResourceAsStream(propFileName);
-        if (inputstream == null) throw new FileNotFoundException();
-        properties.load(inputstream);
-    }
+        StudentDAO studentDAO = new StudentDAO();
 
-    public static String getProperty(String s) {
-        return properties.getProperty(s);
-    }
-
-    public static void main( String[] args ) throws IOException {
-
-        loadProperties("db.properties");
-
+        System.out.println(studentDAO.findAll());
 
         //Defines constraint
         //Constraint[] c1 = {new Constraint(new Date(), new Date())};

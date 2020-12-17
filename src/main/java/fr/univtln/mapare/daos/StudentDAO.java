@@ -10,7 +10,7 @@ import java.sql.SQLException;
 @Log
 public class StudentDAO extends AbstractDAO<Student> {
 
-    public StudentDAO() {
+    public StudentDAO() throws DataAccessException {
         super("",
                 "");
     }
@@ -32,6 +32,6 @@ public class StudentDAO extends AbstractDAO<Student> {
 
     @Override
     public String getTableName() {
-        return "PERSONNE";
+        return "STUDENT";
     }
 }

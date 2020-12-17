@@ -11,9 +11,9 @@ public class DBCPDataSource {
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl(App.getProperty("db.url"));
-        ds.setUsername(App.getProperty("db.username"));
-        ds.setPassword(App.getProperty("db.password"));
+        ds.setUrl("jdbc:h2:tcp://localhost/~/database");
+        ds.setUsername("root");
+        ds.setPassword("toor");
 
         ds.setMinIdle(5);
         ds.setMaxIdle(10);

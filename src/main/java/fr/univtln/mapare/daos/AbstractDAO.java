@@ -19,7 +19,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
     private final PreparedStatement findPS;
     private final PreparedStatement findAllPS;
 
-    public AbstractDAO(String persistPS, String updatePS) {
+    public AbstractDAO(String persistPS, String updatePS) throws DataAccessException {
         Connection _connection = null;
         PreparedStatement _findPS = null, _findAllPS = null, _persistPS = null, _updatePS = null;
         try {
@@ -30,7 +30,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
             _updatePS = _connection.prepareStatement(updatePS);
 
         } catch (SQLException throwables) {
-            new DataAccessException(throwables.getLocalizedMessage());
+            throw new DataAccessException(throwables.getLocalizedMessage());
         }
         this.connection = _connection;
         this.findPS = _findPS;
