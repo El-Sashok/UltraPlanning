@@ -34,6 +34,13 @@ public class AppTest
             "François",
             new Date(),
             "フランソワ@gmail.com");
+    //Creates reservation
+    Reservation r1 = new Reservation(new Date(),
+            new Date(),
+            "NO IDEA",
+            "NO IDEA 2",
+            Reservation.State.NP,
+            new Room("U1", 111, 15, "Salle info", "3 pc en panne"));
     @Test
     public void testCreationCrontrainte() {
         assertEquals(c1.getStartDate(), date);
@@ -46,5 +53,14 @@ public class AppTest
     @Test
     public void testCeationStudent() {
         assertEquals(student1.getEmail(), "sasha@gmail.com");
+    }
+    @Test
+    public void testCreationReservation() {
+        assertEquals(r1.getLabel(), "NO IDEA");
+    }
+    @Test
+    public void testAjoutDivers() {
+        assertEquals(teacher1.addConstraint(c1).getConstraints(), teacher1.getConstraints());
+        assertEquals(r1.addTeacher(teacher1).getTeachers(), r1.getTeachers());
     }
 }
