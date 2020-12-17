@@ -1,15 +1,15 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Yeargroup {
     private String label;
-    private Group[] groups;
+    private ArrayList<Group> groups;
 
     //Constructors
-    public Yeargroup(String label, Group[] groups) {
+    public Yeargroup(String label) {
         this.label = label;
-        this.groups = groups;
+        this.groups = new ArrayList<Group>();
     }
 
     //Getters & Setters
@@ -21,11 +21,11 @@ public class Yeargroup {
         this.label = label;
     }
 
-    public Group[] getGroups() {
+    public ArrayList<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(Group[] groups) {
+    public void setGroups(ArrayList<Group> groups) {
         this.groups = groups;
     }
 
@@ -34,7 +34,12 @@ public class Yeargroup {
     public String toString() {
         return "Yeargroup{" +
                 "label='" + label + '\'' +
-                ", groups=" + Arrays.toString(groups) +
+                ", groups=" + groups +
                 '}';
+    }
+
+    public Yeargroup addGroup(Group g) {
+        groups.add(g);
+        return this;
     }
 }

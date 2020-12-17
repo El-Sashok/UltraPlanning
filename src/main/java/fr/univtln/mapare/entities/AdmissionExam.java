@@ -1,23 +1,23 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AdmissionExam extends Reservation {
-    private Student[] students;
+    private ArrayList<Student> students;
 
     //Constructor
-    public AdmissionExam(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers, Student[] students) {
-        super(startDate, endDate, label, memo, state, room, teachers);
-        this.students = students;
+    public AdmissionExam(Date startDate, Date endDate, String label, String memo, State state, Room room) {
+        super(startDate, endDate, label, memo, state, room);
+        this.students = new ArrayList<Student>();
     }
 
     //Getters & Setters
-    public Student[] getStudents() {
+    public ArrayList<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Student[] students) {
+    public void setStudents(ArrayList<Student> students) {
         this.students = students;
     }
 
@@ -26,7 +26,12 @@ public class AdmissionExam extends Reservation {
     public String toString() {
         return "AdmissionExam{" +
                 super.toString() +
-                ", students=" + Arrays.toString(students) +
+                ", students=" + students +
                 '}';
+    }
+
+    public AdmissionExam addStudent(Student s) {
+        students.add(s);
+        return this;
     }
 }

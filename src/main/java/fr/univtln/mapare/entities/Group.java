@@ -1,15 +1,15 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Group {
     private String label;
-    private Student[] students;
+    private ArrayList<Student> students;
 
     //Constructors
-    public Group(String label, Student[] students) {
+    public Group(String label) {
         this.label = label;
-        this.students = students;
+        this.students = new ArrayList<Student>();
     }
 
     //Getters & Setters
@@ -21,11 +21,11 @@ public class Group {
         this.label = label;
     }
 
-    public Student[] getStudents() {
+    public ArrayList<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Student[] students) {
+    public void setStudents(ArrayList<Student> students) {
         this.students = students;
     }
 
@@ -34,7 +34,12 @@ public class Group {
     public String toString() {
         return "Group{" +
                 "label='" + label + '\'' +
-                ", students=" + Arrays.toString(students) +
+                ", students=" + students +
                 '}';
+    }
+
+    public Group addStudent(Student s) {
+        students.add(s);
+        return this;
     }
 }

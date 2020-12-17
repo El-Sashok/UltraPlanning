@@ -1,19 +1,19 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Lesson extends Reservation {
     private Type type;
-    private Course[] courses;
-    private Group[] goups;
+    private ArrayList<Course> courses;
+    private ArrayList<Group> groups;
 
     //Constructor
-    public Lesson(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers, Type type, Course[] courses, Group[] goups) {
-        super(startDate, endDate, label, memo, state, room, teachers);
+    public Lesson(Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
+        super(startDate, endDate, label, memo, state, room);
         this.type = type;
-        this.courses = courses;
-        this.goups = goups;
+        this.courses = new ArrayList<Course>();
+        this.groups = new ArrayList<Group>();
     }
 
     //Getters & Setters
@@ -25,20 +25,20 @@ public class Lesson extends Reservation {
         this.type = type;
     }
 
-    public Course[] getCourses() {
+    public ArrayList<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(Course[] courses) {
+    public void setCourses(ArrayList<Course> courses) {
         this.courses = courses;
     }
 
-    public Group[] getGoups() {
-        return goups;
+    public ArrayList<Group> getGroups() {
+        return groups;
     }
 
-    public void setGoups(Group[] goups) {
-        this.goups = goups;
+    public void setGroups(ArrayList<Group> goups) {
+        this.groups = goups;
     }
 
     //Methods
@@ -47,11 +47,20 @@ public class Lesson extends Reservation {
         return "Lesson{" +
                 super.toString() +
                 ", type=" + type +
-                ", courses=" + Arrays.toString(courses) +
-                ", goups=" + Arrays.toString(goups) +
+                ", courses=" + courses +
+                ", goups=" + groups +
                 '}';
     }
 
+    public Lesson addCourse(Course c) {
+        courses.add(c);
+        return this;
+    }
+
+    public Lesson addGroup(Group g) {
+        groups.add(g);
+        return this;
+    }
 
     public enum Type {
         TD, TP, CM, CC, CT
