@@ -2,18 +2,22 @@ package fr.univtln.mapare.entities;
 
 import java.util.Date;
 
-public abstract class Person {
+public abstract class Person implements Entity {
+    private final long id;
     private final String lastName;
     private final String firstName;
     private final Date birthdate;
     private final String email;
+    private final String password;
 
     //Constructor
-    public Person(String lastName, String firstName, Date birthdate, String email) {
+    public Person(long id, String lastName, String firstName, Date birthdate, String email, String password) {
+        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthdate = birthdate;
         this.email = email;
+        this.password = password;
     }
 
     //Getters & Setters
@@ -33,6 +37,9 @@ public abstract class Person {
         return email;
     }
 
+    @Override
+    public long getId() { return id; }
+
     //Methods
     @Override
     public String toString() {
@@ -43,4 +50,5 @@ public abstract class Person {
                 ", email='" + email + '\'' +
                 '}';
     }
+
 }

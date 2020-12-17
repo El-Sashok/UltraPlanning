@@ -5,8 +5,8 @@ import java.util.Date;
 public class Student extends Person {
 
     //Constructors
-    public Student(String lastName, String firstName, Date birthdate, String email) {
-        super(lastName, firstName, birthdate, email);
+    public Student(long id, String lastName, String firstName, Date birthdate, String email, String password) {
+        super(id, lastName, firstName, birthdate, email, password);
     }
 
     //Methods
