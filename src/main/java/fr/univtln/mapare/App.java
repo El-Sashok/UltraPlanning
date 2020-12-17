@@ -1,7 +1,6 @@
 package fr.univtln.mapare;
 
 import fr.univtln.mapare.daos.StudentDAO;
-import fr.univtln.mapare.daos.TeacherDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.DataAccessException;
 

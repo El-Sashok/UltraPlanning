@@ -1,24 +1,25 @@
 package fr.univtln.mapare.entities;
 
-public class Room {
+public class Room implements Entity {
     private final long id;
     private String building;
     private int number;
-    private int seats;
+    private int capacity;
     private String label;
     private String info;
 
     //Constructor
-    public Room(long id, String building, int number, int seats, String label, String info) {
+    public Room(long id, String building, int number, int capacity, String label, String info) {
         this.id = id;
         this.building = building;
         this.number = number;
-        this.seats = seats;
+        this.capacity = capacity;
         this.label = label;
         this.info = info;
     }
 
     //Getters & Setters
+    @Override
     public long getId() {
         return id;
     }
@@ -39,12 +40,12 @@ public class Room {
         this.number = number;
     }
 
-    public int getSeats() {
-        return seats;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setSeats(int seats) {
-        this.seats = seats;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public String getLabel() {
@@ -69,7 +70,7 @@ public class Room {
         return "Room{" +
                 "building='" + building + '\'' +
                 ", number=" + number +
-                ", seats=" + seats +
+                ", seats=" + capacity +
                 ", label='" + label + '\'' +
                 ", info='" + info + '\'' +
                 '}';

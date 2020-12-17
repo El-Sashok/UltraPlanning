@@ -3,7 +3,7 @@ package fr.univtln.mapare.entities;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Reservation {
+public class Reservation implements Entity {
     private final long id;
     private Date startDate;
     private Date endDate;
@@ -26,6 +26,7 @@ public class Reservation {
     }
 
     //Getters & Setters
+    @Override
     public long getId() {
         return id;
     }

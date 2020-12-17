@@ -15,6 +15,11 @@ public class Constraint implements Entity {
     }
 
     //Getters & Setters
+    @Override
+    public long getId() {
+        return id;
+    }
+
     public Date getStartDate() {
         return startDate;
     }
