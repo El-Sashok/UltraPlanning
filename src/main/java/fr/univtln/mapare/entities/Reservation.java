@@ -1,6 +1,6 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Reservation {
@@ -10,17 +10,17 @@ public class Reservation {
     private String memo;
     private State state;
     private Room room;
-    private Teacher[] teachers;
+    private ArrayList<Teacher> teachers;
 
     //Constructor
-    public Reservation(Date startDate, Date endDate, String label, String memo, State state, Room room, Teacher[] teachers) {
+    public Reservation(Date startDate, Date endDate, String label, String memo, State state, Room room) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.label = label;
         this.memo = memo;
         this.state = state;
         this.room = room;
-        this.teachers = teachers;
+        this.teachers = new ArrayList<Teacher>();
     }
 
     //Getters & Setters
@@ -72,11 +72,11 @@ public class Reservation {
         this.room = room;
     }
 
-    public Teacher[] getTeachers() {
+    public ArrayList<Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(Teacher[] teachers) {
+    public void setTeachers(ArrayList<Teacher> teachers) {
         this.teachers = teachers;
     }
 
@@ -90,8 +90,13 @@ public class Reservation {
                 ", memo='" + memo + '\'' +
                 ", state=" + state +
                 ", room=" + room +
-                ", teachers=" + Arrays.toString(teachers) +
+                ", teachers=" + teachers +
                 '}';
+    }
+
+    public Reservation addTeacher(Teacher t) {
+        teachers.add(t);
+        return this;
     }
 
 

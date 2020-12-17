@@ -10,7 +10,6 @@ public class Student extends Person {
     }
 
     //Methods
-
     @Override
     public String toString() {
         return "Student{" +

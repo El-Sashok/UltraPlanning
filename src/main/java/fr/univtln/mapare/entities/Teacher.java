@@ -1,20 +1,19 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class Teacher extends Person {
     private String laboratory;
     private Role role;
-    private Constraint[] constraints;
+    private ArrayList<Constraint> constraints;
 
     //Constructor
-    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role role, Constraint[] constraints) {
+    public Teacher(String lastName, String firstName, Date birthdate, String email, String laboratory, Role role) {
         super(lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
         this.role = role;
-        this.constraints = constraints;
+        this.constraints = new ArrayList<Constraint>();
     }
 
     //Getters & Setters
@@ -34,11 +33,11 @@ public class Teacher extends Person {
         this.role = role;
     }
 
-    public Constraint[] getConstraints() {
+    public ArrayList<Constraint> getConstraints() {
         return constraints;
     }
 
-    public void setConstraints(Constraint[] constraints) {
+    public void setConstraints(ArrayList<Constraint> constraints) {
         this.constraints = constraints;
     }
 
@@ -49,9 +48,15 @@ public class Teacher extends Person {
                 super.toString() +
                 ", laboratory='" + laboratory + '\'' +
                 ", role=" + role +
-                ", constraints=" + Arrays.toString(constraints) +
+                ", constraints=" + constraints +
                 '}';
     }
+
+    public Teacher addConstraint(Constraint c) {
+        constraints.add(c);
+        return this;
+    }
+
 
 
     public enum Role {
