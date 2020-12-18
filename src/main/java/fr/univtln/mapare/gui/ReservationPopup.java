@@ -115,7 +115,7 @@ public class ReservationPopup extends JFrame {
                     int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
                     String output = "" + (temp.get(Calendar.DAY_OF_WEEK) - 1) + "/";
                     int heureDebut = comboBox4.getSelectedIndex();
-                    int heureFin = comboBox6.getSelectedIndex();
+                    int heureFin = comboBox6.getSelectedIndex() + 1;
                     if (heureFin <= heureDebut)
                         throw new IncorrectEndHourException();
                     output += heureDebut + "/" + heureFin + "/";
