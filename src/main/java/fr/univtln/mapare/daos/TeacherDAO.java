@@ -56,12 +56,14 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public Optional<Teacher> find(long id) throws SQLException {
         Teacher teacher = null;
         List<Constraint> constraints = new ArrayList<>();
-        findPS.setLong(1, id);
+
         findConstraintsPS.setLong(1, id);
-        ResultSet rs_findPS = findPS.executeQuery();
-        ResultSet rs_findCS = findConstraintsPS.executeQuery();
-        while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
-        while (rs_findPS.next()) teacher = fromResultSet(rs_findPS, constraints);
+        ResultSet findConstraintsRS = findConstraintsPS.executeQuery();
+        while (findConstraintsRS.next()) constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
+
+        findPS.setLong(1, id);
+        ResultSet findRS = findPS.executeQuery();
+        if (findRS.next()) teacher = fromResultSet(findRS, constraints);
 
         return Optional.ofNullable(teacher);
     }
