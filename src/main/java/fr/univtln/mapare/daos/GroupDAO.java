@@ -1,8 +1,10 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Group;
+import fr.univtln.mapare.entities.Lesson;
+import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Student;
-import fr.univtln.mapare.exceptions.DataAccessException;
+import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
 import java.sql.PreparedStatement;
@@ -15,14 +17,17 @@ import java.util.Optional;
 @Log
 public class GroupDAO extends AbstractDAO<Group>{
     private final PreparedStatement findMembersPS;
-    private final PreparedStatement findStudentPS;
+    private final PreparedStatement persistMemberPS;
+    private final PreparedStatement updateMemberPS;
     private final StudentDAO studentDAO;
 
     public GroupDAO() throws SQLException {
-        super("", "");
+        super("INSERT INTO CLASS_GROUP(LABEL) VALUES (?)",
+                "UPDATE CLASS_GROUP SET LABEL=? WHERE ID=?");
         this.studentDAO= new StudentDAO();
         this.findMembersPS = connection.prepareStatement("SELECT * FROM GROUP_MEMBERS WHERE CLASS_GROUP=?");
-        this.findStudentPS = connection.prepareStatement("SELECT * FROM STUDENT WHERE ID=?");
+        this.persistMemberPS = connection.prepareStatement("INSERT INTO GROUP_MEMBERS(CLASS_GROUP, STUDENT) VALUES (?,?)");
+        this.updateMemberPS = connection.prepareStatement("UPDATE GROUP_MEMBERS SET CLASS_GROUP=?, STUDENT=? WHERE ID=?");
     }
 
     @Override
@@ -43,50 +48,83 @@ public class GroupDAO extends AbstractDAO<Group>{
     public Optional<Group> find(long id) throws SQLException {
         Group group  = null;
         List<Student> students = new ArrayList<>();
-        findPS.setLong(1, id);
-        findMembersPS.setLong(1, id);
-        ResultSet rs_findPS = findPS.executeQuery();
-        ResultSet rs_findGP = findMembersPS.executeQuery();
 
-        while (rs_findGP.next()) {
-            findStudentPS.setLong(1, rs_findGP.getInt("STUDENT"));
-            ResultSet rs_findST = findStudentPS.executeQuery();
-            rs_findST.next();
-            students.add(studentDAO.fromResultSet(rs_findST));
+        findMembersPS.setLong(1, id);
+        ResultSet findMembersRS = findMembersPS.executeQuery();
+        while (findMembersRS.next()) {
+            Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
+            if (optionalStudent.isPresent())
+                students.add(optionalStudent.get());
+            else
+                throw new NotFoundException();
         }
-        while (rs_findPS.next()) group = fromResultSet(rs_findPS, students);
+        findPS.setLong(1, id);
+        ResultSet findRS = findPS.executeQuery();
+        if (findRS.next()) group = fromResultSet(findRS, students);
         return Optional.ofNullable(group);
     }
 
     @Override
     public List<Group> findAll() throws SQLException {
-        List<Group> entityList = new ArrayList<>();
-        ResultSet rs_findPS = findAllPS.executeQuery();
+        List<Group> groups = new ArrayList<>();
+        ResultSet findAllRS = findAllPS.executeQuery();
 
-        while (rs_findPS.next()) {
+        while (findAllRS.next()) {
             List<Student> students = new ArrayList<>();
-            findMembersPS.setLong(1, rs_findPS.getLong("ID"));
-            ResultSet rs_findGP = findMembersPS.executeQuery();
+            findMembersPS.setLong(1, findAllRS.getLong("ID"));
+            ResultSet findMembersRS = findMembersPS.executeQuery();
 
-            while (rs_findGP.next()) {
-                findStudentPS.setLong(1, rs_findGP.getLong("STUDENT"));
-                ResultSet rs_findST = findStudentPS.executeQuery();
-                rs_findST.next();
-                students.add(studentDAO.fromResultSet(rs_findST));
+            while (findMembersRS.next()) {
+                Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
+                if (optionalStudent.isPresent())
+                    students.add(optionalStudent.get());
+                else
+                    throw new NotFoundException();
             }
-            entityList.add(fromResultSet(rs_findPS, students));
+            groups.add(fromResultSet(findAllRS, students));
         }
-        return entityList;
+        return groups;
     }
 
     @Override
-    public Group persist(Group group) {
-        return null;
+    public Group persist(Group group) throws SQLException {
+        populate(persistPS, group);
+        Group gp = super.persist();
+        persistMembers(group);
+        return gp;
     }
 
     @Override
-    public void update(Group group) {
+    public void update(Group group) throws SQLException {
+        populate(updatePS, group);
+        updatePS.setLong(2, group.getId());
+        super.update();
+    }
 
+    public void populate(PreparedStatement popPS, Group group) throws SQLException {
+        popPS.setString(1, group.getLabel());
+    }
+
+    public void persistMembers(Group group) throws SQLException {
+        for (Student s: group.getStudents()) {
+            persistMember(group, s);
+        }
+    }
+
+    public void persistMember(Group group, Student member) throws SQLException {
+        populateMember(persistMemberPS, group, member);
+        persistMemberPS.executeUpdate();
+    }
+
+    private void updateGroup(Group group, Student student, Long groupMemberID) throws SQLException {
+        populateMember(updateMemberPS, group, student);
+        updateMemberPS.setLong(3, groupMemberID);
+        updateMemberPS.executeUpdate();
+    }
+
+    private void populateMember(PreparedStatement popGroupPS, Group group, Student student) throws SQLException {
+        popGroupPS.setLong(1, group.getId());
+        popGroupPS.setLong(2, student.getId());
     }
 
     @Override
