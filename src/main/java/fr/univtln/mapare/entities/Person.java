@@ -37,6 +37,10 @@ public abstract class Person implements Entity {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public long getId() { return id; }
 

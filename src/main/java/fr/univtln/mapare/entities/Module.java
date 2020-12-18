@@ -1,12 +1,13 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Module implements Entity {
     private final long id;
     private String label;
     private int nbHour;
-    private static final ArrayList<Module> MODULES = new ArrayList<>();
+    private static final List<Module> MODULES = new ArrayList<>();
     //Constructors
     public Module(long id, String label, int nbHour) {
         this.id = id;
@@ -21,8 +22,7 @@ public class Module implements Entity {
         return id;
     }
 
-    public static ArrayList<Module> getModuleList() { return MODULES; }
-
+    public static List<Module> getModuleList() { return MODULES; }
 
     public String getLabel() {
         return label;

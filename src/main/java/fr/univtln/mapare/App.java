@@ -1,12 +1,7 @@
 package fr.univtln.mapare;
 
-import fr.univtln.mapare.daos.RoomDAO;
-import fr.univtln.mapare.daos.StudentDAO;
-import fr.univtln.mapare.daos.TeacherDAO;
-import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.daos.*;
 import fr.univtln.mapare.exceptions.DataAccessException;
-
-import java.util.Date;
 
 /**
  * Hello world!
@@ -16,10 +11,18 @@ public class App
 {
     public static void main( String[] args ) throws DataAccessException {
         TeacherDAO teacherDAO = new TeacherDAO();
+        System.out.println(teacherDAO.find(1));
 
         RoomDAO roomDAO = new RoomDAO();
         System.out.println(roomDAO.findAll());
 
-        System.out.println(teacherDAO.findAll());
+        StudentDAO studentDAO = new StudentDAO();
+        System.out.println(studentDAO.findAll());
+
+        GroupDAO groupDAO = new GroupDAO();
+        System.out.println(groupDAO.findAll());
+
+        YeargroupDAO yeargroupDAO = new YeargroupDAO();
+        System.out.println(yeargroupDAO.findAll());
     }
 }

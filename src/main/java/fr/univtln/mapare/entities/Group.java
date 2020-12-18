@@ -1,11 +1,12 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Group implements Entity {
     private final long id;
     private String label;
-    private ArrayList<Student> students;
+    private List<Student> students;
 
     //Constructors
     public Group(long id, String label) {
@@ -28,11 +29,11 @@ public class Group implements Entity {
         this.label = label;
     }
 
-    public ArrayList<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(ArrayList<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 

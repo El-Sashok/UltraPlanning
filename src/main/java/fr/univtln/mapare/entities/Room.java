@@ -1,5 +1,8 @@
 package fr.univtln.mapare.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room implements Entity {
     private final long id;
     private String building;
@@ -7,6 +10,7 @@ public class Room implements Entity {
     private int capacity;
     private String label;
     private String info;
+    private static final List<Room> ROOMS = new ArrayList<>();
 
     //Constructor
     public Room(long id, String building, int number, int capacity, String label, String info) {
@@ -16,12 +20,17 @@ public class Room implements Entity {
         this.capacity = capacity;
         this.label = label;
         this.info = info;
+        ROOMS.add(this);
     }
 
     //Getters & Setters
     @Override
     public long getId() {
         return id;
+    }
+
+    public static List<Room> getRoomsList() {
+        return ROOMS;
     }
 
     public String getBuilding() {

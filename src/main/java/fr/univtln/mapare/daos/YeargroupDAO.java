@@ -42,7 +42,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         return null;
     }
 
-    protected Yeargroup fromResultSet(ResultSet resultSet, ArrayList<Group> groups) throws SQLException {
+    protected Yeargroup fromResultSet(ResultSet resultSet, List<Group> groups) throws SQLException {
         Yeargroup yeargroup = new Yeargroup(resultSet.getInt("ID"),
                 resultSet.getString("LABEL"));
         for (Group g : groups) {
@@ -55,7 +55,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     public Optional<Yeargroup> find(long id) throws DataAccessException {
         GroupDAO groupDAO = new GroupDAO();
         Yeargroup yeargroup = null;
-        ArrayList<Group> groups = new ArrayList<>();
+        List<Group> groups = new ArrayList<>();
         try {
             findPS.setLong(1, id);
             findYG.setLong(1, id);
@@ -81,7 +81,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         try {
             ResultSet rs_findPS = findAllPS.executeQuery();
             while (rs_findPS.next()) {
-                ArrayList<Group> groups = new ArrayList<>();
+                List<Group> groups = new ArrayList<>();
                 try {
                     findYG.setLong(1, rs_findPS.getLong("ID"));
                     ResultSet rs_findYG = findYG.executeQuery();
