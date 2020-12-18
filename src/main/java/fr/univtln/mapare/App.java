@@ -1,5 +1,6 @@
 package fr.univtln.mapare;
 
+import fr.univtln.mapare.daos.RoomDAO;
 import fr.univtln.mapare.daos.StudentDAO;
 import fr.univtln.mapare.daos.TeacherDAO;
 import fr.univtln.mapare.entities.*;
@@ -15,6 +16,9 @@ public class App
 {
     public static void main( String[] args ) throws DataAccessException {
         TeacherDAO teacherDAO = new TeacherDAO();
+
+        RoomDAO roomDAO = new RoomDAO();
+        System.out.println(roomDAO.findAll());
 
         System.out.println(teacherDAO.findAll());
     }
