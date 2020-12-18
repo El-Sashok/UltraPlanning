@@ -6,8 +6,7 @@ public class Module implements Entity {
     private final long id;
     private String label;
     private int nbHour;
-    private static final ArrayList<Module> MODULES = new ArrayList<>()
-;
+    private static final ArrayList<Module> MODULES = new ArrayList<>();
     //Constructors
     public Module(long id, String label, int nbHour) {
         this.id = id;

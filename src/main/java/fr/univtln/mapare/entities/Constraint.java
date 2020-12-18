@@ -15,7 +15,6 @@ public class Constraint implements Entity {
     }
 
     //Getters & Setters
-
     public Date getStartDate() {
         return startDate;
     }
