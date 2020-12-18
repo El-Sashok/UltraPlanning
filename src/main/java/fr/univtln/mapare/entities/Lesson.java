@@ -53,7 +53,7 @@ public class Lesson extends Reservation {
                 '}';
     }
 
-    public Lesson addCourse(Module c) {
+    public Lesson addModule(Module c) {
         module.add(c);
         return this;
     }
