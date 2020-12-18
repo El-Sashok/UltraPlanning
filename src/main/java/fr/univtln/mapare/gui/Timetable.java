@@ -492,20 +492,24 @@ public class Timetable extends JFrame {
 
     Color[] colorTypeEnum = {Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED};
 
+    Color defaultColor = new Color(238, 238, 238);
+
     private Timetable thisframe = this;
 
     void buttonFunc(int i) {
         if (lastButton != -1)
             boutons[lastButton].setBorder(lineBorder);
 
-        for (JPanel panel : fullheures)
+        for (JPanel panel : fullheures) {
             panel.setBorder(lineBorder);
+            panel.setBackground(defaultColor);
+        }
 
         int SL = Semaine.length;
         int JL = Jeudi.length;
         for (int j = 0; j < SL; j++) {
             for (int k = 0; k < JL; k++) {
-                Semaine[j][k].setText("");
+                Semaine[j][k].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
             }
         }
 
@@ -517,10 +521,10 @@ public class Timetable extends JFrame {
             int lessonType = Integer.parseInt(banana[7]);
             String displayText = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
             displayText += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
-            int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber - 1) / 2));
+            int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
-                Semaine[dayNumber][j].setText("");
+                Semaine[dayNumber][j].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
             }
             Semaine[dayNumber][midhour].setText(displayText);
 
@@ -538,7 +542,7 @@ public class Timetable extends JFrame {
 
     public Timetable() {
         setTitle("Emploi Du Temps");
-        setSize(1400, 800);
+        setSize(1400, 920);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
