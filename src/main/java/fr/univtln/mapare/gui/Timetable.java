@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
-public class Timetable extends JFrame{
+public class Timetable extends JFrame {
     private JPanel rootPanel;
     private JPanel panel2;
     private JButton a10Button;
@@ -431,7 +431,7 @@ public class Timetable extends JFrame{
     private JLabel m1030Label;
     private JLabel v1130Label;
     private JLabel[] Lundi = {l89Label, l910Label, l1011Label, l1112Label, l1213Label, l1314Label, l1415Label,
-                              l1516Label, l1617Label, l1718Label, l1819Label};
+            l1516Label, l1617Label, l1718Label, l1819Label};
     private JLabel[] Mardi = {m89Label, m910Label, m1011Label, m1112Label, m1213Label, m1314Label, m1415Label,
             m1516Label, m1617Label, m1718Label, m1819Label};
     private JLabel[] Mercredi = {w89Label, w910Label, w1011Label, w1112Label, w1213Label, w1314Label, w1415Label,
@@ -450,7 +450,7 @@ public class Timetable extends JFrame{
             a37Button, a38Button, a39Button, a40Button, a41Button, a42Button, a43Button, a44Button, a45Button,
             a46Button, a47Button, a48Button, a49Button, a50Button, a51Button, a52Button, a53Button};
 
-    private  JPanel[] fullpanels = {panel1, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11,
+    private JPanel[] fullpanels = {panel1, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11,
             panel12, panel13, panel14, panel15, panel16, panel17, panel18, panel19, panel20, panel21, panel22, panel23,
             panel24, panel25, panel26, panel27, panel28, panel29, panel30, panel31, panel32, panel33, panel34, panel35,
             panel36, panel37, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel46, panel47,
@@ -495,8 +495,7 @@ public class Timetable extends JFrame{
     private Timetable thisframe = this;
 
     void buttonFunc(int i) {
-        // doesn't pass if last button is the same as this button
-        if(lastButton != -1)
+        if (lastButton != -1)
             boutons[lastButton].setBorder(lineBorder);
 
         for (JPanel panel : fullheures)
@@ -515,17 +514,15 @@ public class Timetable extends JFrame{
             int dayNumber = Integer.parseInt(banana[0]) - 1;
             int dHourNumber = Integer.parseInt(banana[1]);
             int eHourNumber = Integer.parseInt(banana[2]);
-            System.out.println(banana.length);
-            //NEXT DO TD/TP/CM etc. thingy
             int lessonType = Integer.parseInt(banana[7]);
-            String htmlthingy = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
-            htmlthingy += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
+            String displayText = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
+            displayText += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
             int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber - 1) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
                 Semaine[dayNumber][j].setText("");
             }
-            Semaine[dayNumber][midhour].setText(htmlthingy);
+            Semaine[dayNumber][midhour].setText(displayText);
 
             if (eHourNumber != dHourNumber + 1) {
                 fullheures[dayNumber * JL + dHourNumber].setBorder(topBorder);
@@ -535,8 +532,6 @@ public class Timetable extends JFrame{
                 }
             }
         }
-
-        System.out.println(boutonChaine[i]);
         boutons[i].setBorder(null);
         lastButton = i;
     }
@@ -552,10 +547,10 @@ public class Timetable extends JFrame{
         int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
         boolean is53weekYear = LocalDate.of(year, 1, 1).getDayOfWeek() == DayOfWeek.THURSDAY ||
                 LocalDate.of(year, 12, 31).getDayOfWeek() == DayOfWeek.THURSDAY;
-        if(!is53weekYear)
+        if (!is53weekYear)
             a53Button.setVisible(false);
 
-        for (JPanel jp:demiheures) {
+        for (JPanel jp : demiheures) {
             jp.setVisible(false);
         }
 
@@ -577,24 +572,23 @@ public class Timetable extends JFrame{
             }
         });
 
-        for(int i = 0; i < 53; i++) {
+        for (int i = 0; i < 53; i++) {
             boutonChaine[i] = new ArrayList<String>();
         }
 
         for (int i = 0; i < boutons.length; i++) {
-        int finalI = i;
-        boutons[i].addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                buttonFunc(finalI);
-            }
-        });
+            int finalI = i;
+            boutons[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    buttonFunc(finalI);
+                }
+            });
 
             boutons[i].setBorder(lineBorder);
         }
         buttonFunc(weekNumber - 1);
-        //l89Label.setText("<html><body>Test<br>Test<br>Test</body></html>");
     }
 
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ReservationPopup extends JFrame{
+public class ReservationPopup extends JFrame {
     private JPanel panel1;
     private JPanel panel2;
     private JButton cancelButton;
@@ -64,32 +64,16 @@ public class ReservationPopup extends JFrame{
         });
         this.rootwindow = rootwindow;
 
-        comboBox4.addItem("8h");
-        comboBox4.addItem("9h");
-        comboBox4.addItem("10h");
-        comboBox4.addItem("11h");
-        comboBox4.addItem("12h");
-        comboBox4.addItem("13h");
-        comboBox4.addItem("14h");
-        comboBox4.addItem("15h");
-        comboBox4.addItem("16h");
-        comboBox4.addItem("17h");
-        comboBox4.addItem("18h");
+        String[] hourList = {"8h", "9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h"};
 
-        comboBox6.addItem("8h");
-        comboBox6.addItem("9h");
-        comboBox6.addItem("10h");
-        comboBox6.addItem("11h");
-        comboBox6.addItem("12h");
-        comboBox6.addItem("13h");
-        comboBox6.addItem("14h");
-        comboBox6.addItem("15h");
-        comboBox6.addItem("16h");
-        comboBox6.addItem("17h");
-        comboBox6.addItem("18h");
+        for (int i = 0; i < hourList.length - 1; i++)
+            comboBox4.addItem(hourList[i]);
+
+        for (int i = 1; i < hourList.length; i++)
+            comboBox6.addItem(hourList[i]);
 
         List<Room> roomlist = Room.getRoomList();
-        for (Room r: roomlist) {
+        for (Room r : roomlist) {
             comboBox1.addItem(r.getBuilding() + "." + r.getNumber());
         }
 
@@ -97,17 +81,17 @@ public class ReservationPopup extends JFrame{
             comboBox2.addItem(enumType);
 
         List<Course> courselist = Course.getCourseList();
-        for (Course c: courselist) {
+        for (Course c : courselist) {
             comboBox8.addItem(c.getLabel());
         }
 
         List<Group> grouplist = Group.getGroupList();
-        for (Group g: grouplist) {
+        for (Group g : grouplist) {
             comboBox9.addItem(g.getLabel());
         }
 
         List<Teacher> teacherlist = Teacher.getTeacherList();
-        for (Teacher t: teacherlist) {
+        for (Teacher t : teacherlist) {
             comboBox5.addItem(t.getLastName() + " " + t.getFirstName());
         }
 
@@ -129,7 +113,6 @@ public class ReservationPopup extends JFrame{
                     Calendar temp = Calendar.getInstance(Locale.FRANCE);
                     temp.setTime(date);
                     int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
-                    //System.out.println(textField1.getText());
                     String output = "" + (temp.get(Calendar.DAY_OF_WEEK) - 1) + "/";
                     int heureDebut = comboBox4.getSelectedIndex();
                     int heureFin = comboBox6.getSelectedIndex();
@@ -148,12 +131,10 @@ public class ReservationPopup extends JFrame{
                     rootwindow.buttonFunc(rootwindow.lastButton);
 
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-                }
-                catch (ParseException | ArrayIndexOutOfBoundsException a) {
+                } catch (ParseException | ArrayIndexOutOfBoundsException a) {
                     String message = "Veuillez remplir les champs.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                }
-                catch (IncorrectEndHourException b) {
+                } catch (IncorrectEndHourException b) {
                     String message = "Veuillez choisir une heure de fin supérieure à l'heure de début.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
