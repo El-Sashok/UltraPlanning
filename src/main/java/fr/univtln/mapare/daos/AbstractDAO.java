@@ -42,7 +42,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
 
     public abstract String getTableName();
 
-    protected abstract E fromResultSet(ResultSet resultSet) throws SQLException, DataAccessException;
+    protected abstract E fromResultSet(ResultSet resultSet) throws SQLException;
 
     public Optional<E> find(long id) throws DataAccessException {
         E entity = null;
@@ -51,8 +51,8 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
             ResultSet rs = findPS.executeQuery();
             while (rs.next())
                 entity = fromResultSet(rs);
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+        } catch (SQLException throwable) {
+            throw new DataAccessException(throwable.getLocalizedMessage());
         }
         return Optional.ofNullable(entity);
     }
