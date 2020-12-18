@@ -39,6 +39,7 @@ public class ModuleDAO extends AbstractDAO<Module> {
     @Override
     public void update(Module module) throws SQLException {
         populate(updatePS, module);
+        updatePS.setLong(3, module.getId());
         super.update();
     }
 
