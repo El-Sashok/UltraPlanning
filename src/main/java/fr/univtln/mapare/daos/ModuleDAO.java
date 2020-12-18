@@ -14,20 +14,20 @@ import java.util.Optional;
 public class ModuleDAO extends AbstractDAO<Module> {
 
     public ModuleDAO() throws SQLException {
-        super("INSERT INTO MODULE(TITLE, NB_HOURS) VALUES (?,?)",
-                "UPDATE MODULE SET TITLE=?, NB_HOURS=? WHERE ID=?");
+        super("INSERT INTO MODULE(LABEL, NB_HOURS) VALUES (?,?)",
+                "UPDATE MODULE SET LABEL=?, NB_HOURS=? WHERE ID=?");
     }
 
     @Override
     protected Module fromResultSet(ResultSet resultSet) throws SQLException {
-        Module module = Module.getModuleList().get(resultSet.getInt("ID"));
-        if (module != null) {
-            return module;
-        } else {
-            return new Module(resultSet.getInt("ID"),
-                    resultSet.getString("TITLE"),
-                    resultSet.getInt("NB_HOURS"));
+        int id = resultSet.getInt("ID");
+        for (Module m: Module.getModuleList()) {
+            if (m.getId() == resultSet.getInt("ID"))
+                return m;
         }
+        return new Module(resultSet.getInt("ID"),
+                resultSet.getString("LABEL"),
+                resultSet.getInt("NB_HOURS"));
     }
 
     @Override
