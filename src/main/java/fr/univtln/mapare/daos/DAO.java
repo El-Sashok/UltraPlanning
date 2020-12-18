@@ -44,7 +44,7 @@ public interface DAO<E extends Entity> extends AutoCloseable {
      * @param list The list of entities to be persisted.
      * @return The list of entities or clones if their id has been updated by the database.
      */
-    default List<E> persist(List<E> list) {
+    default List<E> persist(List<E> list) throws SQLException {
         List<E> resultList = new ArrayList<>();
         for (E e : list) resultList.add(persist(e));
         return resultList;
@@ -69,7 +69,7 @@ public interface DAO<E extends Entity> extends AutoCloseable {
      *
      * @param e the entity to be removed.
 */
-    default void remove(E e) {
+    default void remove(E e) throws SQLException {
         remove(e.getId());
     }
 
