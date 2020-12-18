@@ -21,7 +21,8 @@ public class Module implements Entity {
         return id;
     }
 
-    public ArrayList<Module> getModuleList() { return MODULES; }
+    public static ArrayList<Module> getModuleList() { return MODULES; }
+
 
     public String getLabel() {
         return label;
