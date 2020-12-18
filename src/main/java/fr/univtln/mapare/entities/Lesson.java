@@ -26,7 +26,7 @@ public class Lesson extends Reservation {
         this.type = type;
     }
 
-    public List<Module> getCourses() {
+    public List<Module> getModules() {
         return module;
     }
 
