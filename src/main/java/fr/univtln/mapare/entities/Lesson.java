@@ -5,14 +5,14 @@ import java.util.Date;
 
 public class Lesson extends Reservation {
     private Type type;
-    private ArrayList<Course> courses;
+    private ArrayList<Module> cours;
     private ArrayList<Group> groups;
 
     //Constructor
     public Lesson(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
         super(id, startDate, endDate, label, memo, state, room);
         this.type = type;
-        this.courses = new ArrayList<Course>();
+        this.cours = new ArrayList<Module>();
         this.groups = new ArrayList<Group>();
     }
 
@@ -25,12 +25,12 @@ public class Lesson extends Reservation {
         this.type = type;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
+    public ArrayList<Module> getCourses() {
+        return cours;
     }
 
-    public void setCourses(ArrayList<Course> courses) {
-        this.courses = courses;
+    public void setCourses(ArrayList<Module> cours) {
+        this.cours = cours;
     }
 
     public ArrayList<Group> getGroups() {
@@ -47,13 +47,13 @@ public class Lesson extends Reservation {
         return "Lesson{" +
                 super.toString() +
                 ", type=" + type +
-                ", courses=" + courses +
+                ", courses=" + cours +
                 ", goups=" + groups +
                 '}';
     }
 
-    public Lesson addCourse(Course c) {
-        courses.add(c);
+    public Lesson addCourse(Module c) {
+        cours.add(c);
         return this;
     }
 
