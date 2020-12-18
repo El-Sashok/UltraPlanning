@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Entity {
-    private final long id;
+    private long id;
     private String label;
     private List<Student> students;
 
@@ -19,6 +19,11 @@ public class Group implements Entity {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLabel() {

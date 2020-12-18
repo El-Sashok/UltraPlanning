@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Yeargroup implements Entity {
-    private final long id;
+    private long id;
     private String label;
     private List<Group> groups;
 
@@ -19,6 +19,11 @@ public class Yeargroup implements Entity {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLabel() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room implements Entity {
-    private final long id;
+    private long id;
     private String building;
     private int number;
     private int capacity;
@@ -27,6 +27,11 @@ public class Room implements Entity {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public static List<Room> getRoomsList() {

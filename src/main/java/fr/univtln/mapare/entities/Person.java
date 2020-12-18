@@ -3,7 +3,7 @@ package fr.univtln.mapare.entities;
 import java.util.Date;
 
 public abstract class Person implements Entity {
-    private final long id;
+    private long id;
     private final String lastName;
     private final String firstName;
     private final Date birthdate;
@@ -43,6 +43,9 @@ public abstract class Person implements Entity {
 
     @Override
     public long getId() { return id; }
+
+    @Override
+    public void setId(long id) { this.id = id; }
 
     //Methods
     @Override

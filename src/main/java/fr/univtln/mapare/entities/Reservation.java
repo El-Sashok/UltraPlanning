@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Reservation implements Entity {
-    private final long id;
+    private long id;
     private Date startDate;
     private Date endDate;
     private String label;
@@ -32,6 +32,11 @@ public class Reservation implements Entity {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public static List<Reservation> getReservationList() { return RESERVATIONS; }

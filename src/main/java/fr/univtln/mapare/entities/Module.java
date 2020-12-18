@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Module implements Entity {
-    private final long id;
+    private long id;
     private String label;
     private int nbHour;
     private static final List<Module> MODULES = new ArrayList<>();
@@ -20,6 +20,11 @@ public class Module implements Entity {
     @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public static List<Module> getModuleList() { return MODULES; }
