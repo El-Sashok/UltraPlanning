@@ -114,21 +114,4 @@ public class GroupDAO extends AbstractDAO<Group>{
     public String getTableName() {
         return "CLASS_GROUP";
     }
-
-    public ArrayList<Student> getStudents(long id) throws DataAccessException {
-        ArrayList<Student> students = new ArrayList<>();
-        try {
-            findGP.setLong(1, id);
-            ResultSet rs_findGP = findGP.executeQuery();
-            while (rs_findGP.next()) {
-                findST.setLong(1, rs_findGP.getInt("STUDENT"));
-                ResultSet rs_findST = findST.executeQuery();
-                rs_findST.next();
-                students.add(studentDAO.fromResultSet(rs_findST));
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
-        }
-        return students;
-    }
 }
