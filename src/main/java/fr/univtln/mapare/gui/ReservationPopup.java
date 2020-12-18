@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ReservationPopup extends JFrame{
@@ -43,23 +44,25 @@ public class ReservationPopup extends JFrame{
     private JLabel typeLabel;
     private JComboBox comboBox2;
 
-    JFrame thisframe = this;
+    private JFrame thisframe = this;
 
-    public ReservationPopup() {
+    private Timetable rootwindow;
+
+    public ReservationPopup(Timetable rootwindow) {
         setTitle("Reservation");
         setSize(320, 300);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
-        JFrame temp = this;
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                temp.dispatchEvent(new WindowEvent(temp, WindowEvent.WINDOW_CLOSING));
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+        this.rootwindow = rootwindow;
 
         comboBox4.addItem("8h");
         comboBox4.addItem("9h");
@@ -90,11 +93,8 @@ public class ReservationPopup extends JFrame{
             comboBox1.addItem(r.getBuilding() + "." + r.getNumber());
         }
 
-        comboBox2.addItem("TD");
-        comboBox2.addItem("CM");
-        comboBox2.addItem("TP");
-        comboBox2.addItem("CC");
-        comboBox2.addItem("CT");
+        for (String enumType : rootwindow.lessonTypeEnum)
+            comboBox2.addItem(enumType);
 
         List<Course> courselist = Course.getCourseList();
         for (Course c: courselist) {
@@ -126,14 +126,35 @@ public class ReservationPopup extends JFrame{
                     text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
                     DateFormat df = new SimpleDateFormat("dd-MMM-yy");
                     Date date = df.parse(text);
-                    Calendar temp = Calendar.getInstance();
+                    Calendar temp = Calendar.getInstance(Locale.FRANCE);
                     temp.setTime(date);
+                    int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
                     //System.out.println(textField1.getText());
-                    //System.out.println(temp.get(Calendar.WEEK_OF_YEAR));
+                    String output = "" + (temp.get(Calendar.DAY_OF_WEEK) - 1) + "/";
+                    int heureDebut = comboBox4.getSelectedIndex();
+                    int heureFin = comboBox6.getSelectedIndex();
+                    if (heureFin <= heureDebut)
+                        throw new IncorrectEndHourException();
+                    output += heureDebut + "/" + heureFin + "/";
+                    output += comboBox8.getSelectedItem() + "/";
+                    output += comboBox5.getSelectedItem() + "/";
+                    output += comboBox9.getSelectedItem() + "/";
+                    output += comboBox1.getSelectedItem() + "/";
+                    output += comboBox2.getSelectedIndex() + "/";
+                    output += textField1.getText();
 
+                    rootwindow.boutonChaine[boutonNb].add(output);
+
+                    rootwindow.buttonFunc(rootwindow.lastButton);
+
+                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
                 catch (ParseException | ArrayIndexOutOfBoundsException a) {
                     String message = "Veuillez remplir les champs.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (IncorrectEndHourException b) {
+                    String message = "Veuillez choisir une heure de fin supérieure à l'heure de début.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
