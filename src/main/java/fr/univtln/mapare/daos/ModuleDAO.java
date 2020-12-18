@@ -17,10 +17,10 @@ public class ModuleDAO extends AbstractDAO<Module> {
     }
 
     @Override
-    protected Module fromResultSet(ResultSet resultSet) throws SQLException, DataAccessException {
-        Optional<Module> oModule = find(resultSet.getInt("ID"));
-        if (oModule.isPresent()){
-            return oModule.get();
+    protected Module fromResultSet(ResultSet resultSet) throws SQLException {
+        Module module = Module.getModuleList().get(resultSet.getInt("ID"));
+        if (module != null) {
+            return module;
         } else {
             return new Module(resultSet.getInt("ID"),
                     resultSet.getString("TITLE"),
