@@ -21,7 +21,7 @@ public class RoomDAO extends AbstractDAO<Room> {
                 resultSet.getString("BUILDING"),
                 resultSet.getInt("NUMBER"),
                 resultSet.getInt("CAPACITY"),
-                resultSet.getString("TITLE"),
+                resultSet.getString("LABEL"),
                 resultSet.getString("INFO"));
 
     }
