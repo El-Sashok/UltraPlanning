@@ -10,7 +10,7 @@ import java.sql.SQLException;
 @Log
 public class ConstraintDAO extends AbstractDAO<Constraint> {
 
-    public ConstraintDAO() throws DataAccessException {
+    public ConstraintDAO() throws SQLException {
         super("",
                 "");
     }
@@ -24,12 +24,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
     }
 
     @Override
-    public Constraint persist(Constraint constraint) throws DataAccessException {
+    public Constraint persist(Constraint constraint) {
         return null;
     }
 
     @Override
-    public void update(Constraint constraint) throws DataAccessException {
+    public void update(Constraint constraint) {
 
     }
 

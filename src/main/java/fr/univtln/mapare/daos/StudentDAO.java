@@ -10,23 +10,28 @@ import java.sql.SQLException;
 @Log
 public class StudentDAO extends AbstractDAO<Student> {
 
-    public StudentDAO() throws DataAccessException {
+    public StudentDAO() throws SQLException {
         super("",
                 "");
     }
 
     @Override
     protected Student fromResultSet(ResultSet resultSet) throws SQLException {
-        return new Student(resultSet.getInt("ID"), resultSet.getString("SURNAME"), resultSet.getString("NAME"), resultSet.getDate("BIRTHDATE"), resultSet.getString("EMAIL"), resultSet.getString("PASSWORD"));
+        return new Student(resultSet.getInt("ID"),
+                resultSet.getString("SURNAME"),
+                resultSet.getString("NAME"),
+                resultSet.getDate("BIRTHDATE"),
+                resultSet.getString("EMAIL"),
+                resultSet.getString("PASSWORD"));
     }
 
     @Override
-    public Student persist(Student student) throws DataAccessException {
+    public Student persist(Student student) {
         return null;
     }
 
     @Override
-    public void update(Student student) throws DataAccessException {
+    public void update(Student student) {
 
     }
 

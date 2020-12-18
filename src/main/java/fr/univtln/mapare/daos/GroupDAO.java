@@ -14,27 +14,15 @@ import java.util.Optional;
 
 @Log
 public class GroupDAO extends AbstractDAO<Group>{
-    private final PreparedStatement findGP;
-    private final PreparedStatement findST;
+    private final PreparedStatement findMembersPS;
+    private final PreparedStatement findStudentPS;
     private final StudentDAO studentDAO;
 
-    public GroupDAO() throws DataAccessException {
+    public GroupDAO() throws SQLException {
         super("", "");
         this.studentDAO= new StudentDAO();
-        PreparedStatement _findGP = null;
-        try {
-                _findGP = connection.prepareStatement("SELECT * FROM GROUP_MEMBERS WHERE CLASS_GROUP=?");
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
-        this.findGP = _findGP;
-        PreparedStatement _findST = null;
-        try {
-            _findST = connection.prepareStatement("SELECT * FROM STUDENT WHERE ID=?");
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
-        this.findST = _findST;
+        this.findMembersPS = connection.prepareStatement("SELECT * FROM GROUP_MEMBERS WHERE CLASS_GROUP=?");
+        this.findStudentPS = connection.prepareStatement("SELECT * FROM STUDENT WHERE ID=?");
     }
 
     @Override
@@ -52,61 +40,52 @@ public class GroupDAO extends AbstractDAO<Group>{
     }
 
     @Override
-    public Optional<Group> find(long id) throws DataAccessException {
+    public Optional<Group> find(long id) throws SQLException {
         Group group  = null;
         List<Student> students = new ArrayList<>();
-        try {
-            findPS.setLong(1, id);
-            findGP.setLong(1, id);
-            ResultSet rs_findPS = findPS.executeQuery();
-            ResultSet rs_findGP = findGP.executeQuery();
-            while (rs_findGP.next()) {
-                findST.setLong(1, rs_findGP.getInt("STUDENT"));
-                ResultSet rs_findST = findST.executeQuery();
-                rs_findST.next();
-                students.add(studentDAO.fromResultSet(rs_findST));
-            }
-            while (rs_findPS.next()) group = fromResultSet(rs_findPS, students);
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+        findPS.setLong(1, id);
+        findMembersPS.setLong(1, id);
+        ResultSet rs_findPS = findPS.executeQuery();
+        ResultSet rs_findGP = findMembersPS.executeQuery();
+
+        while (rs_findGP.next()) {
+            findStudentPS.setLong(1, rs_findGP.getInt("STUDENT"));
+            ResultSet rs_findST = findStudentPS.executeQuery();
+            rs_findST.next();
+            students.add(studentDAO.fromResultSet(rs_findST));
         }
+        while (rs_findPS.next()) group = fromResultSet(rs_findPS, students);
         return Optional.ofNullable(group);
     }
 
     @Override
-    public List<Group> findAll() throws DataAccessException {
+    public List<Group> findAll() throws SQLException {
         List<Group> entityList = new ArrayList<>();
-        try {
-            ResultSet rs_findPS = findAllPS.executeQuery();
-            while (rs_findPS.next()){
-                List<Student> students = new ArrayList<>();
-                try {
-                    findGP.setLong(1, rs_findPS.getLong("ID"));
-                    ResultSet rs_findGP = findGP.executeQuery();
-                    while (rs_findGP.next()) {
-                        findST.setLong(1, rs_findGP.getLong("STUDENT"));
-                        ResultSet rs_findST = findST.executeQuery();
-                        rs_findST.next();
-                        students.add(studentDAO.fromResultSet(rs_findST));
-                    }
-                    entityList.add(fromResultSet(rs_findPS, students));
-                } catch (SQLException e) {
-                    throw new DataAccessException(e.getLocalizedMessage());
-                }
+        ResultSet rs_findPS = findAllPS.executeQuery();
+
+        while (rs_findPS.next()) {
+            List<Student> students = new ArrayList<>();
+            findMembersPS.setLong(1, rs_findPS.getLong("ID"));
+            ResultSet rs_findGP = findMembersPS.executeQuery();
+
+            while (rs_findGP.next()) {
+                findStudentPS.setLong(1, rs_findGP.getLong("STUDENT"));
+                ResultSet rs_findST = findStudentPS.executeQuery();
+                rs_findST.next();
+                students.add(studentDAO.fromResultSet(rs_findST));
             }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+            entityList.add(fromResultSet(rs_findPS, students));
         }
         return entityList;
     }
 
     @Override
-    public Group persist(Group group) throws DataAccessException {
+    public Group persist(Group group) {
         return null;
     }
 
     @Override
-    public void update(Group group) throws DataAccessException {
+    public void update(Group group) {
 
     }
 

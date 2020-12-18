@@ -3,13 +3,15 @@ package fr.univtln.mapare;
 import fr.univtln.mapare.daos.*;
 import fr.univtln.mapare.exceptions.DataAccessException;
 
+import java.sql.SQLException;
+
 /**
  * Hello world!
  *
  */
 public class App 
 {
-    public static void main( String[] args ) throws DataAccessException {
+    public static void main( String[] args ) throws SQLException {
         TeacherDAO teacherDAO = new TeacherDAO();
         System.out.println(teacherDAO.find(1));
 

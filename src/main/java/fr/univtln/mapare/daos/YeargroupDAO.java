@@ -14,27 +14,16 @@ import java.util.Optional;
 
 @Log
 public class YeargroupDAO extends AbstractDAO<Yeargroup> {
-    private final PreparedStatement findYG;
-    private final PreparedStatement findGP;
+    private final PreparedStatement findYearGroupsPS;
+    private final PreparedStatement findGroupPS;
     private final GroupDAO groupDAO;
 
-    public YeargroupDAO() throws DataAccessException {
+    public YeargroupDAO() throws SQLException {
         super("", "");
         this.groupDAO = new GroupDAO();
-        PreparedStatement _findYG = null;
-        try {
-            _findYG = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
-        this.findYG = _findYG;
-        PreparedStatement _findGP = null;
-        try {
-            _findGP = connection.prepareStatement("SELECT * FROM CLASS_GROUP WHERE ID=?");
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
-        this.findGP = _findGP;
+
+        this.findYearGroupsPS = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
+        this.findGroupPS = connection.prepareStatement("SELECT * FROM CLASS_GROUP WHERE ID=?");
     }
 
     @Override
@@ -52,63 +41,52 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     }
 
     @Override
-    public Optional<Yeargroup> find(long id) throws DataAccessException {
+    public Optional<Yeargroup> find(long id) throws SQLException {
         GroupDAO groupDAO = new GroupDAO();
         Yeargroup yeargroup = null;
         List<Group> groups = new ArrayList<>();
-        try {
-            findPS.setLong(1, id);
-            findYG.setLong(1, id);
-            ResultSet rs_findPS = findPS.executeQuery();
-            ResultSet rs_findYG = findYG.executeQuery();
-            while (rs_findYG.next()) {
-                findGP.setLong(1, rs_findYG.getInt("CLASS_GROUP"));
-                ResultSet rs_findGP = findGP.executeQuery();
-                rs_findGP.next();
-                groups.add(groupDAO.fromResultSet(rs_findGP, groupDAO.find(rs_findGP.getInt("ID")).get().getStudents()));
-            }
-            while (rs_findPS.next()) yeargroup = fromResultSet(rs_findPS, groups);
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+        findPS.setLong(1, id);
+        findYearGroupsPS.setLong(1, id);
+        ResultSet rs_findPS = findPS.executeQuery();
+        ResultSet rs_findYG = findYearGroupsPS.executeQuery();
+        while (rs_findYG.next()) {
+            findGroupPS.setLong(1, rs_findYG.getInt("CLASS_GROUP"));
+            ResultSet rs_findGP = findGroupPS.executeQuery();
+            rs_findGP.next();
+            groups.add(groupDAO.fromResultSet(rs_findGP, groupDAO.find(rs_findGP.getInt("ID")).get().getStudents()));
         }
+        while (rs_findPS.next()) yeargroup = fromResultSet(rs_findPS, groups);
+
         return Optional.ofNullable(yeargroup);
     }
 
     @Override
-    public List<Yeargroup> findAll() throws DataAccessException {
+    public List<Yeargroup> findAll() throws SQLException {
         GroupDAO groupDAO = new GroupDAO();
         List<Yeargroup> entityList = new ArrayList<>();
-        try {
-            ResultSet rs_findPS = findAllPS.executeQuery();
-            while (rs_findPS.next()) {
-                List<Group> groups = new ArrayList<>();
-                try {
-                    findYG.setLong(1, rs_findPS.getLong("ID"));
-                    ResultSet rs_findYG = findYG.executeQuery();
-                    while (rs_findYG.next()) {
-                        findGP.setLong(1, rs_findYG.getLong("CLASS_GROUP"));
-                        ResultSet rs_findGP = findGP.executeQuery();
-                        rs_findGP.next();
-                        groups.add(groupDAO.fromResultSet(rs_findGP, groupDAO.find(rs_findGP.getInt("ID")).get().getStudents()));
-                    }
-                    entityList.add(fromResultSet(rs_findPS, groups));
-                } catch (SQLException e) {
-                    throw new DataAccessException(e.getLocalizedMessage());
-                }
+        ResultSet rs_findPS = findAllPS.executeQuery();
+        while (rs_findPS.next()) {
+            List<Group> groups = new ArrayList<>();
+            findYearGroupsPS.setLong(1, rs_findPS.getLong("ID"));
+            ResultSet rs_findYG = findYearGroupsPS.executeQuery();
+            while (rs_findYG.next()) {
+                findGroupPS.setLong(1, rs_findYG.getLong("CLASS_GROUP"));
+                ResultSet rs_findGP = findGroupPS.executeQuery();
+                rs_findGP.next();
+                groups.add(groupDAO.fromResultSet(rs_findGP, groupDAO.find(rs_findGP.getInt("ID")).get().getStudents()));
             }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+            entityList.add(fromResultSet(rs_findPS, groups));
         }
         return entityList;
     }
 
     @Override
-    public Yeargroup persist(Yeargroup yeargroup) throws DataAccessException {
+    public Yeargroup persist(Yeargroup yeargroup) {
         return null;
     }
 
     @Override
-    public void update(Yeargroup yeargroup) throws DataAccessException {
+    public void update(Yeargroup yeargroup) {
 
     }
 

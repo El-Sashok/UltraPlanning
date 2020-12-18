@@ -3,6 +3,7 @@ package fr.univtln.mapare.daos;
 import fr.univtln.mapare.entities.Entity;
 import fr.univtln.mapare.exceptions.DataAccessException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,35 +20,31 @@ public interface DAO<E extends Entity> extends AutoCloseable {
      *
      * @param id the id of the entity
      * @return the entity with the given id from the database.
-     * @throws DataAccessException If there is a data access error (see message).
      */
-    Optional<E> find(long id) throws DataAccessException;
+    Optional<E> find(long id) throws SQLException;
 
     /**
      * Return the complete list of entities managed by the DAO from the database.
      *
      * @return the list of entities managed by the DAO.
-     * @throws DataAccessException If there is a data access error (see message).
      */
-    List<E> findAll() throws DataAccessException;
+    List<E> findAll() throws SQLException;
 
     /**
      * Persists a new entity in the database.
      *
      * @param e The entity to be persisted.
      * @return The entity or a clone if the id has been updated by the database.
-     * @throws DataAccessException If there is a data access error (see message).
      */
-    E persist(E e) throws DataAccessException;
+    E persist(E e) throws SQLException;
 
     /**
      * A default method to persist a list of entities.
      *
      * @param list The list of entities to be persisted.
      * @return The list of entities or clones if their id has been updated by the database.
-     * @throws DataAccessException If there is a data access error (see message).
      */
-    default List<E> persist(List<E> list) throws DataAccessException {
+    default List<E> persist(List<E> list) {
         List<E> resultList = new ArrayList<>();
         for (E e : list) resultList.add(persist(e));
         return resultList;
@@ -57,38 +54,34 @@ public interface DAO<E extends Entity> extends AutoCloseable {
      * Update the entity in the database with the parameter.
      *
      * @param e The entity to be updated. The id is used and cannot be updated.
-     * @throws DataAccessException If there is a data access error (see message).
-     */
-    void update(E e) throws DataAccessException;
+*/
+    void update(E e) throws SQLException;
 
     /**
      * Removes the entity with the given id from the database.
      *
      * @param id the id of the entity to remove
-     * @throws DataAccessException If there is a data access error (see message).
-     */
-    void remove(long id) throws DataAccessException;
+*/
+    void remove(long id) throws SQLException;
 
     /**
      * Removes the given entity from the database using its ID.
      *
      * @param e the entity to be removed.
-     * @throws DataAccessException If there is a data access error (see message).
-     */
-    default void remove(E e) throws DataAccessException {
+*/
+    default void remove(E e) {
         remove(e.getId());
     }
 
     /**
      * Removes all the entities managed by the DAO from the database.
      *
-     * @throws DataAccessException If there is a data access error (see message).
-     */
-    void clean() throws DataAccessException;
+*/
+    void clean() throws SQLException;
 
     /**
      * Release the connection to the connection pool
      */
-    void close() throws DataAccessException;
+    void close() throws SQLException;
 
 }

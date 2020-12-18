@@ -13,7 +13,7 @@ import java.util.Optional;
 @Log
 public class ModuleDAO extends AbstractDAO<Module> {
 
-    public ModuleDAO() throws DataAccessException {
+    public ModuleDAO() throws SQLException {
         super("INSERT INTO MODULE(TITLE, NB_HOURS) VALUES (?,?)",
                 "UPDATE MODULE SET TITLE=?, NB_HOURS=? WHERE ID=?");
     }
@@ -31,24 +31,20 @@ public class ModuleDAO extends AbstractDAO<Module> {
     }
 
     @Override
-    public Module persist(Module module) throws DataAccessException {
+    public Module persist(Module module) throws SQLException {
         populate(persistPS, module);
         return super.persist();
     }
 
     @Override
-    public void update(Module module) throws DataAccessException {
+    public void update(Module module) throws SQLException {
         populate(updatePS, module);
         super.update();
     }
 
-    public void populate(PreparedStatement popPS, Module module) throws DataAccessException {
-        try {
-            popPS.setString(1, module.getLabel());
-            popPS.setInt(2, module.getNbHour());
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
+    public void populate(PreparedStatement popPS, Module module) throws SQLException {
+        popPS.setString(1, module.getLabel());
+        popPS.setInt(2, module.getNbHour());
     }
 
     @Override

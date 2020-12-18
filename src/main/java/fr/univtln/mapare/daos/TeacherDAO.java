@@ -17,18 +17,17 @@ import java.util.Optional;
 public class TeacherDAO extends AbstractDAO<Teacher> {
 
     private final PreparedStatement findConstraintsPS;
+    private final PreparedStatement persistConstraintsPS;
+    private final PreparedStatement updateConstraintsPS;
     private final ConstraintDAO constraintDAO;
 
-    public TeacherDAO() throws DataAccessException {
+    public TeacherDAO() throws SQLException {
         super("", "");
         this.constraintDAO = new ConstraintDAO();
-        PreparedStatement _findConstraintsPS = null;
-        try {
-            _findConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
-        } catch (SQLException throwable) {
-            throw new DataAccessException(throwable.getLocalizedMessage());
-        }
-        this.findConstraintsPS = _findConstraintsPS;
+
+        this.findConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
+        this.persistConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
+        this.updateConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
     }
 
     @Override
@@ -38,18 +37,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
 
     protected Teacher fromResultSet(ResultSet resultSet, List<Constraint> constraints) throws SQLException {
         Teacher teacher;
-        Teacher.Role role;
-        switch (resultSet.getString("STATUS")){
-            case "P":
-                role = Teacher.Role.PROFESSOR;
-                break;
-            case "V":
-                role = Teacher.Role.ADJUNCT_PROF;
-                break;
-            default:
-                role = Teacher.Role.LECTURER;
-                break;
-        }
+
         teacher = new Teacher(resultSet.getLong("ID"),
                 resultSet.getString("SURNAME"),
                 resultSet.getString("NAME"),
@@ -57,7 +45,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
                 resultSet.getString("EMAIL"),
                 resultSet.getString("PASSWORD"),
                 resultSet.getString("LABORATORY"),
-                role);
+                Teacher.Role.valueOf(resultSet.getString("STATUS")));
         for (Constraint c : constraints) {
             teacher.addConstraint(c);
         }
@@ -65,51 +53,40 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     }
 
     @Override
-    public Optional<Teacher> find(long id) throws DataAccessException {
+    public Optional<Teacher> find(long id) throws SQLException {
         Teacher teacher = null;
         List<Constraint> constraints = new ArrayList<>();
-        try {
-            findPS.setLong(1, id);
-            findConstraintsPS.setLong(1, id);
-            ResultSet rs_findPS = findPS.executeQuery();
-            ResultSet rs_findCS = findConstraintsPS.executeQuery();
-            while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
-            while (rs_findPS.next()) teacher = fromResultSet(rs_findPS, constraints);
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
-        }
+        findPS.setLong(1, id);
+        findConstraintsPS.setLong(1, id);
+        ResultSet rs_findPS = findPS.executeQuery();
+        ResultSet rs_findCS = findConstraintsPS.executeQuery();
+        while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
+        while (rs_findPS.next()) teacher = fromResultSet(rs_findPS, constraints);
+
         return Optional.ofNullable(teacher);
     }
 
     @Override
-    public List<Teacher> findAll() throws DataAccessException {
+    public List<Teacher> findAll() throws SQLException {
         List<Teacher> entityList = new ArrayList<>();
-        try {
-            ResultSet rs_findPS = findAllPS.executeQuery();
-            while (rs_findPS.next()){
-                ArrayList<Constraint> constraints = new ArrayList<>();
-                try {
-                    findConstraintsPS.setLong(1, rs_findPS.getLong("ID"));
-                    ResultSet rs_findCS = findConstraintsPS.executeQuery();
-                    while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
-                    entityList.add(fromResultSet(rs_findPS, constraints));
-                } catch (SQLException e) {
-                    throw new DataAccessException(e.getLocalizedMessage());
-                }
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getLocalizedMessage());
+        ResultSet rs_findPS = findAllPS.executeQuery();
+        while (rs_findPS.next()){
+            ArrayList<Constraint> constraints = new ArrayList<>();
+            findConstraintsPS.setLong(1, rs_findPS.getLong("ID"));
+            ResultSet rs_findCS = findConstraintsPS.executeQuery();
+            while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
+            entityList.add(fromResultSet(rs_findPS, constraints));
         }
         return entityList;
     }
 
     @Override
-    public Teacher persist(Teacher teacher) throws DataAccessException {
+    public Teacher persist(Teacher teacher) {
         return null;
     }
 
     @Override
-    public void update(Teacher teacher) throws DataAccessException {
+    public void update(Teacher teacher) {
 
     }
 

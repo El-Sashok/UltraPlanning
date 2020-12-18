@@ -10,7 +10,7 @@ import java.sql.SQLException;
 @Log
 public class RoomDAO extends AbstractDAO<Room> {
 
-    public RoomDAO() throws DataAccessException {
+    public RoomDAO() throws SQLException {
         super("",
                 "");
     }
@@ -27,12 +27,12 @@ public class RoomDAO extends AbstractDAO<Room> {
     }
 
     @Override
-    public Room persist(Room room) throws DataAccessException {
+    public Room persist(Room room) {
         return null;
     }
 
     @Override
-    public void update(Room room) throws DataAccessException {
+    public void update(Room room) {
 
     }
 
