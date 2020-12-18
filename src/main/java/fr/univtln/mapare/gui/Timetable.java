@@ -510,7 +510,7 @@ public class Timetable extends JFrame{
         int JL = Jeudi.length;
         for (int j = 0; j < SL; j++) {
             for (int k = 0; k < JL; k++) {
-                Semaine[j][k].setText("");
+                Semaine[j][k].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
             }
         }
 
@@ -526,7 +526,7 @@ public class Timetable extends JFrame{
             int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
-                Semaine[dayNumber][j].setText("");
+                Semaine[dayNumber][j].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
             }
             Semaine[dayNumber][midhour].setText(displayText);
 
@@ -546,7 +546,7 @@ public class Timetable extends JFrame{
 
     public Timetable() {
         setTitle("Emploi Du Temps");
-        setSize(1400, 800);
+        setSize(1400, 920);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
