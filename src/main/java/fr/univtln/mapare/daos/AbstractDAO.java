@@ -25,7 +25,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
         this.findAllPS = connection.prepareStatement("SELECT * FROM " + getTableName());
         this.persistPS = connection.prepareStatement(persistPS, Statement.RETURN_GENERATED_KEYS);
         this.updatePS = connection.prepareStatement(updatePS);
-        log.warning(getTableName() + " DAO Created.");
+        log.info(getTableName() + " DAO Created.");
     }
 
     public abstract String getTableName();
