@@ -17,6 +17,19 @@ public class Lesson extends Reservation {
         this.groups = new ArrayList<Group>();
     }
 
+    public Lesson(Reservation reservation, Type type) {
+        super(reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getLabel(),
+                reservation.getMemo(),
+                reservation.getState(),
+                reservation.getRoom());
+        this.type = type;
+        this.module = new ArrayList<Module>();
+        this.groups = new ArrayList<Group>();
+    }
+
     //Getters & Setters
     public Type getType() {
         return type;
