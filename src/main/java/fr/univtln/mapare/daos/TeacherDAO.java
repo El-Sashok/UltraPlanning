@@ -36,7 +36,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         return null;
     }
 
-    protected Teacher fromResultSet(ResultSet resultSet, ArrayList<Constraint> constraints) throws SQLException {
+    protected Teacher fromResultSet(ResultSet resultSet, List<Constraint> constraints) throws SQLException {
         Teacher teacher;
         Teacher.Role role;
         switch (resultSet.getString("STATUS")){
@@ -67,7 +67,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     @Override
     public Optional<Teacher> find(long id) throws DataAccessException {
         Teacher teacher = null;
-        ArrayList<Constraint> constraints = new ArrayList<>();
+        List<Constraint> constraints = new ArrayList<>();
         try {
             findPS.setLong(1, id);
             findConstraintsPS.setLong(1, id);

@@ -2,11 +2,12 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Teacher extends Person {
     private String laboratory;
     private Role role;
-    private ArrayList<Constraint> constraints;
+    private List<Constraint> constraints;
 
     //Constructor
     public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
@@ -33,11 +34,11 @@ public class Teacher extends Person {
         this.role = role;
     }
 
-    public ArrayList<Constraint> getConstraints() {
+    public List<Constraint> getConstraints() {
         return constraints;
     }
 
-    public void setConstraints(ArrayList<Constraint> constraints) {
+    public void setConstraints(List<Constraint> constraints) {
         this.constraints = constraints;
     }
 

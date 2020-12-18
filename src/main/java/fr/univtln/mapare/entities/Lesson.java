@@ -2,11 +2,12 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Lesson extends Reservation {
     private Type type;
-    private ArrayList<Module> module;
-    private ArrayList<Group> groups;
+    private List<Module> module;
+    private List<Group> groups;
 
     //Constructor
     public Lesson(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
@@ -25,19 +26,19 @@ public class Lesson extends Reservation {
         this.type = type;
     }
 
-    public ArrayList<Module> getCourses() {
+    public List<Module> getCourses() {
         return module;
     }
 
-    public void setCourses(ArrayList<Module> module) {
+    public void setCourses(List<Module> module) {
         this.module = module;
     }
 
-    public ArrayList<Group> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 

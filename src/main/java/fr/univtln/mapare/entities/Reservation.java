@@ -2,6 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Reservation implements Entity {
     private final long id;
@@ -11,8 +12,8 @@ public class Reservation implements Entity {
     private String memo;
     private State state;
     private Room room;
-    private ArrayList<Teacher> teachers;
-    private static final ArrayList<Reservation> reservations = new ArrayList<>();
+    private List<Teacher> teachers;
+    private static final List<Reservation> RESERVATIONS = new ArrayList<>();
 
     //Constructor
     public Reservation(long id, Date startDate, Date endDate, String label, String memo, State state, Room room) {
@@ -24,7 +25,7 @@ public class Reservation implements Entity {
         this.state = state;
         this.room = room;
         this.teachers = new ArrayList<Teacher>();
-        reservations.add(this);
+        RESERVATIONS.add(this);
     }
 
     //Getters & Setters
@@ -33,7 +34,7 @@ public class Reservation implements Entity {
         return id;
     }
 
-    public ArrayList<Reservation> getReservationList() { return reservations; }
+    public static List<Reservation> getReservationList() { return RESERVATIONS; }
 
     public Date getStartDate() {
         return startDate;
@@ -83,11 +84,11 @@ public class Reservation implements Entity {
         this.room = room;
     }
 
-    public ArrayList<Teacher> getTeachers() {
+    public List<Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(ArrayList<Teacher> teachers) {
+    public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }
 

@@ -1,17 +1,18 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Yeargroup implements Entity {
     private final long id;
     private String label;
-    private ArrayList<Group> groups;
+    private List<Group> groups;
 
     //Constructors
     public Yeargroup(long id, String label) {
         this.id = id;
         this.label = label;
-        this.groups = new ArrayList<Group>();
+        this.groups = new ArrayList<>();
     }
 
     //Getters & Setters
@@ -28,11 +29,11 @@ public class Yeargroup implements Entity {
         this.label = label;
     }
 
-    public ArrayList<Group> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
+    public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 

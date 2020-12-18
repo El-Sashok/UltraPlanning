@@ -42,7 +42,7 @@ public class GroupDAO extends AbstractDAO<Group>{
         return null;
     }
 
-    protected Group fromResultSet(ResultSet resultSet, ArrayList<Student> students) throws SQLException {
+    protected Group fromResultSet(ResultSet resultSet, List<Student> students) throws SQLException {
         Group group = new Group(resultSet.getInt("ID"),
                 resultSet.getString("LABEL"));
         for (Student s : students) {
@@ -54,7 +54,7 @@ public class GroupDAO extends AbstractDAO<Group>{
     @Override
     public Optional<Group> find(long id) throws DataAccessException {
         Group group  = null;
-        ArrayList<Student> students = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
         try {
             findPS.setLong(1, id);
             findGP.setLong(1, id);
@@ -79,7 +79,7 @@ public class GroupDAO extends AbstractDAO<Group>{
         try {
             ResultSet rs_findPS = findAllPS.executeQuery();
             while (rs_findPS.next()){
-                ArrayList<Student> students = new ArrayList<>();
+                List<Student> students = new ArrayList<>();
                 try {
                     findGP.setLong(1, rs_findPS.getLong("ID"));
                     ResultSet rs_findGP = findGP.executeQuery();
