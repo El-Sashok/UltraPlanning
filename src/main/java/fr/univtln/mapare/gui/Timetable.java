@@ -516,16 +516,15 @@ public class Timetable extends JFrame{
             int dHourNumber = Integer.parseInt(banana[1]);
             int eHourNumber = Integer.parseInt(banana[2]);
             System.out.println(banana.length);
-            //NEXT DO TD/TP/CM etc. thingy
             int lessonType = Integer.parseInt(banana[7]);
-            String htmlthingy = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
-            htmlthingy += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
+            String displayText = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
+            displayText += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
             int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber - 1) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
                 Semaine[dayNumber][j].setText("");
             }
-            Semaine[dayNumber][midhour].setText(htmlthingy);
+            Semaine[dayNumber][midhour].setText(displayText);
 
             if (eHourNumber != dHourNumber + 1) {
                 fullheures[dayNumber * JL + dHourNumber].setBorder(topBorder);
