@@ -42,7 +42,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
 
     public abstract String getTableName();
 
-    protected abstract E fromResultSet(ResultSet resultSet) throws SQLException;
+    protected abstract E fromResultSet(ResultSet resultSet) throws SQLException, DataAccessException;
 
     public Optional<E> find(long id) throws DataAccessException {
         E entity = null;

@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Log
 public class ModuleDAO extends AbstractDAO<Module> {
@@ -16,10 +17,15 @@ public class ModuleDAO extends AbstractDAO<Module> {
     }
 
     @Override
-    protected Module fromResultSet(ResultSet resultSet) throws SQLException {
-        return new Module(resultSet.getInt("ID"),
-                resultSet.getString("TITLE"),
-                resultSet.getInt("NB_HOURS"));
+    protected Module fromResultSet(ResultSet resultSet) throws SQLException, DataAccessException {
+        Optional<Module> oModule = find(resultSet.getInt("ID"));
+        if (oModule.isPresent()){
+            return oModule.get();
+        } else {
+            return new Module(resultSet.getInt("ID"),
+                    resultSet.getString("TITLE"),
+                    resultSet.getInt("NB_HOURS"));
+        }
     }
 
     @Override
