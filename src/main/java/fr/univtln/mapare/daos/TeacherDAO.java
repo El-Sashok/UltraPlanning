@@ -16,19 +16,19 @@ import java.util.Optional;
 @Log
 public class TeacherDAO extends AbstractDAO<Teacher> {
 
-    private final PreparedStatement findCS;
+    private final PreparedStatement findConstraintsPS;
     private final ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws DataAccessException {
         super("", "");
         this.constraintDAO = new ConstraintDAO();
-        PreparedStatement _findCS = null;
+        PreparedStatement _findConstraintsPS = null;
         try {
-            _findCS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
+            _findConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
         } catch (SQLException throwable) {
             throw new DataAccessException(throwable.getLocalizedMessage());
         }
-        this.findCS = _findCS;
+        this.findConstraintsPS = _findConstraintsPS;
     }
 
     @Override
@@ -70,9 +70,9 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         ArrayList<Constraint> constraints = new ArrayList<>();
         try {
             findPS.setLong(1, id);
-            findCS.setLong(1, id);
+            findConstraintsPS.setLong(1, id);
             ResultSet rs_findPS = findPS.executeQuery();
-            ResultSet rs_findCS = findCS.executeQuery();
+            ResultSet rs_findCS = findConstraintsPS.executeQuery();
             while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
             while (rs_findPS.next()) teacher = fromResultSet(rs_findPS, constraints);
         } catch (SQLException e) {
@@ -89,8 +89,8 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
             while (rs_findPS.next()){
                 ArrayList<Constraint> constraints = new ArrayList<>();
                 try {
-                    findCS.setLong(1, rs_findPS.getLong("ID"));
-                    ResultSet rs_findCS = findCS.executeQuery();
+                    findConstraintsPS.setLong(1, rs_findPS.getLong("ID"));
+                    ResultSet rs_findCS = findConstraintsPS.executeQuery();
                     while (rs_findCS.next()) constraints.add(constraintDAO.fromResultSet(rs_findCS));
                     entityList.add(fromResultSet(rs_findPS, constraints));
                 } catch (SQLException e) {
