@@ -507,6 +507,20 @@ public class Timetable extends JFrame {
         if (lastButton != -1)
             boutons[lastButton].setBorder(lineBorder);
 
+        String[] dayOfTheWeek = {"lun", "mar", "mer", "jeu", "ven", "sam"};
+        String[] monthOfTheYear = {"janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
+        "octobre", "novembre", "décembre"};
+        calendar.set(Calendar.WEEK_OF_YEAR, i + 1);
+        if (i >= 33)
+            calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+        else
+            calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) + 1);
+        for (int j = 0; j < 6; j++) {
+            calendar.set(Calendar.DAY_OF_WEEK, j + 2);
+            jourLabels[j].setText(dayOfTheWeek[j] + ". " + calendar.get(Calendar.DAY_OF_MONTH) + " " +
+                    monthOfTheYear[calendar.get(Calendar.MONTH)]);
+        }
+
         for (JPanel panel : fullheures) {
             panel.setBorder(lineBorder);
             panel.setBackground(defaultColor);
@@ -606,6 +620,12 @@ public class Timetable extends JFrame {
             boutons[i].setBorder(lineBorder);
         }
         buttonFunc(weekNumber - 1);
+
+        /*calendar.set(Calendar.WEEK_OF_YEAR, 53);
+        for (int i = 0; i < 8; i++) {
+            calendar.set(Calendar.DAY_OF_WEEK, i);
+            System.out.println(calendar.get(Calendar.DAY_OF_MONTH));
+        }*/
     }
 
     public static void main(String[] args) {
