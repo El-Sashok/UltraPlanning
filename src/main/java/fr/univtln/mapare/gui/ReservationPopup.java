@@ -132,7 +132,7 @@ public class ReservationPopup extends JFrame {
 
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (ParseException | ArrayIndexOutOfBoundsException a) {
-                    String message = "Veuillez remplir les champs.";
+                    String message = "Veuillez sélectionner une date.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectEndHourException b) {
                     String message = "Veuillez choisir une heure de fin supérieure à l'heure de début.";

@@ -490,11 +490,18 @@ public class Timetable extends JFrame {
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
 
-    Color[] colorTypeEnum = {Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED};
+    Color TDColor = new Color(170, 255, 166);
+    Color CMColor = new Color(255, 250, 157);
+    Color TPColor = new Color(220, 175, 220);
+    Color CCColor = new Color(255, 204, 221);
+    Color CTColor = new Color(248, 158, 163);
+    Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor};
 
     Color defaultColor = new Color(238, 238, 238);
 
     private Timetable thisframe = this;
+
+    String paddingText = "<html><body> <br> <br> <br> <br> <br> </body></html>";
 
     void buttonFunc(int i) {
         if (lastButton != -1)
@@ -509,7 +516,7 @@ public class Timetable extends JFrame {
         int JL = Jeudi.length;
         for (int j = 0; j < SL; j++) {
             for (int k = 0; k < JL; k++) {
-                Semaine[j][k].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
+                Semaine[j][k].setText(paddingText);
             }
         }
 
@@ -524,7 +531,7 @@ public class Timetable extends JFrame {
             int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
-                Semaine[dayNumber][j].setText("<html><body> <br> <br> <br> <br> <br> </body></html>");
+                Semaine[dayNumber][j].setText(paddingText);
             }
             Semaine[dayNumber][midhour].setText(displayText);
 
@@ -547,20 +554,10 @@ public class Timetable extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
-        int year = calendar.get(Calendar.YEAR);
-        int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
-        boolean is53weekYear = LocalDate.of(year, 1, 1).getDayOfWeek() == DayOfWeek.THURSDAY ||
-                LocalDate.of(year, 12, 31).getDayOfWeek() == DayOfWeek.THURSDAY;
-        if (!is53weekYear)
-            a53Button.setVisible(false);
+    }
 
-        for (JPanel jp : demiheures) {
-            jp.setVisible(false);
-        }
-
-        for (JPanel panel : fullpanels)
-            panel.setBorder(null);
-
+    public void managerInit() {
+        init();
         JMenu menu = new JMenu("Menu");
         JMenuItem addLesson = new JMenuItem("Ajouter Cours");
         JMenuBar mb = new JMenuBar();
@@ -575,6 +572,22 @@ public class Timetable extends JFrame {
                 rp.setVisible(true);
             }
         });
+    }
+
+    public void init() {
+        int year = calendar.get(Calendar.YEAR);
+        int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
+        boolean is53weekYear = LocalDate.of(year, 1, 1).getDayOfWeek() == DayOfWeek.THURSDAY ||
+                LocalDate.of(year, 12, 31).getDayOfWeek() == DayOfWeek.THURSDAY;
+        if (!is53weekYear)
+            a53Button.setVisible(false);
+
+        for (JPanel jp : demiheures) {
+            jp.setVisible(false);
+        }
+
+        for (JPanel panel : fullpanels)
+            panel.setBorder(null);
 
         for (int i = 0; i < 53; i++) {
             boutonChaine[i] = new ArrayList<String>();
@@ -595,9 +608,9 @@ public class Timetable extends JFrame {
         buttonFunc(weekNumber - 1);
     }
 
-
     public static void main(String[] args) {
         Timetable M = new Timetable();
+        M.managerInit();
         M.setVisible(true);
     }
 }
