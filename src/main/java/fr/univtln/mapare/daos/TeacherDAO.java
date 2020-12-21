@@ -105,9 +105,8 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     }
 
     public void persistConstraints(Teacher teacher, Teacher teacherWithID) throws SQLException {
-        for (Constraint c: teacher.getConstraints()) {
+        for (Constraint c: teacher.getConstraints())
             persistConstraint(teacherWithID, c);
-        }
     }
 
     public void persistConstraint(Teacher teacher, Constraint constraint) throws SQLException {
