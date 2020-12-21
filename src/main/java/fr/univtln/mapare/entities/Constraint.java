@@ -2,14 +2,12 @@ package fr.univtln.mapare.entities;
 
 import java.util.Date;
 
-public class Constraint implements Entity {
-    private long id;
+public class Constraint{
     private Date startDate;
     private Date endDate;
 
     //Constructors
-    public Constraint(long id, Date startDate, Date endDate) {
-        this.id = id;
+    public Constraint(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -38,15 +36,5 @@ public class Constraint implements Entity {
                 "startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 }
