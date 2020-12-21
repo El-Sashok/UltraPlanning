@@ -7,12 +7,15 @@ public class Group implements Entity {
     private long id;
     private String label;
     private List<Student> students;
+    private static final List<Group> GROUPS = new ArrayList<>();
 
     //Constructors
     public Group(long id, String label) {
         this.id = id;
         this.label = label;
         this.students = new ArrayList<Student>();
+        if (id != -1) // To differentiate the ones which are yet in database
+            GROUPS.add(this);
     }
 
     //Getters & Setters
@@ -24,6 +27,14 @@ public class Group implements Entity {
     @Override
     public void setId(long id) {
         this.id = id;
+    }
+
+    public static List<Group> getGroupList() {
+        return GROUPS;
+    }
+
+    public static void popGroupInList(Group group) {
+        GROUPS.remove(group);
     }
 
     public String getLabel() {

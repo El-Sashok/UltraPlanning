@@ -8,6 +8,7 @@ public class Teacher extends Person {
     private String laboratory;
     private Role role;
     private List<Constraint> constraints;
+    private static final List<Teacher> TEACHERS = new ArrayList<>();
 
     //Constructor
     public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
@@ -15,9 +16,19 @@ public class Teacher extends Person {
         this.laboratory = laboratory;
         this.role = role;
         this.constraints = new ArrayList<Constraint>();
+        if (id != -1) // To differentiate the ones which are yet in database
+            TEACHERS.add(this);
     }
 
     //Getters & Setters
+    public static List<Teacher> getTeacherList() {
+        return TEACHERS;
+    }
+
+    public static void popTeacherInList(Teacher teacher) {
+        TEACHERS.remove(teacher);
+    }
+
     public String getLaboratory() {
         return laboratory;
     }

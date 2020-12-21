@@ -7,13 +7,18 @@ public class Yeargroup implements Entity {
     private long id;
     private String label;
     private List<Group> groups;
+    private static final List<Yeargroup> YEARGROUPS = new ArrayList<>();
 
     //Constructors
     public Yeargroup(long id, String label) {
         this.id = id;
         this.label = label;
         this.groups = new ArrayList<>();
+        if (id != -1) // To differentiate the ones which are yet in database
+            YEARGROUPS.add(this);
     }
+
+
 
     //Getters & Setters
     @Override
@@ -24,6 +29,14 @@ public class Yeargroup implements Entity {
     @Override
     public void setId(long id) {
         this.id = id;
+    }
+
+    public static List<Yeargroup> getYeargroupList() {
+        return YEARGROUPS;
+    }
+
+    public static void popYeargroupInList(Yeargroup yeargroup) {
+        YEARGROUPS.remove(yeargroup);
     }
 
     public String getLabel() {

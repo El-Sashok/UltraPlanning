@@ -25,7 +25,8 @@ public class Reservation implements Entity {
         this.state = state;
         this.room = room;
         this.teachers = new ArrayList<Teacher>();
-        RESERVATIONS.add(this);
+        if (id != -1) // To differentiate the ones which are yet in database
+            RESERVATIONS.add(this);
     }
 
     //Getters & Setters
@@ -40,6 +41,10 @@ public class Reservation implements Entity {
     }
 
     public static List<Reservation> getReservationList() { return RESERVATIONS; }
+
+    public static void popReservationList(Reservation reservation) {
+        RESERVATIONS.remove(reservation);
+    }
 
     public Date getStartDate() {
         return startDate;

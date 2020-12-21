@@ -20,7 +20,8 @@ public class Room implements Entity {
         this.capacity = capacity;
         this.label = label;
         this.info = info;
-        ROOMS.add(this);
+        if (id != -1) // To differentiate the ones which are yet in database
+            ROOMS.add(this);
     }
 
     //Getters & Setters
@@ -34,8 +35,12 @@ public class Room implements Entity {
         this.id = id;
     }
 
-    public static List<Room> getRoomsList() {
+    public static List<Room> getRoomList() {
         return ROOMS;
+    }
+
+    public void popRoomInList(Room room) {
+        ROOMS.remove(room);
     }
 
     public String getBuilding() {

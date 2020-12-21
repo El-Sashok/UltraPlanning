@@ -13,7 +13,8 @@ public class Module implements Entity {
         this.id = id;
         this.label = label;
         this.nbHour = nbHour;
-        MODULES.add(this);
+        if (id != -1) // To differentiate the ones which are yet in database
+            MODULES.add(this);
     }
 
     //Getters & Setters
@@ -28,6 +29,10 @@ public class Module implements Entity {
     }
 
     public static List<Module> getModuleList() { return MODULES; }
+
+    public static void popModuleInList(Module module) {
+        MODULES.remove(module);
+    }
 
     public String getLabel() {
         return label;
