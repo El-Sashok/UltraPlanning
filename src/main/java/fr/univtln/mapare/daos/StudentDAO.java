@@ -39,7 +39,7 @@ public class StudentDAO extends AbstractDAO<Student> {
         super.update();
     }
 
-    public void populate(PreparedStatement popPS, Student student) throws SQLException {
+    private void populate(PreparedStatement popPS, Student student) throws SQLException {
         popPS.setString(1, student.getLastName());
         popPS.setString(2, student.getFirstName());
         popPS.setDate(3, new java.sql.Date(student.getBirthdate().getTime()));

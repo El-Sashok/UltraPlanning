@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,15 +15,15 @@ import java.util.Optional;
 public class TeacherDAO extends AbstractDAO<Teacher> {
 
     private final PreparedStatement findConstraintsPS;
-    private final PreparedStatement persistConstraintsPS;
-    private final PreparedStatement updateConstraintsPS;
+    private final PreparedStatement persistConstraintPS;
+    private final PreparedStatement updateConstraintPS;
 
     public TeacherDAO() throws SQLException {
         super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS, PASSWORD) VALUES (?,?,?,?,?,?,?)",
                 "UPDATE TEACHER SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, LABORATORY=?, STATUS=?, PASSWORD=? WHERE ID=?");
         this.findConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
-        this.persistConstraintsPS = connection.prepareStatement("INSERT INTO CONSTRAINTS(TEACHER, START, END) VALUES(?,?,?)");
-        this.updateConstraintsPS = connection.prepareStatement("UPDATE CONSTRAINTS SET TEACHER=?, START=?, END=? WHERE ID=?");
+        this.persistConstraintPS = connection.prepareStatement("INSERT INTO CONSTRAINTS(TEACHER, START, END) VALUES(?,?,?)");
+        this.updateConstraintPS = connection.prepareStatement("UPDATE CONSTRAINTS SET TEACHER=?, START=?, END=? WHERE ID=?");
     }
 
     @Override
@@ -110,14 +109,14 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     }
 
     public void persistConstraint(Teacher teacher, Constraint constraint) throws SQLException {
-        populateConstraint(persistConstraintsPS, teacher, constraint);
-        persistConstraintsPS.executeUpdate();
+        populateConstraint(persistConstraintPS, teacher, constraint);
+        persistConstraintPS.executeUpdate();
     }
 
     private void updateConstraint(Teacher teacher, Constraint constraint, Long teacherConstraintID) throws SQLException {
-        populateConstraint(updateConstraintsPS, teacher, constraint);
-        updateConstraintsPS.setLong(4, teacherConstraintID);
-        updateConstraintsPS.executeUpdate();
+        populateConstraint(updateConstraintPS, teacher, constraint);
+        updateConstraintPS.setLong(4, teacherConstraintID);
+        updateConstraintPS.executeUpdate();
     }
 
     private void populateConstraint(PreparedStatement popTeacherPS, Teacher teacher, Constraint constraint) throws SQLException {

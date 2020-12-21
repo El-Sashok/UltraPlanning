@@ -39,7 +39,7 @@ public class RoomDAO extends AbstractDAO<Room> {
         super.update();
     }
 
-    public void populate(PreparedStatement popPS, Room room) throws SQLException {
+    private void populate(PreparedStatement popPS, Room room) throws SQLException {
         popPS.setString(1, room.getBuilding());
         popPS.setInt(2, room.getNumber());
         popPS.setInt(3, room.getCapacity());

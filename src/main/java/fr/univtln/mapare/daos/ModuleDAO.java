@@ -42,7 +42,7 @@ public class ModuleDAO extends AbstractDAO<Module> {
         super.update();
     }
 
-    public void populate(PreparedStatement popPS, Module module) throws SQLException {
+    private void populate(PreparedStatement popPS, Module module) throws SQLException {
         popPS.setString(1, module.getLabel());
         popPS.setInt(2, module.getNbHour());
     }

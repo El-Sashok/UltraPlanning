@@ -99,7 +99,7 @@ public class GroupDAO extends AbstractDAO<Group>{
         super.update();
     }
 
-    public void populate(PreparedStatement popPS, Group group) throws SQLException {
+    private void populate(PreparedStatement popPS, Group group) throws SQLException {
         popPS.setString(1, group.getLabel());
     }
 
