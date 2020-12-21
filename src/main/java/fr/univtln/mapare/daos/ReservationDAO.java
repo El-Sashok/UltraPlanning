@@ -1,11 +1,9 @@
 package fr.univtln.mapare.daos;
 
-import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.entities.Room;
 import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.DataAccessException;
-import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
 import java.sql.PreparedStatement;

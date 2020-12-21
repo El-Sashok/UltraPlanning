@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Module;
-import fr.univtln.mapare.exceptions.DataAccessException;
 import lombok.extern.java.Log;
 
 import javax.jnlp.PersistenceService;
