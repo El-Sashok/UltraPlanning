@@ -90,7 +90,7 @@ public class GroupDAO extends AbstractDAO<Group>{
     public Group persist(Group group) throws SQLException {
         populate(persistPS, group);
         Group gp = super.persist();
-        persistMembers(group);
+        persistMembers(group, gp);
         return gp;
     }
 
@@ -105,9 +105,9 @@ public class GroupDAO extends AbstractDAO<Group>{
         popPS.setString(1, group.getLabel());
     }
 
-    public void persistMembers(Group group) throws SQLException {
+    public void persistMembers(Group group, Group groupWithID) throws SQLException {
         for (Student s: group.getStudents()) {
-            persistMember(group, s);
+            persistMember(groupWithID, s);
         }
     }
 
@@ -116,7 +116,7 @@ public class GroupDAO extends AbstractDAO<Group>{
         persistMemberPS.executeUpdate();
     }
 
-    private void updateGroup(Group group, Student student, Long groupMemberID) throws SQLException {
+    private void updateMember(Group group, Student student, Long groupMemberID) throws SQLException {
         populateMember(updateMemberPS, group, student);
         updateMemberPS.setLong(3, groupMemberID);
         updateMemberPS.executeUpdate();
