@@ -14,17 +14,12 @@ import java.util.Optional;
 
 @Log
 public class TeacherDAO extends AbstractDAO<Teacher> {
-
-    private final PreparedStatement findConstraintsPS;
-    private final PreparedStatement persistConstraintPS;
-    private final PreparedStatement updateConstraintPS;
+    private ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws SQLException {
         super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS, PASSWORD) VALUES (?,?,?,?,?,?,?)",
                 "UPDATE TEACHER SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, LABORATORY=?, STATUS=?, PASSWORD=? WHERE ID=?");
-        this.findConstraintsPS = connection.prepareStatement("SELECT * FROM CONSTRAINTS WHERE TEACHER=?");
-        this.persistConstraintPS = connection.prepareStatement("INSERT INTO CONSTRAINTS(TEACHER, START, END) VALUES(?,?,?)");
-        this.updateConstraintPS = connection.prepareStatement("UPDATE CONSTRAINTS SET TEACHER=?, START=?, END=? WHERE ID=?");
+        constraintDAO = new ConstraintDAO();
     }
 
     @Override
@@ -56,9 +51,11 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         Teacher teacher = null;
         List<Constraint> constraints = new ArrayList<>();
 
-        findConstraintsPS.setLong(1, id);
-        ResultSet findConstraintsRS = findConstraintsPS.executeQuery();
-        while (findConstraintsRS.next()) constraints.add(new Constraint(findConstraintsRS.getDate("START"), findConstraintsRS.getDate("END")));
+        constraintDAO.findConstraintsByTeacher.setLong(1, id);
+        ResultSet findConstraintsRS = constraintDAO.findConstraintsByTeacher.executeQuery();
+        while (findConstraintsRS.next()) {
+            constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
+        }
 
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
@@ -69,16 +66,16 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
 
     @Override
     public List<Teacher> findAll() throws SQLException {
-        List<Teacher> entityList = new ArrayList<>();
-        ResultSet rs_findPS = findAllPS.executeQuery();
-        while (rs_findPS.next()){
+        List<Teacher> teachers = new ArrayList<>();
+        ResultSet findAllRS = findAllPS.executeQuery();
+        while (findAllRS.next()){
             ArrayList<Constraint> constraints = new ArrayList<>();
-            findConstraintsPS.setLong(1, rs_findPS.getLong("ID"));
-            ResultSet rs_findCS = findConstraintsPS.executeQuery();
-            while (rs_findCS.next()) constraints.add(new Constraint(rs_findCS.getDate("START"), rs_findCS.getDate("END")));
-            entityList.add(fromResultSet(rs_findPS, constraints));
+            constraintDAO.findConstraintsByTeacher.setLong(1, findAllRS.getLong("ID"));
+            ResultSet findConstraintsRS = constraintDAO.findConstraintsByTeacher.executeQuery();
+            while (findConstraintsRS.next()) constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
+            teachers.add(fromResultSet(findAllRS, constraints));
         }
-        return entityList;
+        return teachers;
     }
 
     @Override
@@ -86,7 +83,8 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(persistPS, teacher);
         Teacher t = super.persist();
         Teacher.popTeacherInList(t);
-        persistConstraints(teacher, t);
+        for (Constraint c: teacher.getConstraints())
+            constraintDAO.persist(c, t.getId());
         return find(t.getId()).get();
     }
 
@@ -94,6 +92,8 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public void update(Teacher teacher) throws SQLException {
         populate(updatePS, teacher);
         updatePS.setLong(8, teacher.getId());
+        for (Constraint c: teacher.getConstraints())
+            constraintDAO.update(c, teacher.getId());
         super.update();
     }
 
@@ -107,27 +107,6 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         popPS.setString(7, teacher.getPassword());
     }
 
-    public void persistConstraints(Teacher teacher, Teacher teacherWithID) throws SQLException {
-        for (Constraint c: teacher.getConstraints())
-            persistConstraint(teacherWithID, c);
-    }
-
-    public void persistConstraint(Teacher teacher, Constraint constraint) throws SQLException {
-        populateConstraint(persistConstraintPS, teacher, constraint);
-        persistConstraintPS.executeUpdate();
-    }
-
-    private void updateConstraint(Teacher teacher, Constraint constraint, Long teacherConstraintID) throws SQLException {
-        populateConstraint(updateConstraintPS, teacher, constraint);
-        updateConstraintPS.setLong(4, teacherConstraintID);
-        updateConstraintPS.executeUpdate();
-    }
-
-    private void populateConstraint(PreparedStatement popTeacherPS, Teacher teacher, Constraint constraint) throws SQLException {
-        popTeacherPS.setLong(1, teacher.getId());
-        popTeacherPS.setDate(2, new java.sql.Date(constraint.getStartDate().getTime()));
-        popTeacherPS.setDate(3, new java.sql.Date(constraint.getStartDate().getTime()));
-    }
 
     @Override
     public String getTableName() { return "TEACHER"; }
