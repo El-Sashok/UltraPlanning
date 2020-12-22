@@ -79,7 +79,6 @@ public class App
         groupDAO.persist(group);
         groupDAO.close();
 
-
         Yeargroup yeargroup = new Yeargroup(-1,
                 "Master Info");
         GroupDAO groupDAO = new GroupDAO();
@@ -88,8 +87,11 @@ public class App
         for (Group g: gps)
             yeargroup.addGroup(g);
         YeargroupDAO yeargroupDAO = new YeargroupDAO();
-        yeargroupDAO.persist(yeargroup);
+        Yeargroup testID = yeargroupDAO.persist(yeargroup);
         yeargroupDAO.close();
+
+        System.out.println(testID.getId()); //test objet bien recréé avec nouvel id
+        System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
         */
 
     }
