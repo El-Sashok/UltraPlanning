@@ -486,7 +486,7 @@ public class Timetable extends JFrame {
 
     private Calendar calendar = Calendar.getInstance(Locale.FRANCE);
 
-    List<String>[] boutonChaine = new ArrayList[53];
+    List<String[]>[] boutonChaine = new ArrayList[53];
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
 
@@ -534,8 +534,11 @@ public class Timetable extends JFrame {
             }
         }
 
-        for (String maillon : boutonChaine[i]) {
-            String[] banana = maillon.split("/");
+        for (JPanel jp : demiheures) {
+            jp.setVisible(false);
+        }
+
+        for (String[] banana : boutonChaine[i]) {
             int dayNumber = Integer.parseInt(banana[0]) - 1;
             int dHourNumber = Integer.parseInt(banana[1]);
             int eHourNumber = Integer.parseInt(banana[2]);
@@ -596,15 +599,11 @@ public class Timetable extends JFrame {
         if (!is53weekYear)
             a53Button.setVisible(false);
 
-        for (JPanel jp : demiheures) {
-            jp.setVisible(false);
-        }
-
         for (JPanel panel : fullpanels)
             panel.setBorder(null);
 
         for (int i = 0; i < 53; i++) {
-            boutonChaine[i] = new ArrayList<String>();
+            boutonChaine[i] = new ArrayList<String[]>();
         }
 
         for (int i = 0; i < boutons.length; i++) {
@@ -620,12 +619,6 @@ public class Timetable extends JFrame {
             boutons[i].setBorder(lineBorder);
         }
         buttonFunc(weekNumber - 1);
-
-        /*calendar.set(Calendar.WEEK_OF_YEAR, 53);
-        for (int i = 0; i < 8; i++) {
-            calendar.set(Calendar.DAY_OF_WEEK, i);
-            System.out.println(calendar.get(Calendar.DAY_OF_MONTH));
-        }*/
     }
 
     public static void main(String[] args) {
