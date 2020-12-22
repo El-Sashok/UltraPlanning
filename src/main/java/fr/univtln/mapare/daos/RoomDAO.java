@@ -1,5 +1,6 @@
 package fr.univtln.mapare.daos;
 
+import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Room;
 import lombok.extern.java.Log;
 
@@ -17,6 +18,10 @@ public class RoomDAO extends AbstractDAO<Room> {
 
     @Override
     protected Room fromResultSet(ResultSet resultSet) throws SQLException {
+        for (Room r: Room.getRoomList()) {
+            if (r.getId() == resultSet.getLong("ID"))
+                return r;
+        }
         return new Room(resultSet.getInt("ID"),
                 resultSet.getString("BUILDING"),
                 resultSet.getInt("NUMBER"),

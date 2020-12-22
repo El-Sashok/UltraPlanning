@@ -1,6 +1,7 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Constraint;
+import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Teacher;
 import lombok.extern.java.Log;
 
@@ -32,9 +33,11 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     }
 
     protected Teacher fromResultSet(ResultSet resultSet, List<Constraint> constraints) throws SQLException {
-        Teacher teacher;
-
-        teacher = new Teacher(resultSet.getLong("ID"),
+        for (Teacher t: Teacher.getTeacherList()) {
+            if (t.getId() == resultSet.getLong("ID"))
+                return t;
+        }
+        Teacher teacher = new Teacher(resultSet.getLong("ID"),
                 resultSet.getString("SURNAME"),
                 resultSet.getString("NAME"),
                 resultSet.getDate("BIRTHDATE"),
@@ -82,8 +85,9 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public Teacher persist(Teacher teacher) throws SQLException {
         populate(persistPS, teacher);
         Teacher t = super.persist();
+        Teacher.popTeacherInList(t);
         persistConstraints(teacher, t);
-        return t;
+        return find(t.getId()).get();
     }
 
     @Override

@@ -34,6 +34,10 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     }
 
     protected Yeargroup fromResultSet(ResultSet resultSet, List<Group> groups) throws SQLException {
+        for (Yeargroup yg: Yeargroup.getYeargroupList()) {
+            if (yg.getId() == resultSet.getLong("ID"))
+                return yg;
+        }
         Yeargroup yeargroup = new Yeargroup(resultSet.getLong("ID"),
                 resultSet.getString("LABEL"));
         for (Group g : groups) {
@@ -73,7 +77,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
             ResultSet findGroupsRS = findGroupsPS.executeQuery();
 
             while (findGroupsRS.next()) {
-                Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getInt("CLASS_GROUP"));
+                Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
                 if (optionalGroup.isPresent())
                     groups.add(optionalGroup.get());
                 else
@@ -87,9 +91,10 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     @Override
     public Yeargroup persist(Yeargroup yeargroup) throws SQLException {
         populate(persistPS, yeargroup);
-        Yeargroup yg = super.persist();
+        Yeargroup yg = super.persist(); // problem: save in static list but object not whole (same for the other classes)
+        Yeargroup.popYeargroupInList(yg); // solution: keep object for id but remove it from static list (same for the other classes)
         persistGroups(yeargroup, yg);
-        return yg;
+        return find(yg.getId()).get();
     }
 
     @Override
@@ -103,12 +108,12 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         popPS.setString(1, yeargroup.getLabel());
     }
 
-    public void persistGroups(Yeargroup yeargroup, Yeargroup yeargroupWithID) throws SQLException {
+    private void persistGroups(Yeargroup yeargroup, Yeargroup yeargroupWithID) throws SQLException {
         for (Group g: yeargroup.getGroups())
             persistGroup(yeargroupWithID, g);
     }
 
-    public void persistGroup(Yeargroup yeargroup, Group group) throws SQLException {
+    private void persistGroup(Yeargroup yeargroup, Group group) throws SQLException {
         populateGroup(persistGroupPS, yeargroup, group);
         persistGroupPS.executeUpdate();
     }

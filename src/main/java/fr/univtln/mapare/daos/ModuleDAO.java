@@ -3,11 +3,9 @@ package fr.univtln.mapare.daos;
 import fr.univtln.mapare.entities.Module;
 import lombok.extern.java.Log;
 
-import javax.jnlp.PersistenceService;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 @Log
 public class ModuleDAO extends AbstractDAO<Module> {
@@ -19,12 +17,11 @@ public class ModuleDAO extends AbstractDAO<Module> {
 
     @Override
     protected Module fromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("ID");
         for (Module m: Module.getModuleList()) {
-            if (m.getId() == resultSet.getInt("ID"))
+            if (m.getId() == resultSet.getLong("ID"))
                 return m;
         }
-        return new Module(resultSet.getInt("ID"),
+        return new Module(resultSet.getLong("ID"),
                 resultSet.getString("LABEL"),
                 resultSet.getInt("NB_HOURS"));
     }

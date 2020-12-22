@@ -1,5 +1,6 @@
 package fr.univtln.mapare.daos;
 
+import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Student;
 import lombok.extern.java.Log;
 
@@ -17,6 +18,10 @@ public class StudentDAO extends AbstractDAO<Student> {
 
     @Override
     protected Student fromResultSet(ResultSet resultSet) throws SQLException {
+        for (Student s: Student.getStudentList()) {
+            if (s.getId() == resultSet.getLong("ID"))
+                return s;
+        }
         return new Student(resultSet.getInt("ID"),
                 resultSet.getString("SURNAME"),
                 resultSet.getString("NAME"),

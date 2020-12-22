@@ -1,7 +1,9 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Group;
+import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Student;
+import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
@@ -34,6 +36,11 @@ public class GroupDAO extends AbstractDAO<Group>{
     }
 
     protected Group fromResultSet(ResultSet resultSet, List<Student> students) throws SQLException {
+        for (Group g: Group.getGroupList()) {
+            if (g.getId() == resultSet.getLong("ID"))
+                return g;
+        }
+
         Group group = new Group(resultSet.getInt("ID"),
                 resultSet.getString("LABEL"));
         for (Student s : students) {
@@ -88,8 +95,9 @@ public class GroupDAO extends AbstractDAO<Group>{
     public Group persist(Group group) throws SQLException {
         populate(persistPS, group);
         Group gp = super.persist();
+        Group.popGroupInList(gp);
         persistMembers(group, gp);
-        return gp;
+        return find(gp.getId()).get();
     }
 
     @Override
