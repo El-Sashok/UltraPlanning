@@ -114,7 +114,6 @@ public class GroupDAO extends AbstractDAO<Group>{
     public void persistMembers(Group group) throws SQLException {
         for (Student s: group.getStudents())
             persistMember(group, s);
-        //A changer
     }
 
     public void persistMember(Group group, Student member) throws SQLException {
