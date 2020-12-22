@@ -64,12 +64,14 @@ public class ReservationPopup extends JFrame {
         });
         this.rootwindow = rootwindow;
 
-        String[] hourList = {"8h", "9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h"};
+        String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
+                "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
+                "18h30", "19h00"};
 
-        for (int i = 0; i < hourList.length - 1; i++)
+        for (int i = 0; i < hourList.length - 2; i++)
             comboBox4.addItem(hourList[i]);
 
-        for (int i = 1; i < hourList.length; i++)
+        for (int i = 2; i < hourList.length; i++)
             comboBox6.addItem(hourList[i]);
 
         List<Room> roomlist = Room.getRoomList();
@@ -116,8 +118,8 @@ public class ReservationPopup extends JFrame {
                     String[] output = new String[9];
                     output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
                     int heureDebut = comboBox4.getSelectedIndex();
-                    int heureFin = comboBox6.getSelectedIndex() + 1;
-                    if (heureFin <= heureDebut)
+                    int heureFin = comboBox6.getSelectedIndex() + 2;
+                    if (heureFin <= heureDebut + 1)
                         throw new IncorrectEndHourException();
                     output[1] = heureDebut + "";
                     output[2] = heureFin + "";
@@ -137,7 +139,8 @@ public class ReservationPopup extends JFrame {
                     String message = "Veuillez sélectionner une date.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectEndHourException b) {
-                    String message = "Veuillez choisir une heure de fin supérieure à l'heure de début.";
+                    String message = "Veuillez choisir une heure de fin supérieure à l'heure de début de plus d'une" +
+                            " heure.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
