@@ -430,6 +430,7 @@ public class Timetable extends JFrame {
     private JLabel m930Label;
     private JLabel m1030Label;
     private JLabel v1130Label;
+
     private JLabel[] Lundi = {l89Label, l910Label, l1011Label, l1112Label, l1213Label, l1314Label, l1415Label,
             l1516Label, l1617Label, l1718Label, l1819Label};
     private JLabel[] Mardi = {m89Label, m910Label, m1011Label, m1112Label, m1213Label, m1314Label, m1415Label,
@@ -443,6 +444,21 @@ public class Timetable extends JFrame {
     private JLabel[] Samedi = {s89Label, s910Label, s1011Label, s1112Label, s1213Label, s1314Label, s1415Label,
             s1516Label, s1617Label, s1718Label, s1819Label};
     private final JLabel[][] Semaine = {Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi};
+
+    private JLabel[] LundiH = {l830Label, l930Label, l1030Label, l1130Label, l1230Label, l1330Label, l1430Label,
+            l1530Label, l1630Label, l1730Label, l1830Label};
+    private JLabel[] MardiH = {m830Label, m930Label, m1030Label, m1130Label, m1230Label, m1330Label, m1430Label,
+            m1530Label, m1630Label, m1730Label, m1830Label};
+    private JLabel[] MercrediH = {w830Label, w930Label, w1030Label, w1130Label, w1230Label, w1330Label, w1430Label,
+            w1530Label, w1630Label, w1730Label, w1830Label};
+    private JLabel[] JeudiH = {j830Label, j930Label, j1030Label, j1130Label, j1230Label, j1330Label, j1430Label,
+            j1530Label, j1630Label, j1730Label, j1830Label};
+    private JLabel[] VendrediH = {v830Label, v930Label, v1030Label, v1130Label, v1230Label, v1330Label, v1430Label,
+            v1530Label, v1630Label, v1730Label, v1830Label};
+    private JLabel[] SamediH = {s830Label, s930Label, s1030Label, s1130Label, s1230Label, s1330Label, s1430Label,
+            s1530Label, s1630Label, s1730Label, s1830Label};
+    private JLabel[][] SemaineHalf = {LundiH, MardiH, MercrediH, JeudiH, VendrediH, SamediH};
+
     private final JButton[] boutons = {a1Button, a2Button, a3Button, a4Button, a5Button, a6Button, a7Button, a8Button,
             a9Button, a10Button, a11Button, a12Button, a13Button, a14Button, a15Button, a16Button, a17Button, a18Button,
             a19Button, a20Button, a21Button, a22Button, a23Button, a24Button, a25Button, a26Button, a27Button,
@@ -538,13 +554,13 @@ public class Timetable extends JFrame {
             jp.setVisible(false);
         }
 
-        for (String[] banana : boutonChaine[i]) {
-            int dayNumber = Integer.parseInt(banana[0]) - 1;
-            int dHourNumber = Integer.parseInt(banana[1]);
-            int eHourNumber = Integer.parseInt(banana[2]);
-            int lessonType = Integer.parseInt(banana[7]);
-            String displayText = "<html><body>" + banana[3] + "<br>" + banana[4] + "<br>" + banana[5] + "<br>";
-            displayText += banana[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
+        for (String[] maillon : boutonChaine[i]) {
+            int dayNumber = Integer.parseInt(maillon[0]) - 1;
+            int dHourNumber = Integer.parseInt(maillon[1]);
+            int eHourNumber = Integer.parseInt(maillon[2]);
+            int lessonType = Integer.parseInt(maillon[7]);
+            String displayText = "<html><body>" + maillon[3] + "<br>" + maillon[4] + "<br>" + maillon[5] + "<br>";
+            displayText += maillon[6] + "<br>" + lessonTypeEnum[lessonType] + "</body></html>";
             int midhour = (int) (java.lang.Math.floor(dHourNumber / 2) + java.lang.Math.floor((eHourNumber) / 2));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 fullheures[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
