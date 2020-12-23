@@ -17,7 +17,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     private final PreparedStatement findGroupsPS;
     private final PreparedStatement persistGroupPS;
     private final PreparedStatement updateGroupPS;
-    private final GroupDAO groupDAO;
+    GroupDAO groupDAO;
 
     public YeargroupDAO() throws SQLException {
         super("INSERT INTO YEARGROUP(LABEL) VALUES (?)",

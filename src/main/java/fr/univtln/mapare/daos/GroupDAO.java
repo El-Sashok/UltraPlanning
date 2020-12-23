@@ -17,7 +17,7 @@ public class GroupDAO extends AbstractDAO<Group>{
     private final PreparedStatement findMembersPS;
     private final PreparedStatement persistMemberPS;
     private final PreparedStatement updateMemberPS;
-    private final StudentDAO studentDAO;
+    StudentDAO studentDAO;
 
     public GroupDAO() throws SQLException {
         super("INSERT INTO CLASS_GROUP(LABEL) VALUES (?)",

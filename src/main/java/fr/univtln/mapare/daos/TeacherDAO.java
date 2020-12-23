@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Log
 public class TeacherDAO extends AbstractDAO<Teacher> {
-    private ConstraintDAO constraintDAO;
+    ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws SQLException {
         super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS, PASSWORD) VALUES (?,?,?,?,?,?,?)",
