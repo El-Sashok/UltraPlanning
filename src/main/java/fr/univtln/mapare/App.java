@@ -1,5 +1,7 @@
 package fr.univtln.mapare;
 
+import fr.univtln.mapare.gui.Launcher;
+
 import fr.univtln.mapare.daos.*;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.DataAccessException;
@@ -15,7 +17,9 @@ import java.util.List;
  */
 public class App 
 {
-    public static void main(String[] args ) throws SQLException {
+    public static void main( String[] args ) throws SQLException {
+        Launcher launcher = new Launcher();
+        launcher.setVisible(true);
         /*
         RoomDAO roomDAO = new RoomDAO();
         Room room = roomDAO.find(1).get();
