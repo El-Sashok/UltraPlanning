@@ -116,19 +116,28 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     @Override
     public Reservation persist(Reservation reservation) throws SQLException {
         populate(persistPS, reservation);
-        return super.persist();
+        Reservation r = super.persist();
+        Reservation.popReservationList(r);
+        for (Teacher t: reservation.getTeachers())
+            r.addTeacher(t);
+        persistManagers(r);
+        return find(r.getId()).get();
     }
 
     public Reservation persist(Reservation reservation, String type) throws SQLException {
         populate(persistPS, reservation, type);
-        return super.persist();
+        Reservation r = super.persist();
+        Reservation.popReservationList(r);
+        for (Teacher t: reservation.getTeachers())
+            r.addTeacher(t);
+        persistManagers(r);
+        return find(r.getId()).get();
     }
 
     @Override
     public void update(Reservation reservation) throws SQLException {
         populate(updatePS, reservation);
         updatePS.setLong(8, reservation.getId());
-
         super.update();
     }
 
@@ -144,6 +153,25 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         popPS.setString(5, type);
         popPS.setLong(6,reservation.getRoom().getId());
         popPS.setString(7, reservation.getState().toString());
+    }
+
+    private void persistManagers(Reservation reservation) throws SQLException {
+        for (Teacher t: reservation.getTeachers())
+            persistManager(reservation, t);
+    }
+
+    private void persistManager(Reservation reservation, Teacher manager) throws SQLException {
+        populateManager(persistManagerPS, reservation, manager);
+        persistManagerPS.executeUpdate();
+    }
+
+    public void updateManager(Reservation reservation, Teacher manager) {
+
+    }
+
+    private void populateManager(PreparedStatement popManagerPS, Reservation reservation, Teacher manager) throws SQLException {
+        popManagerPS.setLong(1, reservation.getId());
+        popManagerPS.setLong(2, manager.getId());
     }
 
     @Override
