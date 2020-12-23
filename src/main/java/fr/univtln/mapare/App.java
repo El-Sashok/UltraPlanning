@@ -92,9 +92,28 @@ public class App
         YeargroupDAO yeargroupDAO = new YeargroupDAO();
         Yeargroup testID = yeargroupDAO.persist(yeargroup);
         yeargroupDAO.close();
+
+        RoomDAO roomDAO = new RoomDAO();
+        Room room = roomDAO.find(1).get();
+        roomDAO.close();
+
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = new Reservation(-1,
+                new Date(),
+                new Date(),
+                "test label",
+                "test memo",
+                Reservation.State.NP,
+                room);
+        Reservation test = reservationDAO.persist(reservation);
+        reservationDAO.close();
+        System.out.println(test.getId());
         */
 
+        ReservationDAO reservationDAO = new ReservationDAO();
+        List<Reservation> rs = reservationDAO.findAll();
+        reservationDAO.close();
 
-
+        System.out.println(rs.size());
     }
 }

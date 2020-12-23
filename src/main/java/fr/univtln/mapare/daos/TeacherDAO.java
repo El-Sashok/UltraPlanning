@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Constraint;
-import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Teacher;
 import lombok.extern.java.Log;
 

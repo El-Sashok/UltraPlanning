@@ -1,9 +1,7 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Group;
-import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Student;
-import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
