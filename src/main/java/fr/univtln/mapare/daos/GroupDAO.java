@@ -96,6 +96,8 @@ public class GroupDAO extends AbstractDAO<Group>{
         populate(persistPS, group);
         Group gp = super.persist();
         Group.popGroupInList(gp);
+        for (Student s: group.getStudents())
+            gp.addStudent(s);
         persistMembers(gp);
         return find(gp.getId()).get();
     }

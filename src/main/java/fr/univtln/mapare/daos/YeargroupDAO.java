@@ -93,7 +93,9 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         populate(persistPS, yeargroup);
         Yeargroup yg = super.persist(); // problem: save in static list but object not whole (same for the other classes)
         Yeargroup.popYeargroupInList(yg); // solution: keep object for id but remove it from static list (same for the other classes)
-        persistGroups(yeargroup, yg);
+        for (Group g: yeargroup.getGroups())
+            yg.addGroup(g);
+        persistGroups(yg);
         return find(yg.getId()).get();
     }
 
@@ -108,9 +110,9 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         popPS.setString(1, yeargroup.getLabel());
     }
 
-    private void persistGroups(Yeargroup yeargroup, Yeargroup yeargroupWithID) throws SQLException {
+    private void persistGroups(Yeargroup yeargroup) throws SQLException {
         for (Group g: yeargroup.getGroups())
-            persistGroup(yeargroupWithID, g);
+            persistGroup(yeargroup, g);
     }
 
     private void persistGroup(Yeargroup yeargroup, Group group) throws SQLException {
