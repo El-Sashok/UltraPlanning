@@ -553,9 +553,11 @@ public class Timetable extends JFrame {
             int dHourNumber = Integer.parseInt(maillon[1]);
             int eHourNumber = Integer.parseInt(maillon[2]);
             int lessonType = Integer.parseInt(maillon[7]);
-            int maillonMaxLength = maillon[4].length();
+
+            // We dont close the html tags. It's less "proper" but more readable.
             String displayText1 = htmlTags + maillon[3] + "<br>" + maillon[4] + "<br>" + maillon[5];
             String displayText2 = htmlTags + maillon[6] + "<br>" + lessonTypeEnum[lessonType] + "<br> ";
+
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
             for (int j = dHourNumber; j < eHourNumber; j++) {
