@@ -83,8 +83,10 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(persistPS, teacher);
         Teacher t = super.persist();
         Teacher.popTeacherInList(t);
-        for (Constraint c: teacher.getConstraints())
-            constraintDAO.persist(c, t.getId());
+        for (Constraint c: teacher.getConstraints()) {
+            c.setTeacherID(t.getId());
+            constraintDAO.persist(c);
+        }
         return find(t.getId()).get();
     }
 
@@ -93,7 +95,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(updatePS, teacher);
         updatePS.setLong(8, teacher.getId());
         for (Constraint c: teacher.getConstraints())
-            constraintDAO.update(c, teacher.getId());
+            constraintDAO.update(c);
         super.update();
     }
 

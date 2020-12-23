@@ -25,11 +25,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
             if (c.getId() == resultSet.getLong("ID"))
                 return c;
         }
-        return new Constraint(
-                resultSet.getLong("id"),
+        return new Constraint(resultSet.getLong("id"),
                 resultSet.getDate("START"),
-                resultSet.getDate("END"));
+                resultSet.getDate("END"),
+        resultSet.getLong("TEACHER"));
     }
+
 
     public List<Constraint> findByTeacher(long teacherID) throws SQLException {
         List<Constraint> constraints = new ArrayList<>();
@@ -41,33 +42,27 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
     }
 
     @Override
-    public Constraint persist(Constraint constraint) {
-        return null;
-    }
-
-    public Constraint persist(Constraint constraint, long teacherID) throws SQLException {
-        populate(persistPS, constraint, teacherID);
+    public Constraint persist(Constraint constraint) throws SQLException {
+        long id = -1;
+        populate(persistPS, constraint);
         return super.persist();
     }
 
     @Override
-    public void update(Constraint constraint) {
-    }
-
-    public void update(Constraint constraint, long teacherID) throws SQLException {
-        populate(updatePS, constraint, teacherID);
+    public void update(Constraint constraint) throws SQLException {
+        populate(updatePS, constraint);
         updatePS.setLong(4, constraint.getId());
         super.update();
     }
 
-    private void populate(PreparedStatement popPS, Constraint constraint, long teacherID) throws SQLException {
-        popPS.setLong(1, teacherID);
+    private void populate(PreparedStatement popPS, Constraint constraint) throws SQLException {
+        popPS.setLong(1, constraint.getTeacherID());
         popPS.setDate(2, new java.sql.Date(constraint.getStartDate().getTime()));
         popPS.setDate(3, new java.sql.Date(constraint.getEndDate().getTime()));
     }
 
     @Override
     public String getTableName() {
-        return "STUDENT";
+        return "CONSTRAINTS";
     }
 }

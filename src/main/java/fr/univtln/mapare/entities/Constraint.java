@@ -8,6 +8,7 @@ public class Constraint implements Entity {
     private long id;
     private Date startDate;
     private Date endDate;
+    private long teacherID; //needed for dao
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
 
     //Constructors
@@ -15,6 +16,15 @@ public class Constraint implements Entity {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
+        if (id != -1) // To differentiate the ones which are yet in database
+            CONSTRAINTS.add(this);
+    }
+
+    public Constraint(long id, Date startDate, Date endDate, long teacherID) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.teacherID = teacherID;
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
@@ -52,6 +62,14 @@ public class Constraint implements Entity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public long getTeacherID() {
+        return teacherID;
+    }
+
+    public void setTeacherID(long teadherID) {
+        this.teacherID = teadherID;
     }
 
     //Methods
