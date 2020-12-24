@@ -1,8 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.entities.Teacher;
+import fr.univtln.mapare.entities.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -68,6 +67,18 @@ public class MiscReservationPopup extends JFrame {
         for (Room r : roomlist) {
             comboBox3.addItem(r);
         }
+
+        List<AdmissionExam> examList = AdmissionExam.getAdmissionExamList();
+        for (AdmissionExam exam : examList)
+            comboBox4.addItem(exam);
+
+        List<Yeargroup> promoList = Yeargroup.getYeargroupList();
+        for (Yeargroup promo : promoList)
+            comboBox5.addItem(promo);
+
+        List<Student> studentList = Student.getStudentList();
+        for (Student student : studentList)
+            comboBox6.addItem(student);
 
         MouseListener teacherListCaller = new MouseAdapter() {
             @Override

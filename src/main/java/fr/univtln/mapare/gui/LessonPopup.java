@@ -69,8 +69,6 @@ public class LessonPopup extends JFrame {
         });
         this.rootwindow = rootwindow;
 
-
-
         for (int i = 0; i < hourList.length - 2; i++)
             comboBox4.addItem(hourList[i]);
 
