@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.univtln.mapare.gui.Timetable.hourList;
+import static fr.univtln.mapare.gui.Timetable.resizeable;
 
 public class MiscReservationPopup extends JFrame {
     private JTabbedPane tabbedPane1;
@@ -50,7 +51,7 @@ public class MiscReservationPopup extends JFrame {
     public MiscReservationPopup() {
         setTitle("Réservation de salle");
         setSize(400, 300);
-        setResizable(false);
+        setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);

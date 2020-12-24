@@ -493,6 +493,7 @@ public class Timetable extends JFrame {
 
     private Calendar calendar = Calendar.getInstance(Locale.FRANCE);
 
+    static Boolean resizeable = true;
     static String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
             "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
             "18h30", "19h00"};
@@ -586,7 +587,7 @@ public class Timetable extends JFrame {
     public Timetable() {
         setTitle("Emploi Du Temps");
         setSize(1400, 950);
-        setResizable(false);
+        setResizable(resizeable);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);

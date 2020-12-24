@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static fr.univtln.mapare.gui.Timetable.hourList;
+import static fr.univtln.mapare.gui.Timetable.resizeable;
 
 
 public class LessonPopup extends JFrame {
@@ -55,7 +56,7 @@ public class LessonPopup extends JFrame {
     public LessonPopup(Timetable rootwindow) {
         setTitle("Réservation pour cours");
         setSize(320, 300);
-        setResizable(false);
+        setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);

@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static fr.univtln.mapare.gui.Timetable.resizeable;
+
 public class TeacherListSelector extends JFrame {
     private JPanel panel1;
     private JPanel panel2;
@@ -27,7 +29,7 @@ public class TeacherListSelector extends JFrame {
     public TeacherListSelector(List<Teacher> returnList){
         setTitle("Selection d'enseignants");
         setSize(400, 400);
-        setResizable(false);
+        setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
