@@ -41,11 +41,11 @@ public class LessonPopup extends JFrame {
     private DatePicker datePicker1;
     private JLabel heureFinLabel;
     private JLabel memoLabel;
-    private JTextField textField1;
     private JLabel salleLabel;
     private JComboBox comboBox1;
     private JLabel typeLabel;
     private JComboBox comboBox2;
+    private JTextArea textArea1;
 
     private JFrame thisframe = this;
 
@@ -55,7 +55,7 @@ public class LessonPopup extends JFrame {
 
     public LessonPopup(Timetable rootwindow) {
         setTitle("Réservation pour cours");
-        setSize(320, 300);
+        setSize(320, 330);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -132,7 +132,7 @@ public class LessonPopup extends JFrame {
                     output[5] = comboBox9.getSelectedItem() + "";
                     output[6] = comboBox1.getSelectedItem() + "";
                     output[7] = comboBox2.getSelectedIndex() + "";
-                    output[8] = textField1.getText();
+                    output[8] = textArea1.getText();
 
                     rootwindow.boutonChaine[boutonNb].add(output);
 

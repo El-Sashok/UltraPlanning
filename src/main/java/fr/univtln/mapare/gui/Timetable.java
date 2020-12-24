@@ -595,18 +595,38 @@ public class Timetable extends JFrame {
 
     public void managerInit() {
         init();
-        JMenu menu = new JMenu("Menu");
-        JMenuItem addLesson = new JMenuItem("Ajouter Cours");
         JMenuBar mb = new JMenuBar();
-        menu.add(addLesson);
-        mb.add(menu);
         setJMenuBar(mb);
+        JMenu menu = new JMenu("Menu");
+        mb.add(menu);
+        JMenuItem addLesson = new JMenuItem("Ajouter Cours");
+        menu.add(addLesson);
         addLesson.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 LessonPopup rp = new LessonPopup(thisframe);
                 rp.setVisible(true);
+            }
+        });
+        JMenuItem addReservation = new JMenuItem("Ajouter Reservation");
+        menu.add(addReservation);
+        addReservation.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                MiscReservationPopup rp = new MiscReservationPopup();
+                rp.setVisible(true);
+            }
+        });
+        JMenuItem findRoom = new JMenuItem("Trouver Salle");
+        menu.add(findRoom);
+        findRoom.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                FreeRoomFinder frf = new FreeRoomFinder();
+                frf.setVisible(true);
             }
         });
     }

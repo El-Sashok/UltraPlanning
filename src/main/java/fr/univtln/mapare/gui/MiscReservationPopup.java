@@ -49,7 +49,7 @@ public class MiscReservationPopup extends JFrame {
 
     public MiscReservationPopup() {
         setTitle("Réservation de salle");
-        setSize(400, 300);
+        setSize(310, 300);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

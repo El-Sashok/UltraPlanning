@@ -28,7 +28,7 @@ public class TeacherListSelector extends JFrame {
 
     public TeacherListSelector(List<Teacher> returnList){
         setTitle("Selection d'enseignants");
-        setSize(400, 400);
+        setSize(410, 400);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
