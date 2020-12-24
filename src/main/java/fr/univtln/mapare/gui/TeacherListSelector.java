@@ -5,6 +5,10 @@ import fr.univtln.mapare.entities.Teacher;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class TeacherListSelector extends JFrame {
@@ -14,16 +18,17 @@ public class TeacherListSelector extends JFrame {
     private JButton ajouterEnseignantButton;
     private JComboBox comboBox1;
     private JScrollPane scrollPane1;
-    private DefaultListModel<String> listModel = new DefaultListModel<String>();
+    private DefaultListModel<String> listModel;
     private JList teacherJList;
     private JButton okButton1;
     private JButton cancelButton;
+    private JFrame thisframe = this;
 
-    public TeacherListSelector(){
+    public TeacherListSelector(List<String> returnList){
         setTitle("Selection d'enseignants");
         setSize(400, 400);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
 
@@ -32,10 +37,17 @@ public class TeacherListSelector extends JFrame {
             comboBox1.addItem(t.getLastName() + " " + t.getFirstName());
         }
 
+        listModel = new DefaultListModel<>();
+        for (String elem : returnList) {
+            listModel.addElement(elem);
+            comboBox1.removeItem(elem);
+        }
         teacherJList.setModel(listModel);
         teacherJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         teacherJList.setLayoutOrientation(JList.VERTICAL);
         teacherJList.setVisibleRowCount(-1);
+
+
 
         ajouterEnseignantButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -57,10 +69,31 @@ public class TeacherListSelector extends JFrame {
                 }
             }
         });
+
+
+        okButton1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                returnList.clear();
+                for (int i = 0; i < listModel.getSize(); i++)
+                    returnList.add(listModel.getElementAt(i));
+
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+
+        cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public static void main(String[] args) {
-        TeacherListSelector selector = new TeacherListSelector();
+        TeacherListSelector selector = new TeacherListSelector(new ArrayList<String>());
         selector.setVisible(true);
     }
 }

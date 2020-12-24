@@ -600,7 +600,7 @@ public class Timetable extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                ReservationPopup rp = new ReservationPopup(thisframe);
+                LessonPopup rp = new LessonPopup(thisframe);
                 rp.setVisible(true);
             }
         });

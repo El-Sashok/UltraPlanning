@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ReservationPopup extends JFrame {
+public class LessonPopup extends JFrame {
     private JPanel panel1;
     private JPanel panel2;
     private JButton cancelButton;
@@ -48,8 +48,8 @@ public class ReservationPopup extends JFrame {
 
     private Timetable rootwindow;
 
-    public ReservationPopup(Timetable rootwindow) {
-        setTitle("Reservation");
+    public LessonPopup(Timetable rootwindow) {
+        setTitle("Réservation pour cours");
         setSize(320, 300);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
