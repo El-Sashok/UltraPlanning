@@ -493,6 +493,11 @@ public class Timetable extends JFrame {
 
     private Calendar calendar = Calendar.getInstance(Locale.FRANCE);
 
+    static Boolean resizeable = true;
+    static String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
+            "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
+            "18h30", "19h00"};
+
     List<String[]>[] boutonChaine = new ArrayList[53];
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
@@ -553,9 +558,11 @@ public class Timetable extends JFrame {
             int dHourNumber = Integer.parseInt(maillon[1]);
             int eHourNumber = Integer.parseInt(maillon[2]);
             int lessonType = Integer.parseInt(maillon[7]);
-            int maillonMaxLength = maillon[4].length();
+
+            // We dont close the html tags. It's less "proper" but more readable.
             String displayText1 = htmlTags + maillon[3] + "<br>" + maillon[4] + "<br>" + maillon[5];
             String displayText2 = htmlTags + maillon[6] + "<br>" + lessonTypeEnum[lessonType] + "<br> ";
+
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
             for (int j = dHourNumber; j < eHourNumber; j++) {
@@ -580,7 +587,7 @@ public class Timetable extends JFrame {
     public Timetable() {
         setTitle("Emploi Du Temps");
         setSize(1400, 950);
-        setResizable(false);
+        setResizable(resizeable);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
@@ -598,7 +605,7 @@ public class Timetable extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                ReservationPopup rp = new ReservationPopup(thisframe);
+                LessonPopup rp = new LessonPopup(thisframe);
                 rp.setVisible(true);
             }
         });

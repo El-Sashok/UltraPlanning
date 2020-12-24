@@ -94,4 +94,9 @@ public class Room implements Entity {
                 ", info='" + info + '\'' +
                 '}';
     }
+
+    @Override
+    public String toString() {
+        return building + "." + number;
+    }
 }

@@ -74,4 +74,9 @@ public class Teacher extends Person {
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF
     }
+
+    @Override
+    public String toString() {
+        return lastName + " " + firstName;
+    }
 }
