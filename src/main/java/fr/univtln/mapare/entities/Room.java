@@ -26,4 +26,9 @@ public class Room {
     public static List<Room> getRoomList() {
         return roomList;
     }
+
+    @Override
+    public String toString() {
+        return building + "." + number;
+    }
 }

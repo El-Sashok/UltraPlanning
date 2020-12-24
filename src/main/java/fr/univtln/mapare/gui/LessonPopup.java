@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static fr.univtln.mapare.gui.Timetable.hourList;
+
 
 public class LessonPopup extends JFrame {
     private JPanel panel1;
@@ -48,6 +50,8 @@ public class LessonPopup extends JFrame {
 
     private Timetable rootwindow;
 
+
+
     public LessonPopup(Timetable rootwindow) {
         setTitle("Réservation pour cours");
         setSize(320, 300);
@@ -64,9 +68,7 @@ public class LessonPopup extends JFrame {
         });
         this.rootwindow = rootwindow;
 
-        String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
-                "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
-                "18h30", "19h00"};
+
 
         for (int i = 0; i < hourList.length - 2; i++)
             comboBox4.addItem(hourList[i]);
@@ -76,7 +78,7 @@ public class LessonPopup extends JFrame {
 
         List<Room> roomlist = Room.getRoomList();
         for (Room r : roomlist) {
-            comboBox1.addItem(r.getBuilding() + "." + r.getNumber());
+            comboBox1.addItem(r);
         }
 
         for (String enumType : rootwindow.lessonTypeEnum)
@@ -84,17 +86,17 @@ public class LessonPopup extends JFrame {
 
         List<Course> courselist = Course.getCourseList();
         for (Course c : courselist) {
-            comboBox8.addItem(c.getLabel());
+            comboBox8.addItem(c);
         }
 
         List<Group> grouplist = Group.getGroupList();
         for (Group g : grouplist) {
-            comboBox9.addItem(g.getLabel());
+            comboBox9.addItem(g);
         }
 
         List<Teacher> teacherlist = Teacher.getTeacherList();
         for (Teacher t : teacherlist) {
-            comboBox5.addItem(t.getLastName() + " " + t.getFirstName());
+            comboBox5.addItem(t);
         }
 
         okButton.addMouseListener(new MouseAdapter() {
@@ -121,6 +123,9 @@ public class LessonPopup extends JFrame {
                     int heureFin = comboBox6.getSelectedIndex() + 2;
                     if (heureFin <= heureDebut + 1)
                         throw new IncorrectEndHourException();
+
+                    // TODO: Do the Database associated operations and check for conflicts before confirming.
+
                     output[1] = heureDebut + "";
                     output[2] = heureFin + "";
                     output[3] = comboBox8.getSelectedItem() + "";

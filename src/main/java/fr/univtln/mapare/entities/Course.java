@@ -20,4 +20,9 @@ public class Course {
     public Object getLabel() {
         return label;
     }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 }

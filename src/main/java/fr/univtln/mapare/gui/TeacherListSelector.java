@@ -18,13 +18,13 @@ public class TeacherListSelector extends JFrame {
     private JButton ajouterEnseignantButton;
     private JComboBox comboBox1;
     private JScrollPane scrollPane1;
-    private DefaultListModel<String> listModel;
+    private DefaultListModel<Teacher> listModel;
     private JList teacherJList;
     private JButton okButton1;
     private JButton cancelButton;
     private JFrame thisframe = this;
 
-    public TeacherListSelector(List<String> returnList){
+    public TeacherListSelector(List<Teacher> returnList){
         setTitle("Selection d'enseignants");
         setSize(400, 400);
         setResizable(false);
@@ -34,11 +34,11 @@ public class TeacherListSelector extends JFrame {
 
         List<Teacher> teacherlist = Teacher.getTeacherList();
         for (Teacher t : teacherlist) {
-            comboBox1.addItem(t.getLastName() + " " + t.getFirstName());
+            comboBox1.addItem(t);
         }
 
         listModel = new DefaultListModel<>();
-        for (String elem : returnList) {
+        for (Teacher elem : returnList) {
             listModel.addElement(elem);
             comboBox1.removeItem(elem);
         }
@@ -53,7 +53,7 @@ public class TeacherListSelector extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                String current = comboBox1.getSelectedItem() + "";
+                Teacher current = (Teacher) comboBox1.getSelectedItem();
                 listModel.addElement(current);
                 comboBox1.removeItemAt(comboBox1.getSelectedIndex());
             }
@@ -93,7 +93,7 @@ public class TeacherListSelector extends JFrame {
     }
 
     public static void main(String[] args) {
-        TeacherListSelector selector = new TeacherListSelector(new ArrayList<String>());
+        TeacherListSelector selector = new TeacherListSelector(new ArrayList<Teacher>());
         selector.setVisible(true);
     }
 }

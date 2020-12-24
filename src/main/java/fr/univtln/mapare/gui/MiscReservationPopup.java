@@ -1,6 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import fr.univtln.mapare.entities.Room;
 import fr.univtln.mapare.entities.Teacher;
 
 import javax.swing.*;
@@ -10,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static fr.univtln.mapare.gui.Timetable.hourList;
 
 public class MiscReservationPopup extends JFrame {
     private JTabbedPane tabbedPane1;
@@ -37,8 +40,10 @@ public class MiscReservationPopup extends JFrame {
     private JButton listeDEnseignantsButton;
     private JButton okButton;
     private JButton cancelButton;
+    private JLabel enseignantsLabel2;
+    private JButton listeDEnseignantsButton2;
 
-    private List<String> teacherList;
+    private List<Teacher> teacherList;
 
     private JFrame thisframe = this;
 
@@ -50,7 +55,18 @@ public class MiscReservationPopup extends JFrame {
         add(panel1);
         setLocationRelativeTo(null);
 
-        teacherList = new ArrayList<String>();
+        teacherList = new ArrayList<Teacher>();
+
+        for (int i = 0; i < hourList.length - 2; i++)
+            comboBox1.addItem(hourList[i]);
+
+        for (int i = 2; i < hourList.length; i++)
+            comboBox2.addItem(hourList[i]);
+
+        List<Room> roomlist = Room.getRoomList();
+        for (Room r : roomlist) {
+            comboBox3.addItem(r);
+        }
 
         MouseListener teacherListCaller = new MouseAdapter() {
             @Override
@@ -62,6 +78,7 @@ public class MiscReservationPopup extends JFrame {
         };
         listeDEnseignantsButton.addMouseListener(teacherListCaller);
         listeDEnseignantsButton1.addMouseListener(teacherListCaller);
+        listeDEnseignantsButton2.addMouseListener(teacherListCaller);
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -69,6 +86,7 @@ public class MiscReservationPopup extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+        //tabbedPane1.getSelectedIndex()
     }
 
     public static void main(String[] args) {
