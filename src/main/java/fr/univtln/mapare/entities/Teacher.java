@@ -11,8 +11,8 @@ public class Teacher extends Person {
     private static final List<Teacher> TEACHERS = new ArrayList<>();
 
     //Constructor
-    public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
-        super(id, lastName, firstName, birthdate, email, password);
+    public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String laboratory, Role role) {
+        super(id, lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
         this.role = role;
         this.constraints = new ArrayList<Constraint>();
@@ -73,10 +73,5 @@ public class Teacher extends Person {
 
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF
-    }
-
-    @Override
-    public String toString() {
-        return lastName + " " + firstName;
     }
 }

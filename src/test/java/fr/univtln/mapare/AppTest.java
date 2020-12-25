@@ -25,7 +25,6 @@ public class AppTest
             "Bob",
             new Date(1945, 2, 6),
             "bobm@gmail.com",
-            "1234",
             "marijuana",
             Teacher.Role.ADJUNCT_PROF);
     Student student1 = new Student(
@@ -33,15 +32,13 @@ public class AppTest
             "Réaubourg",
             "Alexandre",
             new Date(),
-            "sasha@gmail.com",
-            "12345");
+            "sasha@gmail.com");
     Student student2 = new Student(
             165,
             "Palma",
             "François",
             new Date(),
-            "フランソワ@gmail.com",
-            "123456");
+            "フランソワ@gmail.com");
     //Creates reservation
     Reservation r1 = new Reservation(
             3,

@@ -8,16 +8,14 @@ public abstract class Person implements Entity {
     private final String firstName;
     private final Date birthdate;
     private final String email;
-    private final String password;
 
     //Constructor
-    public Person(long id, String lastName, String firstName, Date birthdate, String email, String password) {
+    public Person(long id, String lastName, String firstName, Date birthdate, String email) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthdate = birthdate;
         this.email = email;
-        this.password = password;
     }
 
     //Getters & Setters
@@ -35,10 +33,6 @@ public abstract class Person implements Entity {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     @Override

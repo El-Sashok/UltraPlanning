@@ -17,8 +17,8 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     private ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws SQLException {
-        super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS, PASSWORD) VALUES (?,?,?,?,?,?,?)",
-                "UPDATE TEACHER SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, LABORATORY=?, STATUS=?, PASSWORD=? WHERE ID=?");
+        super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS) VALUES (?,?,?,?,?,?)",
+                "UPDATE TEACHER SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, LABORATORY=?, STATUS=? WHERE ID=?");
         constraintDAO = new ConstraintDAO();
     }
 
@@ -37,7 +37,6 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
                 resultSet.getString("NAME"),
                 resultSet.getDate("BIRTHDATE"),
                 resultSet.getString("EMAIL"),
-                resultSet.getString("PASSWORD"),
                 resultSet.getString("LABORATORY"),
                 Teacher.Role.valueOf(resultSet.getString("STATUS")));
         for (Constraint c : constraints) {
@@ -91,7 +90,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     @Override
     public void update(Teacher teacher) throws SQLException {
         populate(updatePS, teacher);
-        updatePS.setLong(8, teacher.getId());
+        updatePS.setLong(7, teacher.getId());
         for (Constraint c: teacher.getConstraints())
             constraintDAO.update(c, teacher.getId());
         super.update();
@@ -104,7 +103,6 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         popPS.setString(4, teacher.getEmail());
         popPS.setString(5, teacher.getLaboratory());
         popPS.setString(6, teacher.getRole().toString());
-        popPS.setString(7, teacher.getPassword());
     }
 
 
