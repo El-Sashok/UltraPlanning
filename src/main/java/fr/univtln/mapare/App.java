@@ -1,15 +1,24 @@
 package fr.univtln.mapare;
 
+import fr.univtln.mapare.controllers.ModuleController;
+import fr.univtln.mapare.controllers.RoomController;
+import fr.univtln.mapare.controllers.SessionControler;
 import fr.univtln.mapare.gui.Launcher;
 
 import fr.univtln.mapare.daos.*;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.DataAccessException;
 
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Hello world!
@@ -17,9 +26,18 @@ import java.util.List;
  */
 public class App 
 {
-    public static void main( String[] args ) throws SQLException {
-        Launcher launcher = new Launcher();
-        launcher.setVisible(true);
+    public static void main( String[] args ) throws SQLException, NoSuchAlgorithmException, InterruptedException {
+//        RoomController.loadRooms();
+//        ModuleController.loadModules();
+//        System.out.println(Room.getRoomList());
+//        System.out.println(Module.getModuleList());
+//        SessionControler.setStatus(SessionControler.Status.MANAGER);
+
+//        Launcher launcher = new Launcher();
+//        launcher.setVisible(true);
+//        ReservationDAO reservationDAO = new ReservationDAO();
+//        Reservation reservation = reservationDAO.find(16).get();
+//        System.out.println(reservation.getStartDate().getTime());
         /*
         RoomDAO roomDAO = new RoomDAO();
         Room room = roomDAO.find(1).get();
