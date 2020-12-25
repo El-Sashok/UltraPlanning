@@ -39,7 +39,7 @@ public class Room implements Entity {
         return ROOMS;
     }
 
-    public void popRoomInList(Room room) {
+    public static void popRoomInList(Room room) {
         ROOMS.remove(room);
     }
 
@@ -93,10 +93,5 @@ public class Room implements Entity {
                 ", label='" + label + '\'' +
                 ", info='" + info + '\'' +
                 '}';
-    }
-
-    @Override
-    public String toString() {
-        return building + "." + number;
     }
 }
