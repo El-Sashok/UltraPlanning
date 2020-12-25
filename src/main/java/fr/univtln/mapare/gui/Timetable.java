@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -543,6 +544,9 @@ public class Timetable extends JFrame {
                 panel.setBorder(bottomBorder);
             parity++;
             panel.setBackground(defaultColor);
+            MouseListener[] toDelete = panel.getMouseListeners();
+            for (MouseListener listener : toDelete)
+                panel.removeMouseListener(listener);
         }
 
         int SL = Semaine.length;
@@ -563,10 +567,20 @@ public class Timetable extends JFrame {
             String displayText1 = htmlTags + maillon[3] + "<br>" + maillon[4] + "<br>" + maillon[5];
             String displayText2 = htmlTags + maillon[6] + "<br>" + lessonTypeEnum[lessonType] + "<br> ";
 
+            MouseListener timeslotPopupCaller = new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    TimeslotPopup popup = new TimeslotPopup(maillon[8]);
+                    popup.setVisible(true);
+                }
+            };
+
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 allhours[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
+                allhours[dayNumber * JL + j].addMouseListener(timeslotPopupCaller);
                 Semaine[dayNumber][j].setText(paddingText);
             }
             Semaine[dayNumber][midhour].setText(displayText1);
@@ -627,6 +641,16 @@ public class Timetable extends JFrame {
                 super.mousePressed(e);
                 FreeRoomFinder frf = new FreeRoomFinder();
                 frf.setVisible(true);
+            }
+        });
+        JMenuItem addModule = new JMenuItem("Ajouter Module");
+        menu.add(addModule);
+        addModule.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                AddModulePopup amp = new AddModulePopup();
+                amp.setVisible(true);
             }
         });
     }
