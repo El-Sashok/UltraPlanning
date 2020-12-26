@@ -1,17 +1,10 @@
 package fr.univtln.mapare;
 
-<<<<<<< HEAD
-import fr.univtln.mapare.gui.Launcher;
-=======
-import fr.univtln.mapare.daos.*;
-import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.DataAccessException;
+import fr.univtln.mapare.daos.ReservationDAO;
+import fr.univtln.mapare.entities.Reservation;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.sql.SQLException;
 import java.util.List;
->>>>>>> feature/DAO
 
 /**
  * Hello world!
@@ -19,12 +12,6 @@ import java.util.List;
  */
 public class App 
 {
-<<<<<<< HEAD
-    public static void main( String[] args )
-    {
-        Launcher launcher = new Launcher();
-        launcher.setVisible(true);
-=======
     public static void main(String[] args ) throws SQLException {
         /*
         RoomDAO roomDAO = new RoomDAO();
@@ -125,6 +112,5 @@ public class App
         reservationDAO.close();
 
         System.out.println(rs.size());
->>>>>>> feature/DAO
     }
 }

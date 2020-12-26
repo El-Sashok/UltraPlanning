@@ -1,42 +1,7 @@
-<<<<<<< HEAD
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-public class Teacher {
-    private String firstName;
-    private String lastName;
-    private static List<Teacher> teacherList = new ArrayList<Teacher>(Arrays.asList(new Teacher[]{new Teacher("Philippe", "LANGEVIN"),
-            new Teacher("Laurent-Stéphane", "DIDIER")}));
-
-    public static List<Teacher> getTeacherList() {
-        return teacherList;
-    }
-
-    public Teacher(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public String toString() {
-        return lastName + " " + firstName;
-    }
-}
-=======
-package fr.univtln.mapare.entities;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +10,12 @@ public class Teacher extends Person {
     private Role role;
     private List<Constraint> constraints;
     private static final List<Teacher> TEACHERS = new ArrayList<>();
+    private static List<Teacher> teacherList = new ArrayList<Teacher>(Arrays.asList(new Teacher[]{new Teacher("Philippe", "LANGEVIN"),
+            new Teacher("Laurent-Stéphane", "DIDIER")}));
+
+    public static List<Teacher> getTeacherList() {
+        return teacherList;
+    }
 
     //Constructor
     public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
@@ -56,10 +27,14 @@ public class Teacher extends Person {
             TEACHERS.add(this);
     }
 
-    //Getters & Setters
-    public static List<Teacher> getTeacherList() {
-        return TEACHERS;
+    private Teacher(String firstName, String lastName) {
+        super(firstName, lastName);
     }
+
+    //Getters & Setters
+    /*public static List<Teacher> getTeacherList() {
+        return TEACHERS;
+    }*/
 
     public static void popTeacherInList(Teacher teacher) {
         TEACHERS.remove(teacher);
@@ -90,7 +65,7 @@ public class Teacher extends Person {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return  "Teacher{" +
                 super.toString() +
@@ -98,7 +73,7 @@ public class Teacher extends Person {
                 ", role=" + role +
                 ", constraints=" + constraints +
                 '}';
-    }
+    }*/
 
     public Teacher addConstraint(Constraint c) {
         constraints.add(c);
@@ -111,4 +86,3 @@ public class Teacher extends Person {
         LECTURER, PROFESSOR, ADJUNCT_PROF
     }
 }
->>>>>>> feature/DAO

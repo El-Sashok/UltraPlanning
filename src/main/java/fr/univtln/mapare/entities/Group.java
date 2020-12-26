@@ -1,36 +1,7 @@
-<<<<<<< HEAD
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-public class Group {
-    private String label;
-    private static List<Group> groupList = new ArrayList<Group>(Arrays.asList(new Group[]{new Group("M1 Info 1"),
-            new Group("M1 Info 2")}));
-
-    public Group(String s) {
-        label = s;
-    }
-
-    public static List<Group> getGroupList() {
-        return groupList;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public String toString() {
-        return label;
-    }
-}
-=======
-package fr.univtln.mapare.entities;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Entity {
@@ -38,6 +9,16 @@ public class Group implements Entity {
     private String label;
     private List<Student> students;
     private static final List<Group> GROUPS = new ArrayList<>();
+    private static List<Group> groupList = new ArrayList<Group>(Arrays.asList(new Group[]{new Group("M1 Info 1"),
+            new Group("M1 Info 2")}));
+
+    private Group(String s) {
+        label = s;
+    }
+
+    public static List<Group> getGroupList() {
+        return groupList;
+    }
 
     //Constructors
     public Group(long id, String label) {
@@ -59,9 +40,9 @@ public class Group implements Entity {
         this.id = id;
     }
 
-    public static List<Group> getGroupList() {
+    /*public static List<Group> getGroupList() {
         return GROUPS;
-    }
+    }*/
 
     public static void popGroupInList(Group group) {
         GROUPS.remove(group);
@@ -84,12 +65,16 @@ public class Group implements Entity {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "Group{" +
                 "label='" + label + '\'' +
                 ", students=" + students +
                 '}';
+    }*/
+    @Override
+    public String toString() {
+        return label;
     }
 
     public Group addStudent(Student s) {
@@ -97,4 +82,3 @@ public class Group implements Entity {
         return this;
     }
 }
->>>>>>> feature/DAO

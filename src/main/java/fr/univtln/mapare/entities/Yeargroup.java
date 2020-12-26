@@ -1,13 +1,15 @@
-<<<<<<< HEAD
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Yeargroup {
+public class Yeargroup implements Entity {
+    private long id;
     private String label;
+    private List<Group> groups;
+    private static final List<Yeargroup> YEARGROUPS = new ArrayList<>();
 
-    public Yeargroup(String label) {
+    private Yeargroup(String label) {
         this.label = label;
     }
 
@@ -22,18 +24,6 @@ public class Yeargroup {
         placeholder.add(new Yeargroup("M2 INFO"));
         return placeholder;
     }
-}
-=======
-package fr.univtln.mapare.entities;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Yeargroup implements Entity {
-    private long id;
-    private String label;
-    private List<Group> groups;
-    private static final List<Yeargroup> YEARGROUPS = new ArrayList<>();
 
     //Constructors
     public Yeargroup(long id, String label) {
@@ -43,8 +33,6 @@ public class Yeargroup implements Entity {
         if (id != -1) // To differentiate the ones which are yet in database
             YEARGROUPS.add(this);
     }
-
-
 
     //Getters & Setters
     @Override
@@ -57,9 +45,9 @@ public class Yeargroup implements Entity {
         this.id = id;
     }
 
-    public static List<Yeargroup> getYeargroupList() {
+    /*public static List<Yeargroup> getYeargroupList() {
         return YEARGROUPS;
-    }
+    }*/
 
     public static void popYeargroupInList(Yeargroup yeargroup) {
         YEARGROUPS.remove(yeargroup);
@@ -82,17 +70,16 @@ public class Yeargroup implements Entity {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "Yeargroup{" +
                 "label='" + label + '\'' +
                 ", groups=" + groups +
                 '}';
-    }
+    }*/
 
     public Yeargroup addGroup(Group g) {
         groups.add(g);
         return this;
     }
 }
->>>>>>> feature/DAO
