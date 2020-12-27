@@ -12,22 +12,36 @@ public class TimeslotPopup extends JFrame{
     private JPanel panel1;
     private JTextArea textArea1;
     private JButton annulerCoursButton;
-    private JButton déplacerCoursButton;
+    private JButton deplacerCoursButton;
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(String memo) {
+    public TimeslotPopup(String memo, JLabel bottomText) {
         setTitle("Détails du cours");
         setSize(300, 200);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        if (memo.equals("") || memo == null)
+            memo = "Aucune note.";
         textArea1.setText(memo);
-    }
 
-    public static void main(String[] args) {
-        TimeslotPopup tsp = new TimeslotPopup("Aucune notes");
-        tsp.setVisible(true);
+        deplacerCoursButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                MoveLessonPopup mlp = new MoveLessonPopup();
+                mlp.setVisible(true);
+            }
+        });
+
+        annulerCoursButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                bottomText.setText("<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>" + bottomText.getText());
+            }
+        });
     }
 }

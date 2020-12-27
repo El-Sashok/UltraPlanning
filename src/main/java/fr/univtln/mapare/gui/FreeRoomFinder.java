@@ -16,7 +16,7 @@ public class FreeRoomFinder extends JFrame {
     private JComboBox comboBox2;
     private JLabel heureFinLabel;
     private JComboBox comboBox3;
-    private JButton searchButton;
+    private JButton chercherButton;
     private JList list1;
 
     public FreeRoomFinder() {
