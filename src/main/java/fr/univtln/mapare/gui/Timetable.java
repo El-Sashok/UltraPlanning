@@ -570,11 +570,12 @@ public class Timetable extends JFrame {
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
 
+            Boolean[] cancelled = {false};
             MouseListener timeslotPopupCaller = new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    TimeslotPopup popup = new TimeslotPopup(maillon[8], Semaine[dayNumber][midhour + 1]);
+                    TimeslotPopup popup = new TimeslotPopup(maillon[8], Semaine[dayNumber][midhour + 1], cancelled);
                     popup.setVisible(true);
                 }
             };
