@@ -51,7 +51,7 @@ public class Module implements Entity {
     }
 
     public void test(){
-        System.out.println("patate");
+        System.out.println("patate ");
     }
 
     //Methods
