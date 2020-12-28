@@ -14,8 +14,8 @@ public class Student extends Person {
     }
 
     //Constructors
-    public Student(long id, String lastName, String firstName, Date birthdate, String email, String password) {
-        super(id, lastName, firstName, birthdate, email, password);
+    public Student(long id, String lastName, String firstName, Date birthdate, String email) {
+        super(id, lastName, firstName, birthdate, email);
         if (id != -1) // To differentiate the ones which are yet in database
             STUDENTS.add(this);
     }

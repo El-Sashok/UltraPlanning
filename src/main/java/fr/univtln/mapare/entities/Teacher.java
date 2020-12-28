@@ -18,8 +18,8 @@ public class Teacher extends Person {
     }
 
     //Constructor
-    public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String password, String laboratory, Role role) {
-        super(id, lastName, firstName, birthdate, email, password);
+    public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String laboratory, Role role) {
+        super(id, lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
         this.role = role;
         this.constraints = new ArrayList<Constraint>();

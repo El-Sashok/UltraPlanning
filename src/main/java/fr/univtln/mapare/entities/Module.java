@@ -17,6 +17,10 @@ public class Module implements Entity {
             MODULES.add(this);
     }
 
+    public void test() {
+        System.out.println("Coucou");
+    }
+
     //Getters & Setters
     @Override
     public long getId() {

@@ -56,7 +56,7 @@ public class Room implements Entity {
         return ROOMS;
     }*/
 
-    public void popRoomInList(Room room) {
+    public static void popRoomInList(Room room) {
         ROOMS.remove(room);
     }
 
