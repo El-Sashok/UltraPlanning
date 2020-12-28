@@ -54,6 +54,10 @@ public class Module implements Entity {
         this.nbHour = nbHour;
     }
 
+    public void test(){
+        System.out.println("patate ");
+    }
+
     //Methods
     @Override
     public String toString() {
