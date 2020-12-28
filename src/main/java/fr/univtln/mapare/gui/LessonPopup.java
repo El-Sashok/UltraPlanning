@@ -1,7 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import fr.univtln.mapare.entities.Course;
+import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Room;
 import fr.univtln.mapare.entities.Teacher;
@@ -83,8 +83,8 @@ public class LessonPopup extends JFrame {
         for (String enumType : rootwindow.lessonTypeEnum)
             comboBox2.addItem(enumType);
 
-        List<Course> courselist = Course.getCourseList();
-        for (Course c : courselist) {
+        List<Module> courselist = Module.getModuleList();
+        for (Module c : courselist) {
             comboBox8.addItem(c);
         }
 

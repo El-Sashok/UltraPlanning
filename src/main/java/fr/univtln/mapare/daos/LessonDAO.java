@@ -1,6 +1,7 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.entities.Module;
 import lombok.extern.java.Log;
 
 import java.sql.PreparedStatement;

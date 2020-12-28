@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Module implements Entity {
@@ -8,6 +9,9 @@ public class Module implements Entity {
     private String label;
     private int nbHour;
     private static final List<Module> MODULES = new ArrayList<>();
+    private static List<Module> moduleList = new ArrayList<Module>(Arrays.asList(new Module[]{new Module("Cryptanalyse"),
+            new Module("Machine Learning")}));
+
     //Constructors
     public Module(long id, String label, int nbHour) {
         this.id = id;
@@ -17,8 +21,8 @@ public class Module implements Entity {
             MODULES.add(this);
     }
 
-    public void test() {
-        System.out.println("Coucou");
+    private Module(String label) {
+        this.label = label;
     }
 
     //Getters & Setters
@@ -27,12 +31,16 @@ public class Module implements Entity {
         return id;
     }
 
+    public static List<Module> getModuleList() {
+        return moduleList;
+    }
+
     @Override
     public void setId(long id) {
         this.id = id;
     }
 
-    public static List<Module> getModuleList() { return MODULES; }
+    /*public static List<Module> getModuleList() { return MODULES; }*/
 
     public static void popModuleInList(Module module) {
         MODULES.remove(module);
@@ -54,16 +62,9 @@ public class Module implements Entity {
         this.nbHour = nbHour;
     }
 
-    public void test(){
-        System.out.println("patate ");
-    }
-
     //Methods
     @Override
     public String toString() {
-        return "Course{" +
-                "label='" + label + '\'' +
-                ", nbHour=" + nbHour +
-                '}';
+        return label;
     }
 }
