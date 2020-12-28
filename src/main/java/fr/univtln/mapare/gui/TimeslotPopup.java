@@ -8,15 +8,17 @@ import java.awt.event.WindowEvent;
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
 public class TimeslotPopup extends JFrame{
-    private JLabel notesLabel;
     private JPanel panel1;
     private JTextArea textArea1;
     private JButton annulerCoursButton;
     private JButton deplacerCoursButton;
+    private JButton voirLEmploiDuButton;
+    private JLabel roomLabel;
+    private JLabel notesLabel;
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(String memo, JLabel bottomText, Boolean[] cancelled) {
+    public TimeslotPopup(String memo, JLabel bottomText, String roomName, Boolean manager, Boolean[] cancelled) {
         setTitle("Détails du cours");
         setSize(300, 200);
         setResizable(resizeable);
@@ -27,29 +29,46 @@ public class TimeslotPopup extends JFrame{
             memo = "Aucune note.";
         textArea1.setText(memo);
 
+        roomLabel.setText(roomName);
+
         if (cancelled[0]) {
             deplacerCoursButton.setEnabled(false);
             annulerCoursButton.setEnabled(false);
         }
 
-        deplacerCoursButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                MoveLessonPopup mlp = new MoveLessonPopup();
-                mlp.setVisible(true);
-            }
-        });
+        if (manager) {
+            deplacerCoursButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    MoveLessonPopup mlp = new MoveLessonPopup();
+                    mlp.setVisible(true);
+                }
+            });
 
-        annulerCoursButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                bottomText.setText("<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>"
-                        + bottomText.getText());
-                cancelled[0] = true;
-                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            }
-        });
+            annulerCoursButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    bottomText.setText("<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>"
+                            + bottomText.getText());
+                    cancelled[0] = true;
+                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+                }
+            });
+        }
+        else {
+            annulerCoursButton.setVisible(false);
+            deplacerCoursButton.setText("Demander deplacement");
+
+            deplacerCoursButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    String msg = "Votre requête a été prise en compte.";
+                    JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+        }
     }
 }

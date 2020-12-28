@@ -67,4 +67,13 @@ public class Module implements Entity {
     public String toString() {
         return label;
     }
+
+    /*@Override
+    public String toString() {
+        return "Module{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", nbHour=" + nbHour +
+                '}';
+    }*/
 }

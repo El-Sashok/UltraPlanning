@@ -514,9 +514,13 @@ public class Timetable extends JFrame {
 
     private Timetable thisframe = this;
 
-    String htmlTags = "<html><body><center><font size=\"2\">";
+    static String htmlTags = "<html><body><center><font size=\"2\">";
 
-    String paddingText = htmlTags + " <br> <br> <br></body></html>";
+    static String paddingText = htmlTags + " <br> <br> <br></body></html>";
+
+    private JMenuBar menuBar;
+
+    private boolean SUStatus = false;
 
     void buttonFunc(int i) {
         if (lastButton != -1)
@@ -575,7 +579,8 @@ public class Timetable extends JFrame {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    TimeslotPopup popup = new TimeslotPopup(maillon[8], Semaine[dayNumber][midhour + 1], cancelled);
+                    TimeslotPopup popup = new TimeslotPopup(maillon[8], Semaine[dayNumber][midhour + 1], maillon[6],
+                            SUStatus, cancelled);
                     popup.setVisible(true);
                 }
             };
@@ -611,12 +616,10 @@ public class Timetable extends JFrame {
 
     public void managerInit() {
         init();
-        JMenuBar mb = new JMenuBar();
-        setJMenuBar(mb);
-        JMenu menu = new JMenu("Menu");
-        mb.add(menu);
+        JMenu addingMenu = new JMenu("Ajout");
+        menuBar.add(addingMenu);
         JMenuItem addLesson = new JMenuItem("Ajouter Cours");
-        menu.add(addLesson);
+        addingMenu.add(addLesson);
         addLesson.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -626,7 +629,7 @@ public class Timetable extends JFrame {
             }
         });
         JMenuItem addReservation = new JMenuItem("Ajouter Reservation");
-        menu.add(addReservation);
+        addingMenu.add(addReservation);
         addReservation.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -635,18 +638,8 @@ public class Timetable extends JFrame {
                 rp.setVisible(true);
             }
         });
-        JMenuItem findRoom = new JMenuItem("Trouver Salle");
-        menu.add(findRoom);
-        findRoom.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder();
-                frf.setVisible(true);
-            }
-        });
         JMenuItem addModule = new JMenuItem("Ajouter Module");
-        menu.add(addModule);
+        addingMenu.add(addModule);
         addModule.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -655,6 +648,9 @@ public class Timetable extends JFrame {
                 amp.setVisible(true);
             }
         });
+
+
+        SUStatus = true;
     }
 
     public void init() {
@@ -685,6 +681,30 @@ public class Timetable extends JFrame {
             boutons[i].setBorder(lineBorder);
         }
         buttonFunc(weekNumber - 1);
+
+
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenuItem findRoom = new JMenuItem("Trouver Salle") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBar.add(findRoom);
+        findRoom.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                FreeRoomFinder frf = new FreeRoomFinder();
+                frf.setVisible(true);
+            }
+        });
+
+
     }
 
     public static void main(String[] args) {
