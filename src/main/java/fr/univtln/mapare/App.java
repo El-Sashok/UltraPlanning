@@ -116,5 +116,9 @@ public class App
         System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
         */
 
+        List<Group> groupList = Group.getGroupList2();
+        for (Group g : groupList)
+            System.out.println(g);
+        System.out.println(groupList.size());
     }
 }

@@ -4,6 +4,7 @@ target/
 .settings/
 Thumbs.db
 database.trace.db
+*:Zone.Identifier
 
 # built application files
 *.apk

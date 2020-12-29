@@ -40,9 +40,9 @@ public class Group implements Entity {
         this.id = id;
     }
 
-    /*public static List<Group> getGroupList() {
+    public static List<Group> getGroupList2() {
         return GROUPS;
-    }*/
+    }
 
     public static void popGroupInList(Group group) {
         GROUPS.remove(group);

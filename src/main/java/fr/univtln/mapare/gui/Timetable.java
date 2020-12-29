@@ -704,7 +704,41 @@ public class Timetable extends JFrame {
             }
         });
 
+        JMenuItem roomView = new JMenuItem("EDT par salle") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBar.add(roomView);
+        roomView.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                RoomViewer rv = new RoomViewer();
+                rv.setVisible(true);
+            }
+        });
 
+        JMenuItem groupView = new JMenuItem("EDT par groupe") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBar.add(groupView);
+        groupView.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                GroupViewer gv = new GroupViewer();
+                gv.setVisible(true);
+            }
+        });
     }
 
     public static void main(String[] args) {
