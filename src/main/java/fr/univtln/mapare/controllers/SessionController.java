@@ -23,7 +23,7 @@ public abstract class SessionController {
     public static void login(String login, String typedPassword) throws SQLException, NoSuchAlgorithmException {
         SessionDAO sessionDAO = new SessionDAO();
         Map<String, Optional<String>> dbInfo = sessionDAO.getUserInfo(login);
-        if (dbInfo.get("ID").isPresent()){
+        if (!dbInfo.isEmpty()){
             if (dbInfo.get("PASSWORD").get().equals(hashPassword(typedPassword))){
                 new Session(Long.valueOf(dbInfo.get("ID").get()),
                         dbInfo.get("LOGIN").get(),
