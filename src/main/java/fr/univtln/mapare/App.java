@@ -67,7 +67,6 @@ public class App
         lessonDAO.persist(lesson);
         lessonDAO.close();
 
-        TeacherDAO teacherDAO = new TeacherDAO();
         Teacher teacher = new Teacher(-1,
                 "RAZIK",
                 "Joseph",
@@ -77,16 +76,19 @@ public class App
                 "LIS",
                 Teacher.Role.PROFESSOR);
 
-        Constraint constraint1 = new Constraint(
+        //Need to follow the correct order as follows
+        Constraint constraint1 = new Constraint(-1,
                 new Date(),
                 new Date());
-        Constraint constraint2 = new Constraint(
+        Constraint constraint2 = new Constraint(-1,
                 new Date(),
                 new Date());
         teacher.addConstraint(constraint1).addConstraint(constraint2);
 
-        teacherDAO.persist(teacher);
+        TeacherDAO teacherDAO = new TeacherDAO();
+        teacher = teacherDAO.persist(teacher);
         teacherDAO.close();
+
 
         StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.find(3).get();
@@ -98,8 +100,9 @@ public class App
                 "Master Info - Groupe 1");
         group.addStudent(student);
 
-        groupDAO.persist(group);
+        group = groupDAO.persist(group);
         groupDAO.close();
+        System.out.println(group.getId());
 
         Yeargroup yeargroup = new Yeargroup(-1,
                 "Master Info");
@@ -112,9 +115,27 @@ public class App
         Yeargroup testID = yeargroupDAO.persist(yeargroup);
         yeargroupDAO.close();
 
-        System.out.println(testID.getId()); //test objet bien recréé avec nouvel id
-        System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
+        RoomDAO roomDAO = new RoomDAO();
+        Room room = roomDAO.find(1).get();
+        roomDAO.close();
+
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = new Reservation(-1,
+                new Date(),
+                new Date(),
+                "test label",
+                "test memo",
+                Reservation.State.NP,
+                room);
+        Reservation test = reservationDAO.persist(reservation);
+        reservationDAO.close();
+        System.out.println(test.getId());
         */
 
+        ReservationDAO reservationDAO = new ReservationDAO();
+        List<Reservation> rs = reservationDAO.findAll();
+        reservationDAO.close();
+
+        System.out.println(rs.size());
     }
 }

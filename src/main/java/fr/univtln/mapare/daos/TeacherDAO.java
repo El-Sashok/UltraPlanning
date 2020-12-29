@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Constraint;
-import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Teacher;
 import lombok.extern.java.Log;
 
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Log
 public class TeacherDAO extends AbstractDAO<Teacher> {
-    private ConstraintDAO constraintDAO;
+    ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws SQLException {
         super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS) VALUES (?,?,?,?,?,?)",
@@ -82,8 +81,10 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(persistPS, teacher);
         Teacher t = super.persist();
         Teacher.popTeacherInList(t);
-        for (Constraint c: teacher.getConstraints())
-            constraintDAO.persist(c, t.getId());
+        for (Constraint c: teacher.getConstraints()) {
+            c.setTeacherID(t.getId());
+            constraintDAO.persist(c);
+        }
         return find(t.getId()).get();
     }
 
@@ -92,7 +93,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(updatePS, teacher);
         updatePS.setLong(7, teacher.getId());
         for (Constraint c: teacher.getConstraints())
-            constraintDAO.update(c, teacher.getId());
+            constraintDAO.update(c);
         super.update();
     }
 

@@ -17,7 +17,7 @@ public class AppTest
      */
     //Defines constraint
     Date date = new Date();
-    Constraint c1 = new Constraint(1, date, date);
+    Constraint c1 = new Constraint(-1, date, date);
     //Creates persons
     Teacher teacher1 = new Teacher(
             123,

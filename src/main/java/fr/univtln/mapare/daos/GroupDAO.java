@@ -1,9 +1,7 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Group;
-import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Student;
-import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
@@ -19,7 +17,7 @@ public class GroupDAO extends AbstractDAO<Group>{
     private final PreparedStatement findMembersPS;
     private final PreparedStatement persistMemberPS;
     private final PreparedStatement updateMemberPS;
-    private final StudentDAO studentDAO;
+    StudentDAO studentDAO;
 
     public GroupDAO() throws SQLException {
         super("INSERT INTO CLASS_GROUP(LABEL) VALUES (?)",
@@ -96,6 +94,8 @@ public class GroupDAO extends AbstractDAO<Group>{
         populate(persistPS, group);
         Group gp = super.persist();
         Group.popGroupInList(gp);
+        for (Student s: group.getStudents())
+            gp.addStudent(s);
         persistMembers(gp);
         return find(gp.getId()).get();
     }
