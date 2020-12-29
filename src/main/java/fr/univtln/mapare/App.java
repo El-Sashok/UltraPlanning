@@ -1,14 +1,16 @@
 package fr.univtln.mapare;
 
-import fr.univtln.mapare.controllers.Controllers;
-import fr.univtln.mapare.controllers.GroupController;
+import fr.univtln.mapare.controllers.*;
 
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,94 +21,32 @@ import static org.junit.Assert.assertEquals;
 public class App 
 {
     public static void main( String[] args ) throws SQLException, NoSuchAlgorithmException, InterruptedException {
-//        RoomController.loadRooms();
-//        ModuleController.loadModules();
-//        System.out.println(Room.getRoomList());
-//        System.out.println(Module.getModuleList());
-//        SessionControler.setStatus(SessionControler.Status.MANAGER);
+        RoomController.loadRooms();
+        ModuleController.loadModules();
+        GroupController.loadGroups();
+        TeacherController.loadTeachers();
 
-//        Launcher launcher = new Launcher();
-//        launcher.setVisible(true);
-//        ReservationDAO reservationDAO = new ReservationDAO();
-//        Reservation reservation = reservationDAO.find(16).get();
-//        System.out.println(reservation.getStartDate().getTime());
-        /*
-        RoomDAO roomDAO = new RoomDAO();
-        Room room = roomDAO.find(1).get();
-        roomDAO.close();
+        LocalDateTime start = LocalDateTime.of(2020, Month.DECEMBER,29,10,0);
+        LocalDateTime end = LocalDateTime.of(2020, Month.DECEMBER,29,11,0);
 
-        ModuleDAO moduleDAO = new ModuleDAO();
-        Module module = moduleDAO.find(1).get();
-        moduleDAO.close();
+        ArrayList<Module> modules = new ArrayList<>();
+        modules.add(Module.getModuleList().get(0));
 
-        GroupDAO groupDAO = new GroupDAO();
-        Group group = groupDAO.find(2).get();
-        groupDAO.close();
+        ArrayList<Group> groups = new ArrayList<>();
+        groups.add(Group.getGroupList().get(0));
 
-        LessonDAO lessonDAO = new LessonDAO();
-        Lesson lesson = new Lesson(-1,
-                new Date(),
-                new Date(),
-                "test label",
-                "test memo",
+        ArrayList<Teacher> teachers = new ArrayList<>();
+        teachers.add(Teacher.getTeacherList().get(0));
+
+        LessonController.createLesson(start,
+                end,
+                "label",
+                "memo",
                 Reservation.State.NP,
-                room,
-                Lesson.Type.CM);
-
-        lesson.addModule(module);
-        lesson.addGroup(group);
-
-        lessonDAO.persist(lesson);
-        lessonDAO.close();
-
-        TeacherDAO teacherDAO = new TeacherDAO();
-        Teacher teacher = new Teacher(-1,
-                "RAZIK",
-                "Joseph",
-                new Date(),
-                "joseph.razik@univ-tln.fr",
-                "motdepasseprotégé",
-                "LIS",
-                Teacher.Role.PROFESSOR);
-
-        Constraint constraint1 = new Constraint(
-                new Date(),
-                new Date());
-        Constraint constraint2 = new Constraint(
-                new Date(),
-                new Date());
-        teacher.addConstraint(constraint1).addConstraint(constraint2);
-
-        teacherDAO.persist(teacher);
-        teacherDAO.close();
-
-        StudentDAO studentDAO = new StudentDAO();
-        Student student = studentDAO.find(3).get();
-        studentDAO.close();
-
-
-        GroupDAO groupDAO = new GroupDAO();
-        Group group = new Group(-1,
-                "Master Info - Groupe 1");
-        group.addStudent(student);
-
-        groupDAO.persist(group);
-        groupDAO.close();
-
-        Yeargroup yeargroup = new Yeargroup(-1,
-                "Master Info");
-        GroupDAO groupDAO = new GroupDAO();
-        List<Group> gps = groupDAO.findAll();
-        groupDAO.close();
-        for (Group g: gps)
-            yeargroup.addGroup(g);
-        YeargroupDAO yeargroupDAO = new YeargroupDAO();
-        Yeargroup testID = yeargroupDAO.persist(yeargroup);
-        yeargroupDAO.close();
-
-        System.out.println(testID.getId()); //test objet bien recréé avec nouvel id
-        System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
-        */
-
+                Room.getRoomList().get(0),
+                Lesson.Type.CM,
+                modules,
+                groups,
+                teachers);
     }
 }
