@@ -62,7 +62,7 @@ public class Lesson extends Reservation {
                 super.toString() +
                 ", type=" + type +
                 ", courses=" + module +
-                ", goups=" + groups +
+                ", groups=" + groups +
                 '}';
     }
 
