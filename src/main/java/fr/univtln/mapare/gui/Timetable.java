@@ -524,7 +524,7 @@ public class Timetable extends JFrame {
 
     private JMenuBar menuBar;
 
-    private boolean SUStatus = false;
+    private int SUStatus = 0; // 0 for student, 1 for teacher and 2 for manager
 
     void buttonFunc(int i) {
         if (lastButton != -1)
@@ -654,7 +654,7 @@ public class Timetable extends JFrame {
         });
 
 
-        SUStatus = true;
+        SUStatus = 2;
     }
 
     public void init() {

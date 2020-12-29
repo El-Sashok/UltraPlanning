@@ -14,13 +14,14 @@ public class TimeslotPopup extends JFrame{
     private JButton deplacerCoursButton;
     private JButton voirLEmploiDuButton;
     private JLabel roomLabel;
+    private JButton voirLaListeDButton;
     private JLabel notesLabel;
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(String memo, JLabel bottomText, String roomName, Boolean manager, Boolean[] cancelled) {
+    public TimeslotPopup(String memo, JLabel bottomText, String roomName, int userType, Boolean[] cancelled) {
         setTitle("Détails du cours");
-        setSize(300, 200);
+        setSize(300, 300);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -36,7 +37,7 @@ public class TimeslotPopup extends JFrame{
             annulerCoursButton.setEnabled(false);
         }
 
-        if (manager) {
+        if (userType == 2) {
             deplacerCoursButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -69,6 +70,8 @@ public class TimeslotPopup extends JFrame{
                     JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
+            if (userType == 0)
+                voirLaListeDButton.setVisible(false);
         }
     }
 }
