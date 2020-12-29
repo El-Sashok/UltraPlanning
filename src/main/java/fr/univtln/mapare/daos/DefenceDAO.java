@@ -10,14 +10,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class DefenceDAO extends AbstractDAO<Defence> {
-    ReservationDAO reservationDAO;
-    StudentDAO studentDAO;
-
     public DefenceDAO() throws SQLException {
         super("INSERT INTO DEFENCE(ID, STUDENT) VALUES (?,?)",
                 "UPDATE DEFENCE SET ID=?, STUDENT=? WHERE ID=?");
-        reservationDAO = new ReservationDAO();
-        this.studentDAO = new StudentDAO();
     }
 
     @Override
@@ -26,8 +21,12 @@ public class DefenceDAO extends AbstractDAO<Defence> {
             if (d.getId() == resultSet.getLong("ID"))
                 return d;
         }
+        ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        reservationDAO.close();
+        StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.find(resultSet.getLong("STUDENT")).get();
+        studentDAO.close();
 
         return new Defence(reservation, student);
     }
@@ -41,7 +40,9 @@ public class DefenceDAO extends AbstractDAO<Defence> {
                 defence.getMemo(),
                 defence.getState(),
                 defence.getRoom());
+        ReservationDAO reservationDAO = new ReservationDAO();
         Reservation r = reservationDAO.persist(reservation,"DEFENCE");
+        reservationDAO.close();
         defence.setId(r.getId());
         populate(persistPS, defence);
         return super.persist();

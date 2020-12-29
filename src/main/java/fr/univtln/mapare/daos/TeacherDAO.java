@@ -13,12 +13,10 @@ import java.util.Optional;
 
 @Log
 public class TeacherDAO extends AbstractDAO<Teacher> {
-    ConstraintDAO constraintDAO;
 
     public TeacherDAO() throws SQLException {
         super("INSERT INTO TEACHER(SURNAME, NAME, BIRTHDATE, EMAIL, LABORATORY, STATUS) VALUES (?,?,?,?,?,?)",
                 "UPDATE TEACHER SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, LABORATORY=?, STATUS=? WHERE ID=?");
-        constraintDAO = new ConstraintDAO();
     }
 
     @Override
@@ -48,8 +46,9 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public Optional<Teacher> find(long id) throws SQLException {
         Teacher teacher = null;
         List<Constraint> constraints = new ArrayList<>();
-
+        ConstraintDAO constraintDAO = new ConstraintDAO();
         constraintDAO.findConstraintsByTeacher.setLong(1, id);
+        constraintDAO.close();
         ResultSet findConstraintsRS = constraintDAO.findConstraintsByTeacher.executeQuery();
         while (findConstraintsRS.next()) {
             constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
@@ -66,6 +65,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public List<Teacher> findAll() throws SQLException {
         List<Teacher> teachers = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
+        ConstraintDAO constraintDAO = new ConstraintDAO();
         while (findAllRS.next()){
             ArrayList<Constraint> constraints = new ArrayList<>();
             constraintDAO.findConstraintsByTeacher.setLong(1, findAllRS.getLong("ID"));
@@ -73,6 +73,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
             while (findConstraintsRS.next()) constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
             teachers.add(fromResultSet(findAllRS, constraints));
         }
+        constraintDAO.close();
         return teachers;
     }
 
@@ -81,10 +82,12 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         populate(persistPS, teacher);
         Teacher t = super.persist();
         Teacher.popTeacherInList(t);
+        ConstraintDAO constraintDAO = new ConstraintDAO();
         for (Constraint c: teacher.getConstraints()) {
             c.setTeacherID(t.getId());
             constraintDAO.persist(c);
         }
+        constraintDAO.close();
         return find(t.getId()).get();
     }
 
@@ -92,8 +95,10 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     public void update(Teacher teacher) throws SQLException {
         populate(updatePS, teacher);
         updatePS.setLong(7, teacher.getId());
+        ConstraintDAO constraintDAO = new ConstraintDAO();
         for (Constraint c: teacher.getConstraints())
             constraintDAO.update(c);
+        constraintDAO.close();
         super.update();
     }
 

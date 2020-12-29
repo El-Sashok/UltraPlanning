@@ -19,14 +19,10 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     private final PreparedStatement findModulesPS;
     private final PreparedStatement persistModulePS;
     private final PreparedStatement updateModulePS;
-    ReservationDAO reservationDAO;
-
 
     public LessonDAO() throws SQLException {
         super("INSERT INTO LESSON(ID, TYPE) VALUES (?,?)",
                 "UPDATE LESSON SET ID=?, TYPE=? WHERE ID=?");
-        this.reservationDAO = new ReservationDAO();
-
         findGroupsPS = connection.prepareStatement("SELECT * FROM LESSON_GROUPS WHERE LESSON=?");
         persistGroupPS = connection.prepareStatement("INSERT INTO LESSON_GROUPS(LESSON, CLASS_GROUP) VALUES (?,?)");
         updateGroupPS = connection.prepareStatement("UPDATE LESSON_GROUPS SET LESSON=?, CLASS_GROUP=? WHERE ID=?");
@@ -40,8 +36,10 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     protected Lesson fromResultSet(ResultSet resultSet) { return null; }
 
     protected Lesson fromResultSet(ResultSet resultSet, ArrayList<Group> groups, ArrayList<Module> modules) throws SQLException {
+        ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-
+        reservationDAO.close();
+        Reservation.popReservationList(reservation);
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
         for (Group g: groups) {
             lesson.addGroup(g);
@@ -83,7 +81,9 @@ public class LessonDAO extends AbstractDAO<Lesson> {
                 lesson.getMemo(),
                 lesson.getState(),
                 lesson.getRoom());
+        ReservationDAO reservationDAO = new ReservationDAO();
         Reservation r = reservationDAO.persist(reservation, "LESSON");
+        reservationDAO.close();
         lesson.setId(r.getId());
         populate(persistPS, lesson);
         Lesson pers = super.persist();

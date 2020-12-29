@@ -17,12 +17,10 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     private final PreparedStatement findGroupsPS;
     private final PreparedStatement persistGroupPS;
     private final PreparedStatement updateGroupPS;
-    GroupDAO groupDAO;
 
     public YeargroupDAO() throws SQLException {
         super("INSERT INTO YEARGROUP(LABEL) VALUES (?)",
                 "UPDATE YEARGROUP SET LABEL=? WHERE ID=?");
-        this.groupDAO = new GroupDAO();
         this.findGroupsPS = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
         this.persistGroupPS = connection.prepareStatement("INSERT INTO YEARGROUP_GROUPS(YEARGROUP, CLASS_GROUP) VALUES(?,?)");
         this.updateGroupPS = connection.prepareStatement("UPDATE YEARGROUP_GROUPS SET YEARGROUP=?, CLASS_GROUP=? WHERE ID=?");
@@ -53,6 +51,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
 
         findGroupsPS.setLong(1, id);
         ResultSet findGroupsRS = findGroupsPS.executeQuery();
+        GroupDAO groupDAO = new GroupDAO();
         while (findGroupsRS.next()) {
             Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
             if (optionalGroup.isPresent())
@@ -60,6 +59,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
             else
                 throw new NotFoundException();
         }
+        groupDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) yeargroup = fromResultSet(findRS, groups);
@@ -70,7 +70,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     public List<Yeargroup> findAll() throws SQLException {
         List<Yeargroup> yeargroups = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
-
+        GroupDAO groupDAO = new GroupDAO();
         while (findAllRS.next()) {
             List<Group> groups = new ArrayList<>();
             findGroupsPS.setLong(1, findAllRS.getLong("ID"));
@@ -85,6 +85,7 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
             }
             yeargroups.add(fromResultSet(findAllRS, groups));
         }
+        groupDAO.close();
         return yeargroups;
     }
 
