@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public abstract class StudentController {
 
-    public static void loadStudents(Student student) throws SQLException {
+    public static void loadStudents() throws SQLException {
         StudentDAO studentDAO = new StudentDAO();
         studentDAO.findAll();
         studentDAO.close();
