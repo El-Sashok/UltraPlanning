@@ -12,8 +12,8 @@ import java.util.*;
 public class SessionDAO extends AbstractDAO<Session> {
 
     public SessionDAO() throws SQLException {
-        super("INSERT INTO MODULE(LOGIN, PASSWORD, STATUS) VALUES (?,?,?)",
-                "UPDATE MODULE SET LOGIN=?, PASSWORD=?, STATUS=? WHERE ID=?");
+        super("INSERT INTO SESSION(LOGIN, PASSWORD, STATUS) VALUES (?,?,?)",
+                "UPDATE SESSION SET LOGIN=?, PASSWORD=?, STATUS=? WHERE ID=?");
     }
 
     @Override
@@ -48,12 +48,14 @@ public class SessionDAO extends AbstractDAO<Session> {
     }
 
     public Map<String, Optional<String>> getUserInfo(String userLogin) throws SQLException {
-        ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM " + getTableName() + " WHERE LOGIN=" + userLogin);
-        Map<String, Optional<String>> info = new HashMap<>();
-        info.put("ID", Optional.ofNullable(rs.getString("ID")));
-        info.put("LOGIN", Optional.ofNullable(rs.getString("LOGIN")));
-        info.put("PASSWORD", Optional.ofNullable(rs.getString("PASSWORD")));
-        info.put("STATUS", Optional.ofNullable(rs.getString("STATUS")));
+        ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM " + getTableName() + " WHERE LOGIN='" + userLogin+"'");
+        Map <String, Optional<String>> info = new HashMap<>();
+        if (rs.next()) {
+            info.put("ID", Optional.ofNullable(rs.getString("ID")));
+            info.put("LOGIN", Optional.ofNullable(rs.getString("LOGIN")));
+            info.put("PASSWORD", Optional.ofNullable(rs.getString("PASSWORD")));
+            info.put("STATUS", Optional.ofNullable(rs.getString("STATUS")));
+        }
         return info;
     }
 
