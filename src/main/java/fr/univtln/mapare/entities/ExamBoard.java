@@ -1,5 +1,6 @@
 package fr.univtln.mapare.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ExamBoard extends Reservation {
@@ -8,6 +9,17 @@ public class ExamBoard extends Reservation {
     //Constructor
     public ExamBoard(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Yeargroup yeargroup) {
         super(id, startDate, endDate, label, memo, state, room);
+        this.yeargroup = yeargroup;
+    }
+
+    public ExamBoard(Reservation reservation, Yeargroup yeargroup) {
+        super(reservation.getId(),
+        reservation.getStartDate(),
+        reservation.getEndDate(),
+        reservation.getLabel(),
+        reservation.getMemo(),
+        reservation.getState(),
+        reservation.getRoom());
         this.yeargroup = yeargroup;
     }
 

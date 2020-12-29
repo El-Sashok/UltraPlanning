@@ -6,12 +6,6 @@ import java.util.List;
 
 public class Student extends Person {
     private static final List<Student> STUDENTS = new ArrayList<>();
-    public static List<Student> getStudentList() {
-        List<Student> placeholder = new ArrayList<Student>();
-        placeholder.add(new Student("Nicolas", "MARGUERIT"));
-        placeholder.add(new Student("Alexandre", "REAUBOURG"));
-        return placeholder;
-    }
 
     //Constructors
     public Student(long id, String lastName, String firstName, Date birthdate, String email) {
@@ -20,14 +14,10 @@ public class Student extends Person {
             STUDENTS.add(this);
     }
 
-    private Student(String firstName, String lastName) {
-        super(firstName, lastName);
-    }
-
     //Getters & Setters
-    /*public static List<Student> getStudentList() {
+    public static List<Student> getStudentList() {
         return STUDENTS;
-    }*/
+    }
 
     public static void popStudentInList(Student student) {
         STUDENTS.remove(student);

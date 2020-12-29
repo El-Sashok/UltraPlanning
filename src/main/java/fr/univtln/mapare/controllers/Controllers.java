@@ -7,5 +7,6 @@ public abstract class Controllers {
         GroupController.loadGroups();
         ModuleController.loadModules();
         RoomController.loadRooms();
+        StudentController.loadStudents();
     }
 }

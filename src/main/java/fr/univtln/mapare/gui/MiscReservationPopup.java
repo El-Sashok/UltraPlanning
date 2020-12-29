@@ -110,51 +110,52 @@ public class MiscReservationPopup extends JFrame {
                 super.mousePressed(e);
                 String text = datePicker1.getText();
                 String[] banana = text.split(" ");
-                String[] cuckoo = banana[1].split(",");
-                if (cuckoo[0].length() == 1)
-                    text = "0";
-                else
-                    text = "";
-                text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
-                DateFormat df = new SimpleDateFormat("dd-MMM-yy");
-                Date date = new Date();
+                String[] cuckoo = {};
                 try {
+                    cuckoo = banana[1].split(",");
+
+                    if (cuckoo[0].length() == 1)
+                        text = "0";
+                    else
+                        text = "";
+                    text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
+                    DateFormat df = new SimpleDateFormat("dd-MMM-yy");
+                    Date date = new Date();
                     df.parse(text);
-                }
-                catch (ParseException exc)  {
-                    exc.printStackTrace();
-                }
-                Calendar temp = Calendar.getInstance(Locale.FRANCE);
-                temp.setTime(date);
-                int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
-                String[] output = new String[9];
-                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
-                int heureDebut = comboBox1.getSelectedIndex();
-                int heureFin = comboBox2.getSelectedIndex() + 2;
+                    Calendar temp = Calendar.getInstance(Locale.FRANCE);
+                    temp.setTime(date);
+                    int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
+                    String[] output = new String[9];
+                    output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
+                    int heureDebut = comboBox1.getSelectedIndex();
+                    int heureFin = comboBox2.getSelectedIndex() + 2;
 
-                Date dateDebut = new Date(date.getTime() + heureDebut * 3600 * 1000);
-                Date dateFin = new Date(date.getTime() + heureFin * 3600 * 1000);
+                    Date dateDebut = new Date(date.getTime() + heureDebut * 3600 * 1000);
+                    Date dateFin = new Date(date.getTime() + heureFin * 3600 * 1000);
 
-                switch (tabbedPane1.getSelectedIndex())
-                {
-                    case 0: // concours
-                        new AdmissionExam(-1,
-                                dateDebut,
-                                dateFin,
-                                "",
-                                textArea1.getText(),
-                                Reservation.State.NP,
-                                (Room) comboBox3.getSelectedItem());
-                        break;
-                    case 1: // jury
-                        new ExamBoard(-1, dateDebut, dateFin, "", textArea1.getText(), Reservation.State.NP,
-                                (Room) comboBox3.getSelectedItem(), (Yeargroup) comboBox5.getSelectedItem());
-                        break;
-                    case 2: // défense
-                        break;
-                    case 3: // autre
-                        break;
+                    Reservation baseR = new Reservation(-1,dateDebut, dateFin, "", textArea1.getText(),
+                            Reservation.State.NP, (Room) comboBox3.getSelectedItem());
 
+                    switch (tabbedPane1.getSelectedIndex())
+                    {
+                        case 0: // concours
+                            new AdmissionExam(baseR);
+                            break;
+                        case 1: // jury
+                            new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
+                            break;
+                        case 2: // défense
+                            new Defence(baseR, (Student) comboBox6.getSelectedItem());
+                            break;
+                        case 3: // autre
+                            baseR.setLabel(textField1.getText());
+                            break;
+                    }
+
+                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+                } catch (ParseException | ArrayIndexOutOfBoundsException a) {
+                    String message = "Veuillez sélectionner une date.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
