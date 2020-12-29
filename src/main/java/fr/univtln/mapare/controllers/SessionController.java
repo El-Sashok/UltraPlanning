@@ -5,19 +5,19 @@ import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.exceptions.IncorrectPasswordException;
 import fr.univtln.mapare.exceptions.UserNotFoundException;
 
-import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.security.*;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class SessionControler {
+public abstract class SessionController {
 
     private static String hashPassword(String TypedPassword) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(TypedPassword.getBytes());
-        byte[]digest = md.digest();
-        return DatatypeConverter.printHexBinary(digest).toUpperCase();
+        byte[] digest = md.digest();
+        return new BigInteger(1, digest).toString(16);
     }
 
     public static void login(String login, String typedPassword) throws SQLException, NoSuchAlgorithmException {
@@ -37,4 +37,7 @@ public abstract class SessionControler {
         }
     }
 
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        System.out.println(hashPassword("coucou"));
+    }
 }

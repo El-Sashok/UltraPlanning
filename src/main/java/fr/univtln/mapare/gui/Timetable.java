@@ -1,11 +1,15 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.GroupController;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -741,7 +745,8 @@ public class Timetable extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        Controllers.loadDB();
         Timetable M = new Timetable();
         M.managerInit();
         M.setVisible(true);

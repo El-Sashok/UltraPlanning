@@ -9,8 +9,6 @@ public class Module implements Entity {
     private String label;
     private int nbHour;
     private static final List<Module> MODULES = new ArrayList<>();
-    private static List<Module> moduleList = new ArrayList<Module>(Arrays.asList(new Module[]{new Module("Cryptanalyse"),
-            new Module("Machine Learning")}));
 
     //Constructors
     public Module(long id, String label, int nbHour) {
@@ -21,18 +19,10 @@ public class Module implements Entity {
             MODULES.add(this);
     }
 
-    private Module(String label) {
-        this.label = label;
-    }
-
     //Getters & Setters
     @Override
     public long getId() {
         return id;
-    }
-
-    public static List<Module> getModuleList() {
-        return moduleList;
     }
 
     @Override
@@ -40,7 +30,7 @@ public class Module implements Entity {
         this.id = id;
     }
 
-    /*public static List<Module> getModuleList() { return MODULES; }*/
+    public static List<Module> getModuleList() { return MODULES; }
 
     public static void popModuleInList(Module module) {
         MODULES.remove(module);

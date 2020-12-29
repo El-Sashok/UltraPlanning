@@ -9,23 +9,13 @@ public class Group implements Entity {
     private String label;
     private List<Student> students;
     private static final List<Group> GROUPS = new ArrayList<>();
-    private static List<Group> groupList = new ArrayList<Group>(Arrays.asList(new Group[]{new Group("M1 Info 1"),
-            new Group("M1 Info 2")}));
-
-    private Group(String s) {
-        label = s;
-    }
-
-    public static List<Group> getGroupList() {
-        return groupList;
-    }
 
     //Constructors
     public Group(long id, String label) {
         this.id = id;
         this.label = label;
         this.students = new ArrayList<Student>();
-        if (id != -1) // To differentiate the ones which are yet in database
+        if (id != -1) // To differentiate which ones aren't in the database yet
             GROUPS.add(this);
     }
 
@@ -40,7 +30,7 @@ public class Group implements Entity {
         this.id = id;
     }
 
-    public static List<Group> getGroupList2() {
+    public static List<Group> getGroupList() {
         return GROUPS;
     }
 

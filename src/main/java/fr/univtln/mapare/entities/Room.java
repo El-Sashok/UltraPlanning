@@ -12,17 +12,6 @@ public class Room implements Entity {
     private String label;
     private String info;
     private static final List<Room> ROOMS = new ArrayList<>();
-    private static List<Room> roomList = new ArrayList<Room>(Arrays.asList(new Room[]{new Room("U1", 110),
-            new Room("W1", 203)}));
-
-    private Room(String b, int n) {
-        building = b;
-        number = n;
-    };
-
-    public static List<Room> getRoomList() {
-        return roomList;
-    }
 
     @Override
     public String toString() {
@@ -52,9 +41,9 @@ public class Room implements Entity {
         this.id = id;
     }
 
-    /*public static List<Room> getRoomList() {
+    public static List<Room> getRoomList() {
         return ROOMS;
-    }*/
+    }
 
     public static void popRoomInList(Room room) {
         ROOMS.remove(room);

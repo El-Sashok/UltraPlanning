@@ -1,7 +1,5 @@
 package fr.univtln.mapare.entities;
 
-import fr.univtln.mapare.controllers.SessionControler;
-
 public class Session implements Entity{
     private static Long id;
     private static Status status;

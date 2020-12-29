@@ -1,22 +1,14 @@
 package fr.univtln.mapare;
 
-import fr.univtln.mapare.controllers.ModuleController;
-import fr.univtln.mapare.controllers.RoomController;
-import fr.univtln.mapare.controllers.SessionControler;
-import fr.univtln.mapare.gui.Launcher;
+import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.GroupController;
 
-import fr.univtln.mapare.daos.*;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.DataAccessException;
+import fr.univtln.mapare.entities.Module;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -116,9 +108,5 @@ public class App
         System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
         */
 
-        List<Group> groupList = Group.getGroupList2();
-        for (Group g : groupList)
-            System.out.println(g);
-        System.out.println(groupList.size());
     }
 }

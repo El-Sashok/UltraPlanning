@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class StudentDAO extends AbstractDAO<Student> {
 
     public StudentDAO() throws SQLException {
-        super("INSERT INTO STUDENT(SURNAME, NAME, BIRTHDATE, EMAIL) VALUES(?,?,?,?,?)",
+        super("INSERT INTO STUDENT(SURNAME, NAME, BIRTHDATE, EMAIL) VALUES(?,?,?,?)",
                 "UPDATE STUDENT SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=? WHERE ID=?");
     }
 
