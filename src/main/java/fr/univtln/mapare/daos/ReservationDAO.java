@@ -1,5 +1,6 @@
 package fr.univtln.mapare.daos;
 
+import fr.univtln.mapare.entities.Lesson;
 import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.entities.Room;
 import fr.univtln.mapare.entities.Teacher;
@@ -15,20 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Log
 public class ReservationDAO extends AbstractDAO<Reservation> {
     private final PreparedStatement findManagersPS;
     private final PreparedStatement persistManagerPS;
     private final PreparedStatement updateManagerPS;
-    RoomDAO roomDAO;
-    TeacherDAO teacherDAO;
 
     public ReservationDAO() throws SQLException {
         super("INSERT INTO RESERVATION(START, END, LABEL, MEMO, TYPE, ROOM, STATE) VALUES (?,?,?,?,?,?,?)",
                 "UPDATE RESERVATION SET START=?, END=?, LABEL=?, MEMO=?, TYPE=?, ROOM=?, STATE=? WHERE ID=?");
-        this.roomDAO = new RoomDAO();
-        this.teacherDAO = new TeacherDAO();
 
         findManagersPS = connection.prepareStatement("SELECT * FROM MANAGERS WHERE RESERVATION=?");
         persistManagerPS = connection.prepareStatement("INSERT INTO MANAGERS(RESERVATION, MANAGER) VALUES (?,?)");
@@ -41,7 +37,9 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
             if (r.getId() == resultSet.getLong("ID"))
                 return r;
         }
+        RoomDAO roomDAO = new RoomDAO();
         Room room = roomDAO.find(resultSet.getLong("ROOM")).get();
+        roomDAO.close();
         return new Reservation(resultSet.getLong("ID"),
                 resultSet.getDate("START"),
                 resultSet.getDate("END"),
@@ -51,33 +49,13 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                 room);
     }
 
-    protected Reservation fromResultSet(ResultSet resultSet, List<Teacher> managers) throws SQLException, DataAccessException {
-        for (Reservation r: Reservation.getReservationList()) {
-            if (r.getId() == resultSet.getLong("ID"))
-                return r;
-        }
-        Room room = roomDAO.find(resultSet.getLong("ROOM")).get();
-        Reservation reservation = new Reservation(resultSet.getLong("ID"),
-                resultSet.getDate("START"),
-                resultSet.getDate("END"),
-                resultSet.getString("LABEL"),
-                resultSet.getString("MEMO"),
-                Reservation.State.valueOf(resultSet.getString("STATE")),
-                room);
-
-        for (Teacher t: managers) {
-            reservation.addTeacher(t);
-        }
-        return reservation;
-    }
-
     @Override
     public Optional<Reservation> find(long id) throws SQLException {
         Reservation reservation = null;
         List<Teacher> managers = new ArrayList<>();
-
         findManagersPS.setLong(1, id);
         ResultSet findManagersRS = findManagersPS.executeQuery();
+        TeacherDAO teacherDAO = new TeacherDAO();
         while (findManagersRS.next()) {
             Optional<Teacher> optionalManager = teacherDAO.find(findManagersRS.getLong("MANAGER"));
             if (optionalManager.isPresent())
@@ -85,9 +63,15 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
             else
                 throw new NotFoundException();
         }
+        teacherDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
-        if (findRS.next()) reservation = fromResultSet(findRS, managers);
+        if (findRS.next()) {
+            reservation = fromResultSet(findRS);
+            for (Teacher t: managers) {
+                reservation.addTeacher(t);
+            }
+        }
         return Optional.ofNullable(reservation);
     }
 
@@ -95,6 +79,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     public List<Reservation> findAll() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
+        TeacherDAO teacherDAO = new TeacherDAO();
 
         while (findAllRS.next()) {
             List<Teacher> managers = new ArrayList<>();
@@ -108,8 +93,31 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                 else
                     throw new NotFoundException();
             }
-            reservations.add(fromResultSet(findAllRS, managers));
+            switch (findAllRS.getString("TYPE")){
+                case "LESSON":
+                    LessonDAO lessonDAO = new LessonDAO();
+                    Lesson lesson = lessonDAO.find(findAllRS.getLong("ID")).get();
+                    for (Teacher t: managers) {
+                        lesson.addTeacher(t);
+                    }
+                    reservations.add(lesson);
+                    lessonDAO.close();
+                    break;
+                case "ADMISSION_EXAM":
+                    break;
+                case "DEFENCE":
+                    break;
+                case "EXAM_BOARD":
+                    break;
+                default:
+                    Reservation reservation = fromResultSet(findAllRS);
+                    for (Teacher t: managers) {
+                        reservation.addTeacher(t);
+                    }
+                    reservations.add(reservation);
+            }
         }
+        teacherDAO.close();
         return reservations;
     }
 
@@ -146,8 +154,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     }
 
     private void populate(PreparedStatement popPS, Reservation reservation, String type) throws SQLException {
-        popPS.setDate(1, new java.sql.Date(reservation.getStartDate().getTime()));
-        popPS.setDate(2, new java.sql.Date(reservation.getEndDate().getTime()));
+        popPS.setTimestamp(1, new java.sql.Timestamp(reservation.getStartDate().getTime()));
+        popPS.setTimestamp(2, new java.sql.Timestamp(reservation.getEndDate().getTime()));
         popPS.setString(3, reservation.getLabel());
         popPS.setString(4, reservation.getMemo());
         popPS.setString(5, type);

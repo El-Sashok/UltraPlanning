@@ -20,15 +20,12 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     private final PreparedStatement persistModulePS;
     private final PreparedStatement updateModulePS;
     ReservationDAO reservationDAO;
-    GroupDAO groupDAO;
-    ModuleDAO moduleDAO;
+
 
     public LessonDAO() throws SQLException {
         super("INSERT INTO LESSON(ID, TYPE) VALUES (?,?)",
                 "UPDATE LESSON SET ID=?, TYPE=? WHERE ID=?");
         this.reservationDAO = new ReservationDAO();
-        this.groupDAO = new GroupDAO();
-        this.moduleDAO = new ModuleDAO();
 
         findGroupsPS = connection.prepareStatement("SELECT * FROM LESSON_GROUPS WHERE LESSON=?");
         persistGroupPS = connection.prepareStatement("INSERT INTO LESSON_GROUPS(LESSON, CLASS_GROUP) VALUES (?,?)");
@@ -64,11 +61,13 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         findGroupsPS.setLong(1, id);
         findModulesPS.setLong(1, id);
         ResultSet rs_findGroupsPS = findGroupsPS.executeQuery();
+        GroupDAO groupDAO = new GroupDAO();
         while (rs_findGroupsPS.next()) groups.add(groupDAO.fromResultSet(rs_findGroupsPS));
-
+        groupDAO.close();
         ResultSet rs_findModulesPS = findModulesPS.executeQuery();
-        while (rs_findModulesPS.next()) modules.add(moduleDAO.fromResultSet(rs_findModulesPS));
-
+        ModuleDAO moduleDAO = new ModuleDAO();
+        while (rs_findModulesPS.next()) modules.add(moduleDAO.find(rs_findModulesPS.getLong("MODULE")).get());
+        moduleDAO.close();
         ResultSet rs_findPS = findPS.executeQuery();
         while (rs_findPS.next()) lesson = fromResultSet(rs_findPS, groups, modules);
 
