@@ -38,6 +38,6 @@ public abstract class SessionController {
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        System.out.println(hashPassword("coucou"));
+        System.out.println(hashPassword("test"));
     }
 }

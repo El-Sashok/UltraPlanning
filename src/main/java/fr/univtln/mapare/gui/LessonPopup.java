@@ -1,10 +1,8 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
-import fr.univtln.mapare.entities.Group;
-import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.entities.Teacher;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -124,6 +122,16 @@ public class LessonPopup extends JFrame {
                         throw new IncorrectEndHourException();
 
                     // TODO: Do the Database associated operations and check for conflicts before confirming.
+                    Lesson servation = new Lesson(-1,
+                            new Date(date.getTime() + heureDebut * 3600 * 1000),
+                            new Date(date.getTime() + heureFin * 3600 * 1000),
+                            "",
+                            textArea1.getText(),
+                            Reservation.State.NP,
+                            (Room) comboBox1.getSelectedItem(),
+                            Lesson.Type.TD);
+
+
 
                     output[1] = heureDebut + "";
                     output[2] = heureFin + "";
