@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class StudentDAO extends AbstractDAO<Student> {
 
     public StudentDAO() throws SQLException {
-        super("INSERT INTO STUDENT(SURNAME, NAME, BIRTHDATE, EMAIL, PASSWORD) VALUES(?,?,?,?,?)",
-                "UPDATE STUDENT SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=?, PASSWORD=? WHERE ID=?");
+        super("INSERT INTO STUDENT(SURNAME, NAME, BIRTHDATE, EMAIL) VALUES(?,?,?,?)",
+                "UPDATE STUDENT SET SURNAME=?, NAME=?, BIRTHDATE=?, EMAIL=? WHERE ID=?");
     }
 
     @Override
@@ -26,8 +26,7 @@ public class StudentDAO extends AbstractDAO<Student> {
                 resultSet.getString("SURNAME"),
                 resultSet.getString("NAME"),
                 resultSet.getDate("BIRTHDATE"),
-                resultSet.getString("EMAIL"),
-                resultSet.getString("PASSWORD"));
+                resultSet.getString("EMAIL"));
     }
 
 
@@ -40,7 +39,7 @@ public class StudentDAO extends AbstractDAO<Student> {
     @Override
     public void update(Student student) throws SQLException {
         populate(updatePS, student);
-        updatePS.setLong(6, student.getId());
+        updatePS.setLong(5, student.getId());
         super.update();
     }
 
@@ -49,7 +48,6 @@ public class StudentDAO extends AbstractDAO<Student> {
         popPS.setString(2, student.getFirstName());
         popPS.setDate(3, new java.sql.Date(student.getBirthdate().getTime()));
         popPS.setString(4, student.getEmail());
-        popPS.setString(5, student.getPassword());
     }
 
     @Override

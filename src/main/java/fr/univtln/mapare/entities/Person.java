@@ -8,16 +8,21 @@ public abstract class Person implements Entity {
     private final String firstName;
     private final Date birthdate;
     private final String email;
-    private final String password;
 
     //Constructor
-    public Person(long id, String lastName, String firstName, Date birthdate, String email, String password) {
+    public Person(long id, String lastName, String firstName, Date birthdate, String email) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthdate = birthdate;
         this.email = email;
-        this.password = password;
+    }
+
+    protected Person (String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        birthdate = null;
+        email = null;
     }
 
     //Getters & Setters
@@ -37,10 +42,6 @@ public abstract class Person implements Entity {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     @Override
     public long getId() { return id; }
 
@@ -48,7 +49,7 @@ public abstract class Person implements Entity {
     public void setId(long id) { this.id = id; }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "Person{" +
                 "lastName='" + lastName + '\'' +
@@ -56,6 +57,11 @@ public abstract class Person implements Entity {
                 ", birthdate=" + birthdate +
                 ", email='" + email + '\'' +
                 '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return this.lastName + " " + this.firstName;
     }
 
 }

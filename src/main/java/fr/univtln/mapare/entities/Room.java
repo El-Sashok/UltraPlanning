@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Room implements Entity {
@@ -11,6 +12,11 @@ public class Room implements Entity {
     private String label;
     private String info;
     private static final List<Room> ROOMS = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return building + "." + number;
+    }
 
     //Constructor
     public Room(long id, String building, int number, int capacity, String label, String info) {
@@ -39,7 +45,7 @@ public class Room implements Entity {
         return ROOMS;
     }
 
-    public void popRoomInList(Room room) {
+    public static void popRoomInList(Room room) {
         ROOMS.remove(room);
     }
 
@@ -84,7 +90,7 @@ public class Room implements Entity {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "Room{" +
                 "building='" + building + '\'' +
@@ -93,5 +99,5 @@ public class Room implements Entity {
                 ", label='" + label + '\'' +
                 ", info='" + info + '\'' +
                 '}';
-    }
+    }*/
 }

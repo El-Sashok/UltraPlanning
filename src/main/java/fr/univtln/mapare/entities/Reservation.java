@@ -29,6 +29,11 @@ public class Reservation implements Entity {
             RESERVATIONS.add(this);
     }
 
+    //Note: delete later, used for tests
+    protected Reservation(String label) {
+        this.label = label;
+    }
+
     //Getters & Setters
     @Override
     public long getId() {
@@ -103,7 +108,7 @@ public class Reservation implements Entity {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "Reservation{" +
                 "startDate=" + startDate +
@@ -114,6 +119,11 @@ public class Reservation implements Entity {
                 ", room=" + room +
                 ", teachers=" + teachers +
                 '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return label;
     }
 
     public Reservation addTeacher(Teacher t) {

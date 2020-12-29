@@ -13,6 +13,10 @@ public class AdmissionExam extends Reservation {
         this.students = new ArrayList<>();
     }
 
+    private AdmissionExam(String label) {
+        super(label);
+    }
+
     //Getters & Setters
     public List<Student> getStudents() {
         return students;
@@ -23,12 +27,23 @@ public class AdmissionExam extends Reservation {
     }
 
     //Methods
-    @Override
+    /*@Override
     public String toString() {
         return "AdmissionExam{" +
                 super.toString() +
                 ", students=" + students +
                 '}';
+    }*/
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    public static List<AdmissionExam> getAdmissionExamList() {
+        List<AdmissionExam> placeholder = new ArrayList<AdmissionExam>();
+        placeholder.add(new AdmissionExam("TOEIC"));
+        placeholder.add(new AdmissionExam("PIX"));
+        return placeholder;
     }
 
     public AdmissionExam addStudent(Student s) {

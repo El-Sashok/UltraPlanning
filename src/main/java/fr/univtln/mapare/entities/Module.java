@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Module implements Entity {
@@ -8,6 +9,7 @@ public class Module implements Entity {
     private String label;
     private int nbHour;
     private static final List<Module> MODULES = new ArrayList<>();
+
     //Constructors
     public Module(long id, String label, int nbHour) {
         this.id = id;
@@ -53,9 +55,15 @@ public class Module implements Entity {
     //Methods
     @Override
     public String toString() {
-        return "Course{" +
-                "label='" + label + '\'' +
+        return label;
+    }
+
+    /*@Override
+    public String toString() {
+        return "Module{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
                 ", nbHour=" + nbHour +
                 '}';
-    }
+    }*/
 }

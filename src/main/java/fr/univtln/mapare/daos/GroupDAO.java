@@ -17,12 +17,11 @@ public class GroupDAO extends AbstractDAO<Group>{
     private final PreparedStatement findMembersPS;
     private final PreparedStatement persistMemberPS;
     private final PreparedStatement updateMemberPS;
-    StudentDAO studentDAO;
 
     public GroupDAO() throws SQLException {
         super("INSERT INTO CLASS_GROUP(LABEL) VALUES (?)",
                 "UPDATE CLASS_GROUP SET LABEL=? WHERE ID=?");
-        this.studentDAO= new StudentDAO();
+
         this.findMembersPS = connection.prepareStatement("SELECT * FROM GROUP_MEMBERS WHERE CLASS_GROUP=?");
         this.persistMemberPS = connection.prepareStatement("INSERT INTO GROUP_MEMBERS(CLASS_GROUP, STUDENT) VALUES (?,?)");
         this.updateMemberPS = connection.prepareStatement("UPDATE GROUP_MEMBERS SET CLASS_GROUP=?, STUDENT=? WHERE ID=?");
@@ -54,6 +53,7 @@ public class GroupDAO extends AbstractDAO<Group>{
 
         findMembersPS.setLong(1, id);
         ResultSet findMembersRS = findMembersPS.executeQuery();
+        StudentDAO studentDAO = new StudentDAO();
         while (findMembersRS.next()) {
             Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
             if (optionalStudent.isPresent())
@@ -61,6 +61,7 @@ public class GroupDAO extends AbstractDAO<Group>{
             else
                 throw new NotFoundException();
         }
+        studentDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) group = fromResultSet(findRS, students);
@@ -71,7 +72,7 @@ public class GroupDAO extends AbstractDAO<Group>{
     public List<Group> findAll() throws SQLException {
         List<Group> groups = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
-
+        StudentDAO studentDAO = new StudentDAO();
         while (findAllRS.next()) {
             List<Student> students = new ArrayList<>();
             findMembersPS.setLong(1, findAllRS.getLong("ID"));
@@ -86,6 +87,7 @@ public class GroupDAO extends AbstractDAO<Group>{
             }
             groups.add(fromResultSet(findAllRS, students));
         }
+        studentDAO.close();
         return groups;
     }
 
