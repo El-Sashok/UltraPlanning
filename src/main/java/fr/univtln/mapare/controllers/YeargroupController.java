@@ -5,7 +5,7 @@ import fr.univtln.mapare.entities.Yeargroup;
 
 import java.sql.SQLException;
 
-public class YeargroupController {
+public abstract class YeargroupController {
 
     public static void loadYeargroup() throws SQLException {
         YeargroupDAO yeargroupDAO = new YeargroupDAO();

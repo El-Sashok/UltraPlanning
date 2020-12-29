@@ -5,7 +5,7 @@ import fr.univtln.mapare.entities.Teacher;
 
 import java.sql.SQLException;
 
-public class TeacherController {
+public abstract class TeacherController {
 
     public static void loadTeachers() throws SQLException {
         TeacherDAO teacherDAO = new TeacherDAO();
