@@ -115,6 +115,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                         reservation.addTeacher(t);
                     }
                     reservations.add(reservation);
+                    break;
             }
         }
         teacherDAO.close();
