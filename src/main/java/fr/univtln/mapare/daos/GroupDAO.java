@@ -133,6 +133,18 @@ public class GroupDAO extends AbstractDAO<Group>{
     }
 
     @Override
+    public void remove(long id) throws SQLException {
+        connection.createStatement().execute("DELETE FROM GROUP_MEMBERS WHERE CLASS_GROUP=" + id);
+        super.remove(id);
+    }
+
+    @Override
+    public void clean() throws SQLException {
+        connection.createStatement().execute("DELETE FROM GROUP_MEMBERS");
+        super.clean();
+    }
+
+    @Override
     public String getTableName() {
         return "CLASS_GROUP";
     }
