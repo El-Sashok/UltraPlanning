@@ -1,7 +1,7 @@
 package fr.univtln.mapare.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Lesson extends Reservation {
@@ -10,7 +10,7 @@ public class Lesson extends Reservation {
     private List<Group> groups;
 
     //Constructor
-    public Lesson(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Type type) {
+    public Lesson(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room, Type type) {
         super(id, startDate, endDate, label, memo, state, room);
         this.type = type;
         this.module = new ArrayList<Module>();

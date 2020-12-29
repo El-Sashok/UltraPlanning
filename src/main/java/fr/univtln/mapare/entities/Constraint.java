@@ -1,18 +1,18 @@
 package fr.univtln.mapare.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Constraint implements Entity {
     private long id;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private long teacherID; //needed for dao
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
 
     //Constructors
-    public Constraint(long id, Date startDate, Date endDate) {
+    public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -20,7 +20,7 @@ public class Constraint implements Entity {
             CONSTRAINTS.add(this);
     }
 
-    public Constraint(long id, Date startDate, Date endDate, long teacherID) {
+    public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate, long teacherID) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -48,19 +48,19 @@ public class Constraint implements Entity {
         CONSTRAINTS.remove(constraint);
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

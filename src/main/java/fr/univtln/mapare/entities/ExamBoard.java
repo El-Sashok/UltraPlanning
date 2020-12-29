@@ -1,12 +1,12 @@
 package fr.univtln.mapare.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ExamBoard extends Reservation {
     private Yeargroup yeargroup;
 
     //Constructor
-    public ExamBoard(long id, Date startDate, Date endDate, String label, String memo, State state, Room room, Yeargroup yeargroup) {
+    public ExamBoard(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room, Yeargroup yeargroup) {
         super(id, startDate, endDate, label, memo, state, room);
         this.yeargroup = yeargroup;
     }

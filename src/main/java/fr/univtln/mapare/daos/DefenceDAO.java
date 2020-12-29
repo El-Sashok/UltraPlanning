@@ -7,7 +7,6 @@ import fr.univtln.mapare.entities.Student;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class DefenceDAO extends AbstractDAO<Defence> {
     public DefenceDAO() throws SQLException {
