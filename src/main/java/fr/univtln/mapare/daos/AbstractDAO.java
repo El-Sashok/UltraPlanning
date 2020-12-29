@@ -2,7 +2,6 @@ package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.datasources.DBCPDataSource;
 import fr.univtln.mapare.entities.Entity;
-import fr.univtln.mapare.exceptions.DataAccessException;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
@@ -75,5 +74,6 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
     @Override
     public void close() throws SQLException {
         connection.close();
+        log.info(getTableName() + " DAO Closed.");
     }
 }
