@@ -15,9 +15,7 @@ public abstract class LessonController {
         for (Group g : groups) lesson.addGroup(g);
         for (Teacher t : managers) lesson.addTeacher(t);
         LessonDAO lessonDAO = new LessonDAO();
-        System.out.println("persist");
-        lessonDAO.persist(lesson);
-        System.out.println("persist finish");
+        Lesson l = lessonDAO.persist(lesson);
         lessonDAO.close();
     }
 }

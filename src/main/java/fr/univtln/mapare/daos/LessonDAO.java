@@ -36,10 +36,18 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     protected Lesson fromResultSet(ResultSet resultSet) { return null; }
 
     protected Lesson fromResultSet(ResultSet resultSet, ArrayList<Group> groups, ArrayList<Module> modules) throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        reservationDAO.close();
+        Reservation reservation = null;
+        for (Reservation r: Reservation.getReservationList()) {
+            if (r.getId() == resultSet.getLong("ID"))
+                reservation = r;
+        }
+        if (reservation == null) {
+            ReservationDAO reservationDAO = new ReservationDAO();
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            reservationDAO.close();
+        }
         Reservation.popReservationList(reservation);
+
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
         for (Group g: groups) {
             lesson.addGroup(g);

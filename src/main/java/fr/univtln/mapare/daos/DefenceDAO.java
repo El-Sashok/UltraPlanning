@@ -16,13 +16,18 @@ public class DefenceDAO extends AbstractDAO<Defence> {
 
     @Override
     protected Defence fromResultSet(ResultSet resultSet) throws SQLException {
-        for (Defence d: Defence.getDefenceList()) {
-            if (d.getId() == resultSet.getLong("ID"))
-                return d;
+        Reservation reservation = null;
+        for (Reservation r: Reservation.getReservationList()) {
+            if (r.getId() == resultSet.getLong("ID"))
+                reservation = r;
         }
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        reservationDAO.close();
+        if (reservation == null) {
+            ReservationDAO reservationDAO = new ReservationDAO();
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            reservationDAO.close();
+        }
+        Reservation.popReservationList(reservation);
+
         StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.find(resultSet.getLong("STUDENT")).get();
         studentDAO.close();
