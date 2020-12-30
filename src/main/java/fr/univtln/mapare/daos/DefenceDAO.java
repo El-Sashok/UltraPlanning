@@ -19,7 +19,7 @@ public class DefenceDAO extends AbstractDAO<Defence> {
 
         for (Reservation r: Reservation.getReservationList()) {
             if (r.getId() == resultSet.getLong("ID") && r instanceof Defence)
-                return ((Defence) r);
+                return (Defence) r;
         }
 
         ReservationDAO reservationDAO = new ReservationDAO();
@@ -36,16 +36,11 @@ public class DefenceDAO extends AbstractDAO<Defence> {
 
     @Override
     public Defence persist(Defence defence) throws SQLException {
-        Reservation reservation = new Reservation(defence.getId(),
-                defence.getStartDate(),
-                defence.getEndDate(),
-                defence.getLabel(),
-                defence.getMemo(),
-                defence.getState(),
-                defence.getRoom());
         ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(reservation,"DEFENCE");
+        Reservation r = reservationDAO.persist(defence,"DEFENCE");
         reservationDAO.close();
+        Reservation.popReservationList(r);
+
         defence.setId(r.getId());
         populate(persistPS, defence);
         return super.persist();

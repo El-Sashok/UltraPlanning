@@ -21,6 +21,7 @@ public class Defence extends Reservation {
                 reservation.getMemo(),
                 reservation.getState(),
                 reservation.getRoom());
+        setManagers(reservation.getManagers());
         this.student = student;
     }
 
