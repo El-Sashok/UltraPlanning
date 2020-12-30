@@ -10,12 +10,6 @@ public class Teacher extends Person {
     private Role role;
     private List<Constraint> constraints;
     private static final List<Teacher> TEACHERS = new ArrayList<>();
-    private static List<Teacher> teacherList = new ArrayList<Teacher>(Arrays.asList(new Teacher[]{new Teacher("Philippe", "LANGEVIN"),
-            new Teacher("Laurent-Stéphane", "DIDIER")}));
-
-    public static List<Teacher> getTeacherList() {
-        return teacherList;
-    }
 
     //Constructor
     public Teacher(long id, String lastName, String firstName, Date birthdate, String email, String laboratory, Role role) {
@@ -32,9 +26,9 @@ public class Teacher extends Person {
     }
 
     //Getters & Setters
-    /*public static List<Teacher> getTeacherList() {
+    public static List<Teacher> getTeacherList() {
         return TEACHERS;
-    }*/
+    }
 
     public static void popTeacherInList(Teacher teacher) {
         TEACHERS.remove(teacher);

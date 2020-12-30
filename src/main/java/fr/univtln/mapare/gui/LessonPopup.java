@@ -13,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static fr.univtln.mapare.gui.Timetable.hourList;
@@ -124,15 +126,20 @@ public class LessonPopup extends JFrame {
                 if (heureFin <= heureDebut + 1)
                     throw new IncorrectEndHourException();
 
+                Date dateDeb = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
+                Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
+
                 // TODO: Do the Database associated operations and check for conflicts before confirming.
                 Lesson servation = new Lesson(-1,
-                        new Date(date.getTime() + heureDebut * 3600 * 1000),
-                        new Date(date.getTime() + heureFin * 3600 * 1000),
+                        dateDeb.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
+                        dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
                         "",
                         textArea1.getText(),
                         Reservation.State.NP,
                         (Room) comboBox1.getSelectedItem(),
                         Lesson.Type.TD);
+
+                System.out.println(dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime());
 
                 if (groupList.isEmpty())
                     throw new EmptySelectionListException("Aucun groupe selectionné.");

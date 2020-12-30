@@ -8,5 +8,6 @@ public abstract class Controllers {
         ModuleController.loadModules();
         RoomController.loadRooms();
         StudentController.loadStudents();
+        TeacherController.loadTeachers();
     }
 }

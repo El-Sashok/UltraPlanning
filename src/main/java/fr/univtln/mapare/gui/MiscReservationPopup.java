@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.*;
 
 import static fr.univtln.mapare.gui.Timetable.hourList;
@@ -130,10 +131,14 @@ public class MiscReservationPopup extends JFrame {
                     int heureDebut = comboBox1.getSelectedIndex();
                     int heureFin = comboBox2.getSelectedIndex() + 2;
 
-                    Date dateDebut = new Date(date.getTime() + heureDebut * 3600 * 1000);
-                    Date dateFin = new Date(date.getTime() + heureFin * 3600 * 1000);
+                    Date dateDebut = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
+                    Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
 
-                    Reservation baseR = new Reservation(-1,dateDebut, dateFin, "", textArea1.getText(),
+
+                    Reservation baseR = new Reservation(-1,
+                            dateDebut.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
+                            dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime()
+                            , "", textArea1.getText(),
                             Reservation.State.NP, (Room) comboBox3.getSelectedItem());
 
                     switch (tabbedPane1.getSelectedIndex())
