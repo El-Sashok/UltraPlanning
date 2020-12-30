@@ -37,7 +37,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
     protected Lesson fromResultSet(ResultSet resultSet, List<Group> groups, List<Module> modules) throws SQLException {
         for (Reservation r: Reservation.getReservationList()) {
-            if (r.getId() == resultSet.getLong("ID"))
+            if (r.getId() == resultSet.getLong("ID") && r instanceof Lesson)
                 return (Lesson) r;
         }
 
