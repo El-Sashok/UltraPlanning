@@ -1,9 +1,6 @@
 package fr.univtln.mapare.daos;
 
-import fr.univtln.mapare.entities.Lesson;
-import fr.univtln.mapare.entities.Reservation;
-import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.entities.Teacher;
+import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
@@ -105,6 +102,13 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                 case "ADMISSION_EXAM":
                     break;
                 case "DEFENCE":
+                    DefenceDAO defenceDAO = new DefenceDAO();
+                    Defence defence = defenceDAO.find(findAllRS.getLong("ID")).get();
+                    for (Teacher t: managers) {
+                        defence.addTeacher(t);
+                    }
+                    reservations.add(defence);
+                    defenceDAO.close();
                     break;
                 case "EXAM_BOARD":
                     break;
@@ -126,7 +130,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         populate(persistPS, reservation);
         Reservation r = super.persist();
         Reservation.popReservationList(r);
-        for (Teacher t: reservation.getTeachers())
+        for (Teacher t: reservation.getManagers())
             r.addTeacher(t);
         persistManagers(r);
         return find(r.getId()).get();
@@ -136,7 +140,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         populate(persistPS, reservation, type);
         Reservation r = super.persist();
         Reservation.popReservationList(r);
-        for (Teacher t: reservation.getTeachers())
+        for (Teacher t: reservation.getManagers())
             r.addTeacher(t);
         persistManagers(r);
         return find(r.getId()).get();
@@ -164,7 +168,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     }
 
     private void persistManagers(Reservation reservation) throws SQLException {
-        for (Teacher t: reservation.getTeachers())
+        for (Teacher t: reservation.getManagers())
             persistManager(reservation, t);
     }
 

@@ -12,7 +12,7 @@ public class Reservation implements Entity {
     private String memo;
     private State state;
     private Room room;
-    private List<Teacher> teachers;
+    private List<Teacher> managers;
     private static final List<Reservation> RESERVATIONS = new ArrayList<>();
 
     //Constructor
@@ -24,7 +24,7 @@ public class Reservation implements Entity {
         this.memo = memo;
         this.state = state;
         this.room = room;
-        this.teachers = new ArrayList<Teacher>();
+        this.managers = new ArrayList<Teacher>();
         if (id != -1) // To differentiate the ones which are yet in database
             RESERVATIONS.add(this);
     }
@@ -99,12 +99,12 @@ public class Reservation implements Entity {
         this.room = room;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<Teacher> getManagers() {
+        return managers;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setManagers(List<Teacher> managers) {
+        this.managers = managers;
     }
 
     //Methods
@@ -127,7 +127,7 @@ public class Reservation implements Entity {
     }
 
     public Reservation addTeacher(Teacher t) {
-        teachers.add(t);
+        managers.add(t);
         return this;
     }
 
