@@ -16,16 +16,15 @@ public class DefenceDAO extends AbstractDAO<Defence> {
 
     @Override
     protected Defence fromResultSet(ResultSet resultSet) throws SQLException {
-        Reservation reservation = null;
+
         for (Reservation r: Reservation.getReservationList()) {
-            if (r.getId() == resultSet.getLong("ID"))
-                reservation = r;
+            if (r.getId() == resultSet.getLong("ID") && r instanceof Defence)
+                return ((Defence) r);
         }
-        if (reservation == null) {
-            ReservationDAO reservationDAO = new ReservationDAO();
-            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-            reservationDAO.close();
-        }
+
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        reservationDAO.close();
         Reservation.popReservationList(reservation);
 
         StudentDAO studentDAO = new StudentDAO();
