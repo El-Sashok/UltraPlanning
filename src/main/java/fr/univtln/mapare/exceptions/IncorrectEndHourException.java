@@ -1,4 +1,4 @@
-package fr.univtln.mapare.gui;
+package fr.univtln.mapare.exceptions;
 
 public class IncorrectEndHourException extends Exception{
 

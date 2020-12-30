@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="fr.univtln.mapare.gui.TeacherListSelector">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="fr.univtln.mapare.gui.EntityListSelector">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
@@ -31,7 +31,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="50a8a" class="javax.swing.JList" binding="teacherJList">
+              <component id="50a8a" class="javax.swing.JList" binding="entityJList">
                 <constraints/>
                 <properties/>
               </component>
@@ -39,12 +39,12 @@
           </scrollpane>
         </children>
       </grid>
-      <component id="a32a" class="javax.swing.JButton" binding="ajouterEnseignantButton" default-binding="true">
+      <component id="a32a" class="javax.swing.JButton" binding="addEntityButton">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Ajouter enseignant"/>
+          <text value="Ajouter entité"/>
         </properties>
       </component>
       <component id="33197" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">

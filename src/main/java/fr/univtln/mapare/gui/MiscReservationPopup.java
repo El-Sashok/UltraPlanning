@@ -88,7 +88,7 @@ public class MiscReservationPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                TeacherListSelector selector = new TeacherListSelector(teacherList);
+                EntityListSelector selector = EntityListSelector.getTeacherSelector(teacherList);
                 selector.setVisible(true);
             }
         };
