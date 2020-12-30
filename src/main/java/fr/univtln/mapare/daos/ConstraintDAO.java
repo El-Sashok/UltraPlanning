@@ -12,7 +12,7 @@ import java.util.List;
 
 @Log
 public class ConstraintDAO extends AbstractDAO<Constraint> {
-    public final PreparedStatement findConstraintsByTeacher;
+    private final PreparedStatement findConstraintsByTeacher;
 
     public ConstraintDAO() throws SQLException {
         super("INSERT INTO CONSTRAINTS(TEACHER, START, END) VALUES(?,?,?)",
