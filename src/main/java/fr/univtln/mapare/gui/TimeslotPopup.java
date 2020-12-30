@@ -1,5 +1,7 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.entities.Session;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +21,8 @@ public class TimeslotPopup extends JFrame{
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(String memo, JLabel bottomText, String roomName, int userType, Boolean[] cancelled) {
+    public TimeslotPopup(String memo, JLabel bottomText, String roomName, Session.Status userType,
+                         Boolean[] cancelled) {
         setTitle("Détails du cours");
         setSize(300, 300);
         setResizable(resizeable);
@@ -37,7 +40,7 @@ public class TimeslotPopup extends JFrame{
             annulerCoursButton.setEnabled(false);
         }
 
-        if (userType == 2) {
+        if (userType == Session.Status.MANAGER) {
             deplacerCoursButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -70,7 +73,7 @@ public class TimeslotPopup extends JFrame{
                     JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            if (userType == 0)
+            if (userType == Session.Status.STUDENT)
                 voirLaListeDButton.setVisible(false);
         }
     }

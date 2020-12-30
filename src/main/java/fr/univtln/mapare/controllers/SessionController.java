@@ -39,7 +39,7 @@ public abstract class SessionController {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, SQLException {
         System.out.println(hashPassword("test"));
-        login("sasha@sasha.fr", "tost");
+        //login("sasha@sasha.fr", "tost");
         System.out.println(Session.getStatus());
     }
 }

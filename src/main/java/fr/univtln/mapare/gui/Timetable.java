@@ -2,6 +2,7 @@ package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.Controllers;
 import fr.univtln.mapare.controllers.GroupController;
+import fr.univtln.mapare.entities.Session;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -524,7 +525,7 @@ public class Timetable extends JFrame {
 
     private JMenuBar menuBar;
 
-    private int SUStatus = 0; // 0 for student, 1 for teacher and 2 for manager
+    private Session.Status SUStatus;
 
     void buttonFunc(int i) {
         if (lastButton != -1)
@@ -609,17 +610,21 @@ public class Timetable extends JFrame {
         lastButton = i;
     }
 
-    public Timetable() {
+    public Timetable(Session.Status status) {
         setTitle("Emploi Du Temps");
         setSize(1400, 950);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
+        SUStatus = status;
+
+        init();
+        if (SUStatus == Session.Status.MANAGER)
+            managerInit();
     }
 
     public void managerInit() {
-        init();
         JMenu addingMenu = new JMenu("Ajout");
         menuBar.add(addingMenu);
         JMenuItem addLesson = new JMenuItem("Ajouter Cours");
@@ -652,9 +657,6 @@ public class Timetable extends JFrame {
                 amp.setVisible(true);
             }
         });
-
-
-        SUStatus = 2;
     }
 
     public void init() {
@@ -747,8 +749,7 @@ public class Timetable extends JFrame {
 
     public static void main(String[] args) throws SQLException {
         Controllers.loadDB();
-        Timetable M = new Timetable();
-        M.managerInit();
+        Timetable M = new Timetable(Session.Status.MANAGER);
         M.setVisible(true);
     }
 }
