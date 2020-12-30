@@ -13,6 +13,17 @@ public class AdmissionExam extends Reservation {
         this.students = new ArrayList<>();
     }
 
+    public AdmissionExam(Reservation reservation) {
+        super(reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getLabel(),
+                reservation.getMemo(),
+                reservation.getState(),
+                reservation.getRoom());
+        this.students = new ArrayList<>();
+    }
+
     private AdmissionExam(String label) {
         super(label);
     }
