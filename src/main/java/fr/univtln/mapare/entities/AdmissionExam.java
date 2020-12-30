@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdmissionExam extends Reservation {
+    private AdmissionExamLabel admissionExamLabel;
     private List<Student> students;
 
     //Constructor
-    public AdmissionExam(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room) {
+    public AdmissionExam(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room, AdmissionExamLabel admissionExamLabel) {
         super(id, startDate, endDate, label, memo, state, room);
+        this.admissionExamLabel = admissionExamLabel;
         this.students = new ArrayList<>();
     }
 
-    public AdmissionExam(Reservation reservation) {
+    public AdmissionExam(Reservation reservation, AdmissionExamLabel admissionExamLabel) {
         super(reservation.getId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
@@ -21,6 +23,8 @@ public class AdmissionExam extends Reservation {
                 reservation.getMemo(),
                 reservation.getState(),
                 reservation.getRoom());
+        setManagers(reservation.getManagers());
+        this.admissionExamLabel = admissionExamLabel;
         this.students = new ArrayList<>();
     }
 
@@ -37,14 +41,23 @@ public class AdmissionExam extends Reservation {
         this.students = students;
     }
 
+    public AdmissionExamLabel getAdmissionExamLabel() {
+        return admissionExamLabel;
+    }
+
+    public void setAdmissionExamLabel(AdmissionExamLabel admissionExamLabel) {
+        this.admissionExamLabel = admissionExamLabel;
+    }
+
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "AdmissionExam{" +
-                super.toString() +
+                super.print() +
+                ", label=" + admissionExamLabel +
                 ", students=" + students +
                 '}';
-    }*/
+    }
+
     @Override
     public String toString() {
         return super.toString();
