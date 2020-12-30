@@ -38,6 +38,7 @@ public class Defence extends Reservation {
     public String toString() {
         return "Defence{" +
                 super.toString() +
+                ", ID=" + getId() +
                 ", student=" + student +
                 '}';
     }

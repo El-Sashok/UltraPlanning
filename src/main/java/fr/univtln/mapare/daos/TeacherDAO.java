@@ -45,15 +45,9 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
     @Override
     public Optional<Teacher> find(long id) throws SQLException {
         Teacher teacher = null;
-        List<Constraint> constraints = new ArrayList<>();
         ConstraintDAO constraintDAO = new ConstraintDAO();
-        constraintDAO.findConstraintsByTeacher.setLong(1, id);
+        List<Constraint> constraints = constraintDAO.findByTeacher(id);
         constraintDAO.close();
-        ResultSet findConstraintsRS = constraintDAO.findConstraintsByTeacher.executeQuery();
-        while (findConstraintsRS.next()) {
-            constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
-        }
-
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) teacher = fromResultSet(findRS, constraints);
@@ -67,10 +61,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         ResultSet findAllRS = findAllPS.executeQuery();
         ConstraintDAO constraintDAO = new ConstraintDAO();
         while (findAllRS.next()){
-            ArrayList<Constraint> constraints = new ArrayList<>();
-            constraintDAO.findConstraintsByTeacher.setLong(1, findAllRS.getLong("ID"));
-            ResultSet findConstraintsRS = constraintDAO.findConstraintsByTeacher.executeQuery();
-            while (findConstraintsRS.next()) constraints.add(constraintDAO.fromResultSet(findConstraintsRS));
+            List<Constraint> constraints = constraintDAO.findByTeacher(findAllRS.getLong("ID"));
             teachers.add(fromResultSet(findAllRS, constraints));
         }
         constraintDAO.close();
