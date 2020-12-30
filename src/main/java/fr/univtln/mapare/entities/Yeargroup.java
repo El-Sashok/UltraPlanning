@@ -18,13 +18,6 @@ public class Yeargroup implements Entity {
         return label;
     }
 
-    public static List<Yeargroup> getYeargroupList() {
-        List<Yeargroup> placeholder = new ArrayList<Yeargroup>();
-        placeholder.add(new Yeargroup("M1 INFO"));
-        placeholder.add(new Yeargroup("M2 INFO"));
-        return placeholder;
-    }
-
     //Constructors
     public Yeargroup(long id, String label) {
         this.id = id;
@@ -45,9 +38,9 @@ public class Yeargroup implements Entity {
         this.id = id;
     }
 
-    /*public static List<Yeargroup> getYeargroupList() {
+    public static List<Yeargroup> getYeargroupList() {
         return YEARGROUPS;
-    }*/
+    }
 
     public static void popYeargroupInList(Yeargroup yeargroup) {
         YEARGROUPS.remove(yeargroup);

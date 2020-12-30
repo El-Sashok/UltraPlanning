@@ -11,6 +11,18 @@ public class ExamBoard extends Reservation {
         this.yeargroup = yeargroup;
     }
 
+    public ExamBoard(Reservation reservation, Yeargroup yeargroup) {
+        super(reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getLabel(),
+                reservation.getMemo(),
+                reservation.getState(),
+                reservation.getRoom());
+        setManagers(reservation.getManagers());
+        this.yeargroup = yeargroup;
+    }
+
     //Getters & Setters
     public Yeargroup getYeargroup() {
         return yeargroup;
@@ -21,6 +33,8 @@ public class ExamBoard extends Reservation {
     }
 
     //Methods
+
+
     @Override
     public String toString() {
         return "ExamBoard{" +
