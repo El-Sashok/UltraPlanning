@@ -35,7 +35,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     @Override
     protected Lesson fromResultSet(ResultSet resultSet) { return null; }
 
-    protected Lesson fromResultSet(ResultSet resultSet, ArrayList<Group> groups, ArrayList<Module> modules) throws SQLException {
+    protected Lesson fromResultSet(ResultSet resultSet, List<Group> groups, List<Module> modules) throws SQLException {
         Reservation reservation = null;
         for (Reservation r: Reservation.getReservationList()) {
             if (r.getId() == resultSet.getLong("ID"))
@@ -49,20 +49,19 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         Reservation.popReservationList(reservation);
 
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
-        for (Group g: groups) {
+        for (Group g: groups)
             lesson.addGroup(g);
-        }
-        for (Module m: modules) {
+        for (Module m: modules)
             lesson.addModule(m);
-        }
+
         return lesson;
     }
 
     @Override
     public Optional<Lesson> find(long id) throws SQLException {
         Lesson lesson = null;
-        ArrayList<Group> groups = new ArrayList<>();
-        ArrayList<Module> modules = new ArrayList<>();
+        List<Group> groups = new ArrayList<>();
+        List<Module> modules = new ArrayList<>();
         findPS.setLong(1, id);
         findGroupsPS.setLong(1, id);
         findModulesPS.setLong(1, id);
