@@ -29,7 +29,7 @@ public class Reservation implements Entity {
             RESERVATIONS.add(this);
     }
 
-    //Note: delete later, used for tests
+    //TODO: delete later, used for tests
     protected Reservation(String label) {
         this.label = label;
     }

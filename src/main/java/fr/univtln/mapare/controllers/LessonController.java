@@ -15,7 +15,7 @@ public abstract class LessonController {
 
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
-                if (checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){
+                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){
                     for (Teacher dbTeacher : r.getManagers())
                         for (Teacher LocalTeacher : managers)
                             if (dbTeacher.getId() == LocalTeacher.getId())
@@ -43,11 +43,5 @@ public abstract class LessonController {
         LessonDAO lessonDAO = new LessonDAO();
         lessonDAO.persist(lesson);
         lessonDAO.close();
-    }
-
-    private static boolean checkTimeBreak(LocalDateTime dbStart, LocalDateTime dbEnd, LocalDateTime localStart, LocalDateTime localEnd) {
-        return (dbStart.isAfter(localStart) && dbStart.isBefore(localEnd)) ||
-                (dbEnd.isAfter(localStart) && dbEnd.isBefore(localEnd)) ||
-                (dbStart.isBefore(localStart) && dbEnd.isAfter(localEnd));
     }
 }
