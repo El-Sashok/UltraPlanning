@@ -29,6 +29,10 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
 
     @Override
     protected Reservation fromResultSet(ResultSet resultSet) throws SQLException {
+        return null;
+    }
+
+    protected Reservation fromResultSet(ResultSet resultSet, List<Teacher> managers) throws SQLException {
         for (Reservation r: Reservation.getReservationList()) {
             if (r.getId() == resultSet.getLong("ID"))
                 return r;
@@ -36,13 +40,17 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         RoomDAO roomDAO = new RoomDAO();
         Room room = roomDAO.find(resultSet.getLong("ROOM")).get();
         roomDAO.close();
-        return new Reservation(resultSet.getLong("ID"),
+
+        Reservation reservation = new Reservation(resultSet.getLong("ID"),
                 resultSet.getTimestamp("START").toLocalDateTime(),
                 resultSet.getTimestamp("END").toLocalDateTime(),
                 resultSet.getString("LABEL"),
                 resultSet.getString("MEMO"),
                 Reservation.State.valueOf(resultSet.getString("STATE")),
                 room);
+        for (Teacher t: managers) reservation.addTeacher(t);
+
+        return reservation;
     }
 
     @Override
@@ -62,12 +70,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         teacherDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
-        if (findRS.next()) {
-            reservation = fromResultSet(findRS);
-            for (Teacher t: managers) {
-                reservation.addTeacher(t);
-            }
-        }
+        if (findRS.next()) reservation = fromResultSet(findRS, managers);
+
         return Optional.ofNullable(reservation);
     }
 
@@ -113,10 +117,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                 case "EXAM_BOARD":
                     break;
                 default:
-                    Reservation reservation = fromResultSet(findAllRS);
-                    for (Teacher t: managers) {
-                        reservation.addTeacher(t);
-                    }
+                    Reservation reservation = fromResultSet(findAllRS, managers);
                     reservations.add(reservation);
                     break;
             }
@@ -130,9 +131,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         populate(persistPS, reservation);
         Reservation r = super.persist();
         Reservation.popReservationList(r);
-        for (Teacher t: reservation.getManagers())
-            r.addTeacher(t);
-        persistManagers(r);
+        reservation.setId(r.getId());
+        persistManagers(reservation);
         return find(r.getId()).get();
     }
 
@@ -140,9 +140,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         populate(persistPS, reservation, type);
         Reservation r = super.persist();
         Reservation.popReservationList(r);
-        for (Teacher t: reservation.getManagers())
-            r.addTeacher(t);
-        persistManagers(r);
+        reservation.setId(r.getId());
+        persistManagers(reservation);
         return find(r.getId()).get();
     }
 

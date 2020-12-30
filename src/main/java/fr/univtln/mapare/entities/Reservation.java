@@ -108,8 +108,7 @@ public class Reservation implements Entity {
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Reservation{" +
                 "startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -117,9 +116,9 @@ public class Reservation implements Entity {
                 ", memo='" + memo + '\'' +
                 ", state=" + state +
                 ", room=" + room +
-                ", teachers=" + teachers +
+                ", teachers=" + managers +
                 '}';
-    }*/
+    }
 
     @Override
     public String toString() {

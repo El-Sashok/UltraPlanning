@@ -79,22 +79,18 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
     @Override
     public Lesson persist(Lesson lesson) throws SQLException {
-        Reservation reservation = new Reservation(lesson.getId(),
-                lesson.getStartDate(),
-                lesson.getEndDate(),
-                lesson.getLabel(),
-                lesson.getMemo(),
-                lesson.getState(),
-                lesson.getRoom());
         ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(reservation, "LESSON");
+        Reservation r = reservationDAO.persist(lesson, "LESSON");
         reservationDAO.close();
+        Reservation.popReservationList(r);
+
         lesson.setId(r.getId());
         populate(persistPS, lesson);
         Lesson pers = super.persist();
         persistGroups(lesson);
         persistModules(lesson);
-        return pers;
+        Reservation.popReservationList(pers);
+        return find(pers.getId()).get();
     }
 
     @Override
