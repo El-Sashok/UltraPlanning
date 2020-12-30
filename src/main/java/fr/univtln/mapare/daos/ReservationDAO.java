@@ -4,14 +4,13 @@ import fr.univtln.mapare.entities.Lesson;
 import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.entities.Room;
 import fr.univtln.mapare.entities.Teacher;
-import fr.univtln.mapare.exceptions.DataAccessException;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +40,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         Room room = roomDAO.find(resultSet.getLong("ROOM")).get();
         roomDAO.close();
         return new Reservation(resultSet.getLong("ID"),
-                resultSet.getDate("START"),
-                resultSet.getDate("END"),
+                resultSet.getTimestamp("START").toLocalDateTime(),
+                resultSet.getTimestamp("END").toLocalDateTime(),
                 resultSet.getString("LABEL"),
                 resultSet.getString("MEMO"),
                 Reservation.State.valueOf(resultSet.getString("STATE")),
@@ -115,6 +114,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                         reservation.addTeacher(t);
                     }
                     reservations.add(reservation);
+                    break;
             }
         }
         teacherDAO.close();
@@ -154,8 +154,8 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     }
 
     private void populate(PreparedStatement popPS, Reservation reservation, String type) throws SQLException {
-        popPS.setTimestamp(1, new java.sql.Timestamp(reservation.getStartDate().getTime()));
-        popPS.setTimestamp(2, new java.sql.Timestamp(reservation.getEndDate().getTime()));
+        popPS.setTimestamp(1, Timestamp.valueOf(reservation.getStartDate()));
+        popPS.setTimestamp(2, Timestamp.valueOf(reservation.getEndDate()));
         popPS.setString(3, reservation.getLabel());
         popPS.setString(4, reservation.getMemo());
         popPS.setString(5, type);

@@ -1,15 +1,26 @@
 package fr.univtln.mapare.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AdmissionExam extends Reservation {
     private List<Student> students;
 
     //Constructor
-    public AdmissionExam(long id, Date startDate, Date endDate, String label, String memo, State state, Room room) {
+    public AdmissionExam(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room) {
         super(id, startDate, endDate, label, memo, state, room);
+        this.students = new ArrayList<>();
+    }
+
+    public AdmissionExam(Reservation reservation) {
+        super(reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getLabel(),
+                reservation.getMemo(),
+                reservation.getState(),
+                reservation.getRoom());
         this.students = new ArrayList<>();
     }
 

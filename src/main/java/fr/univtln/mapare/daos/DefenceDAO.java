@@ -7,27 +7,30 @@ import fr.univtln.mapare.entities.Student;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class DefenceDAO extends AbstractDAO<Defence> {
-    ReservationDAO reservationDAO;
-    StudentDAO studentDAO;
-
     public DefenceDAO() throws SQLException {
         super("INSERT INTO DEFENCE(ID, STUDENT) VALUES (?,?)",
                 "UPDATE DEFENCE SET ID=?, STUDENT=? WHERE ID=?");
-        reservationDAO = new ReservationDAO();
-        this.studentDAO = new StudentDAO();
     }
 
     @Override
     protected Defence fromResultSet(ResultSet resultSet) throws SQLException {
-        for (Defence d: Defence.getDefenceList()) {
-            if (d.getId() == resultSet.getLong("ID"))
-                return d;
+        Reservation reservation = null;
+        for (Reservation r: Reservation.getReservationList()) {
+            if (r.getId() == resultSet.getLong("ID"))
+                reservation = r;
         }
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        if (reservation == null) {
+            ReservationDAO reservationDAO = new ReservationDAO();
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            reservationDAO.close();
+        }
+        Reservation.popReservationList(reservation);
+
+        StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.find(resultSet.getLong("STUDENT")).get();
+        studentDAO.close();
 
         return new Defence(reservation, student);
     }
@@ -41,7 +44,9 @@ public class DefenceDAO extends AbstractDAO<Defence> {
                 defence.getMemo(),
                 defence.getState(),
                 defence.getRoom());
+        ReservationDAO reservationDAO = new ReservationDAO();
         Reservation r = reservationDAO.persist(reservation,"DEFENCE");
+        reservationDAO.close();
         defence.setId(r.getId());
         populate(persistPS, defence);
         return super.persist();

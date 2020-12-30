@@ -6,12 +6,13 @@ import lombok.extern.java.Log;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Log
 public class ConstraintDAO extends AbstractDAO<Constraint> {
-    public final PreparedStatement findConstraintsByTeacher;
+    private final PreparedStatement findConstraintsByTeacher;
 
     public ConstraintDAO() throws SQLException {
         super("INSERT INTO CONSTRAINTS(TEACHER, START, END) VALUES(?,?,?)",
@@ -26,8 +27,8 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
                 return c;
         }
         return new Constraint(resultSet.getLong("id"),
-                resultSet.getDate("START"),
-                resultSet.getDate("END"),
+                resultSet.getTimestamp("START").toLocalDateTime(),
+                resultSet.getTimestamp("END").toLocalDateTime(),
         resultSet.getLong("TEACHER"));
     }
 
@@ -57,8 +58,8 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
 
     private void populate(PreparedStatement popPS, Constraint constraint) throws SQLException {
         popPS.setLong(1, constraint.getTeacherID());
-        popPS.setDate(2, new java.sql.Date(constraint.getStartDate().getTime()));
-        popPS.setDate(3, new java.sql.Date(constraint.getEndDate().getTime()));
+        popPS.setTimestamp(2, Timestamp.valueOf(constraint.getStartDate()));
+        popPS.setTimestamp(3, Timestamp.valueOf(constraint.getEndDate()));
     }
 
     @Override

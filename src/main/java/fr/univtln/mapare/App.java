@@ -1,13 +1,19 @@
 package fr.univtln.mapare;
 
-import fr.univtln.mapare.controllers.Controllers;
-import fr.univtln.mapare.controllers.GroupController;
+import fr.univtln.mapare.controllers.*;
 
+import fr.univtln.mapare.daos.DefenceDAO;
+import fr.univtln.mapare.daos.RoomDAO;
+import fr.univtln.mapare.daos.StudentDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -107,6 +113,45 @@ public class App
         System.out.println(testID.getId()); //test objet bien recréé avec nouvel id
         System.out.println(Yeargroup.getYeargroupList()); //test nouvel objet bien présent dans la liste static
         */
+
+
+       /* DefenceDAO defenceDAO = new DefenceDAO();
+        defenceDAO.findAll();
+        Defence defence = defenceDAO.find(56).get();
+        for (Reservation r: Reservation.getReservationList())
+            System.out.println("in list" + r);
+        System.out.println(defence);
+        defenceDAO.close();*/
+
+
+        /*RoomController.loadRooms();
+        ModuleController.loadModules();
+        GroupController.loadGroups();
+        TeacherController.loadTeachers();
+
+        LocalDateTime start = LocalDateTime.of(2020, Month.DECEMBER,29,10,0);
+        LocalDateTime end = LocalDateTime.of(2020, Month.DECEMBER,29,11,0);
+
+        ArrayList<Module> modules = new ArrayList<>();
+        modules.add(Module.getModuleList().get(0));
+
+        ArrayList<Group> groups = new ArrayList<>();
+        groups.add(Group.getGroupList().get(0));
+
+        ArrayList<Teacher> teachers = new ArrayList<>();
+        teachers.add(Teacher.getTeacherList().get(0));
+
+        LessonController.createLesson(start,
+                end,
+                "label",
+                "memo",
+                Reservation.State.NP,
+                Room.getRoomList().get(0),
+                Lesson.Type.CM,
+                modules,
+                groups,
+                teachers);*/
+
 
     }
 }
