@@ -82,8 +82,8 @@ public class AppTest
     @Test
     public void testAjoutDivers() {
         assertEquals(teacher1.addConstraint(c1).getConstraints(), teacher1.getConstraints());
-        assertEquals(r1.addTeacher(teacher1).getTeachers(), r1.getTeachers());
+        assertEquals(r1.addTeacher(teacher1).getManagers(), r1.getManagers());
         assertEquals(a1.addStudent(student1).addStudent(student2).getStudents(), a1.getStudents());
-        assertEquals(a1.addTeacher(teacher1).getTeachers(), a1.getTeachers());
+        assertEquals(a1.addTeacher(teacher1).getManagers(), a1.getManagers());
     }
 }
