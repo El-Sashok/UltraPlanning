@@ -56,7 +56,8 @@ public class AppTest
             "NO IDEA3",
             "NO IDEA4",
             Reservation.State.NP,
-            new Room(6, "U1", 111, 15, "Salle info", "3 pc en panne"));
+            new Room(6, "U1", 111, 15, "Salle info", "3 pc en panne"),
+            new AdmissionExamLabel(-1, "TOEIC"));
     @Test
     public void testCreationCronstraint() {
         assertEquals(c1.getStartDate(), LocalDateTime.now());
