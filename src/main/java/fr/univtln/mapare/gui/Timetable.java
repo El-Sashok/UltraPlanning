@@ -534,11 +534,12 @@ public class Timetable extends JFrame {
         String[] dayOfTheWeek = {"lun", "mar", "mer", "jeu", "ven", "sam"};
         String[] monthOfTheYear = {"janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
         "octobre", "novembre", "décembre"};
-        calendar.set(Calendar.WEEK_OF_YEAR, i + 1);
+        Calendar temp = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR, i + 1 + (temp.get(Calendar.DAY_OF_WEEK) == 1 ? 1 : 0));
         if (i >= 33)
-            calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+            calendar.set(Calendar.YEAR, temp.get(Calendar.YEAR) - (temp.get(Calendar.WEEK_OF_MONTH) < 33 ? 1 : 0));
         else
-            calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) + 1);
+            calendar.set(Calendar.YEAR, temp.get(Calendar.YEAR) + 1 - (temp.get(Calendar.WEEK_OF_MONTH) < 33 ? 1 : 0));
         for (int j = 0; j < 6; j++) {
             calendar.set(Calendar.DAY_OF_WEEK, j + 2);
             jourLabels[j].setText(dayOfTheWeek[j] + ". " + calendar.get(Calendar.DAY_OF_MONTH) + " " +
