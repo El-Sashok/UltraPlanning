@@ -1,5 +1,7 @@
 package fr.univtln.mapare.controllers;
 
+import fr.univtln.mapare.entities.Yeargroup;
+
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -10,6 +12,9 @@ public abstract class Controllers {
         RoomController.loadRooms();
         StudentController.loadStudents();
         TeacherController.loadTeachers();
+        ReservationController.loadReservations();
+        YeargroupController.loadYeargroup();
+        AdmissionExamLabelController.loadLabels();
     }
 
     public static boolean checkTimeBreak(LocalDateTime dbStart, LocalDateTime dbEnd, LocalDateTime localStart, LocalDateTime localEnd) {

@@ -56,14 +56,7 @@ public class AdmissionExam extends Reservation {
 
     @Override
     public String toString() {
-        return super.toString();
-    }
-
-    public static List<AdmissionExam> getAdmissionExamList() {
-        List<AdmissionExam> placeholder = new ArrayList<AdmissionExam>();
-        placeholder.add(new AdmissionExam("TOEIC"));
-        placeholder.add(new AdmissionExam("PIX"));
-        return placeholder;
+        return admissionExamLabel.getLabel();
     }
 
     public AdmissionExam addStudent(Student s) {

@@ -660,7 +660,10 @@ public class Timetable extends JFrame {
     }
 
     public void init() {
+        int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
+        if (month < 7)
+            year -= 1;
         int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
         boolean is53weekYear = LocalDate.of(year, 1, 1).getDayOfWeek() == DayOfWeek.THURSDAY ||
                 LocalDate.of(year, 12, 31).getDayOfWeek() == DayOfWeek.THURSDAY;

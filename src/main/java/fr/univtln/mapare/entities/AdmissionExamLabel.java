@@ -46,6 +46,10 @@ public class AdmissionExamLabel implements Entity {
     //Methods
     @Override
     public String toString() {
+        return label;
+    }
+
+    public String print() {
         return "AdmissionExamLabel{" +
                 "label=" + label +
                 ", id=" + id + '}';

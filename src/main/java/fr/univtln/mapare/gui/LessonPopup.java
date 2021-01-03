@@ -27,14 +27,12 @@ public class LessonPopup extends JFrame {
     private JButton cancelButton;
     private JButton okButton;
     private JLabel dateLabel;
-    private JPanel panel3;
     private JLabel modulesLabel;
     private JLabel heureDébutLabel;
     private JComboBox comboBox4;
     private JComboBox comboBox6;
     private JLabel groupesLabel;
-    private JLabel enseignantLabel;
-    private JComboBox comboBox5;
+    private JLabel enseignantsLabel;
     private DatePicker datePicker1;
     private JLabel heureFinLabel;
     private JLabel memoLabel;
@@ -45,6 +43,7 @@ public class LessonPopup extends JFrame {
     private JTextArea textArea1;
     private JButton listeDeModulesButton;
     private JButton listeDeGroupesButton;
+    private JButton listeDEnseignantsButton;
 
     private JFrame thisframe = this;
 
@@ -82,24 +81,9 @@ public class LessonPopup extends JFrame {
         for (String enumType : rootwindow.lessonTypeEnum)
             comboBox2.addItem(enumType);
 
-        /*List<Module> courselist = Module.getModuleList();
-        for (Module c : courselist) {
-            comboBox8.addItem(c);
-        }
-
-        List<Group> grouplist = Group.getGroupList();
-        for (Group g : grouplist) {
-            comboBox9.addItem(g);
-        }*/
-
         List<Module> courseList = new ArrayList<>();
         List<Group> groupList = new ArrayList<>();
-
-        for (Teacher t : Teacher.getTeacherList()) {
-            comboBox5.addItem(t);
-        }
-
-
+        List<Teacher> teacherList = new ArrayList<>();
 
         okButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -139,8 +123,6 @@ public class LessonPopup extends JFrame {
                         (Room) comboBox1.getSelectedItem(),
                         Lesson.Type.TD);
 
-                System.out.println(dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime());
-
                 if (groupList.isEmpty())
                     throw new EmptySelectionListException("Aucun groupe selectionné.");
 
@@ -159,10 +141,19 @@ public class LessonPopup extends JFrame {
                     courseString += m + ", ";
                 courseString = courseString.substring(0, courseString.length() - 2);
 
+                if (teacherList.isEmpty())
+                    throw new EmptySelectionListException("Aucun enseignant selectionné.");
+
+                servation.setManagers(teacherList);
+                String teacherString = "";
+                for (Teacher t : teacherList)
+                    teacherString += t + ", ";
+                teacherString = teacherString.substring(0, teacherString.length() - 2);
+
                 output[1] = heureDebut + "";
                 output[2] = heureFin + "";
                 output[3] = courseString;
-                output[4] = comboBox5.getSelectedItem() + "";
+                output[4] = teacherString;
                 output[5] = groupString;
                 output[6] = comboBox1.getSelectedItem() + "";
                 output[7] = comboBox2.getSelectedIndex() + "";
@@ -202,6 +193,15 @@ public class LessonPopup extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 EntityListSelector gSelector = EntityListSelector.getGroupSelector(groupList);
+                gSelector.setVisible(true);
+            }
+        });
+
+        listeDEnseignantsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                EntityListSelector gSelector = EntityListSelector.getTeacherSelector(teacherList);
                 gSelector.setVisible(true);
             }
         });

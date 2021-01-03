@@ -73,8 +73,8 @@ public class MiscReservationPopup extends JFrame {
             comboBox3.addItem(r);
         }
 
-        List<AdmissionExam> examList = AdmissionExam.getAdmissionExamList();
-        for (AdmissionExam exam : examList)
+        List<AdmissionExamLabel> examList = AdmissionExamLabel.getAdmissionExamLabelList();
+        for (AdmissionExamLabel exam : examList)
             comboBox4.addItem(exam);
 
         List<Yeargroup> promoList = Yeargroup.getYeargroupList();
@@ -143,7 +143,7 @@ public class MiscReservationPopup extends JFrame {
                 switch (tabbedPane1.getSelectedIndex())
                 {
                     case 0: // concours
-                        new AdmissionExam(baseR);
+                        new AdmissionExam(baseR, (AdmissionExamLabel) comboBox4.getSelectedItem());
                         break;
                     case 1: // jury
                         new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
