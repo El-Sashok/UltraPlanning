@@ -1,7 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class ExamBoard extends Reservation {
     private Yeargroup yeargroup;
@@ -14,12 +13,13 @@ public class ExamBoard extends Reservation {
 
     public ExamBoard(Reservation reservation, Yeargroup yeargroup) {
         super(reservation.getId(),
-        reservation.getStartDate(),
-        reservation.getEndDate(),
-        reservation.getLabel(),
-        reservation.getMemo(),
-        reservation.getState(),
-        reservation.getRoom());
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getLabel(),
+                reservation.getMemo(),
+                reservation.getState(),
+                reservation.getRoom());
+        setManagers(reservation.getManagers());
         this.yeargroup = yeargroup;
     }
 

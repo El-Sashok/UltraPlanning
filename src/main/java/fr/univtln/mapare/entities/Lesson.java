@@ -25,6 +25,7 @@ public class Lesson extends Reservation {
                 reservation.getMemo(),
                 reservation.getState(),
                 reservation.getRoom());
+        setManagers(reservation.getManagers());
         this.type = type;
         this.module = new ArrayList<Module>();
         this.groups = new ArrayList<Group>();

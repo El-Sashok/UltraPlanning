@@ -12,7 +12,7 @@ public class Reservation implements Entity {
     private String memo;
     private State state;
     private Room room;
-    private List<Teacher> teachers;
+    private List<Teacher> managers;
     private static final List<Reservation> RESERVATIONS = new ArrayList<>();
 
     //Constructor
@@ -24,12 +24,12 @@ public class Reservation implements Entity {
         this.memo = memo;
         this.state = state;
         this.room = room;
-        this.teachers = new ArrayList<Teacher>();
+        this.managers = new ArrayList<Teacher>();
         if (id != -1) // To differentiate the ones which are yet in database
             RESERVATIONS.add(this);
     }
 
-    //Note: delete later, used for tests
+    //TODO: delete later, used for tests
     protected Reservation(String label) {
         this.label = label;
     }
@@ -99,17 +99,16 @@ public class Reservation implements Entity {
         this.room = room;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<Teacher> getManagers() {
+        return managers;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setManagers(List<Teacher> managers) {
+        this.managers = managers;
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Reservation{" +
                 "startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -117,9 +116,9 @@ public class Reservation implements Entity {
                 ", memo='" + memo + '\'' +
                 ", state=" + state +
                 ", room=" + room +
-                ", teachers=" + teachers +
+                ", teachers=" + managers +
                 '}';
-    }*/
+    }
 
     @Override
     public String toString() {
@@ -127,7 +126,7 @@ public class Reservation implements Entity {
     }
 
     public Reservation addTeacher(Teacher t) {
-        teachers.add(t);
+        managers.add(t);
         return this;
     }
 

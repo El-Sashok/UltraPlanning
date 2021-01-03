@@ -36,17 +36,14 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     protected Lesson fromResultSet(ResultSet resultSet) { return null; }
 
     protected Lesson fromResultSet(ResultSet resultSet, List<Group> groups, List<Module> modules) throws SQLException {
-        Reservation reservation = null;
         for (Reservation r: Reservation.getReservationList()) {
-            if (r.getId() == resultSet.getLong("ID"))
-                reservation = r;
+            if (r.getId() == resultSet.getLong("ID") && r instanceof Lesson)
+                return (Lesson) r;
         }
-        if (reservation == null) {
-            ReservationDAO reservationDAO = new ReservationDAO();
-            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-            reservationDAO.close();
-        }
-        Reservation.popReservationList(reservation);
+
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        reservationDAO.close();
 
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
         for (Group g: groups)
@@ -81,22 +78,18 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
     @Override
     public Lesson persist(Lesson lesson) throws SQLException {
-        Reservation reservation = new Reservation(lesson.getId(),
-                lesson.getStartDate(),
-                lesson.getEndDate(),
-                lesson.getLabel(),
-                lesson.getMemo(),
-                lesson.getState(),
-                lesson.getRoom());
         ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(reservation, "LESSON");
+        Reservation r = reservationDAO.persist(lesson, "LESSON");
         reservationDAO.close();
+        Reservation.popReservationList(r);
+
         lesson.setId(r.getId());
         populate(persistPS, lesson);
         Lesson pers = super.persist();
         persistGroups(lesson);
         persistModules(lesson);
-        return pers;
+        Reservation.popReservationList(pers);
+        return find(pers.getId()).get();
     }
 
     @Override

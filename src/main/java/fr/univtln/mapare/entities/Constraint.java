@@ -19,7 +19,7 @@ public class Constraint implements Entity {
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
-
+    //Needed for TeacherDao
     public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate, long teacherID) {
         this.id = id;
         this.startDate = startDate;
