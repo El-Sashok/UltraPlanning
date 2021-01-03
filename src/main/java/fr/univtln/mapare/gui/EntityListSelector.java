@@ -1,13 +1,16 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.controllers.Controllers;
 import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.entities.Teacher;
 
+import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class EntityListSelector extends JFrame {
         entityJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         entityJList.setLayoutOrientation(JList.VERTICAL);
         entityJList.setVisibleRowCount(-1);
+
+        entityJList.setSize(200, 200);
 
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -182,7 +187,8 @@ public class EntityListSelector extends JFrame {
         return groupSelector;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        Controllers.loadDB();
         EntityListSelector selector = EntityListSelector.getTeacherSelector(new ArrayList<Teacher>());
         selector.setVisible(true);
     }

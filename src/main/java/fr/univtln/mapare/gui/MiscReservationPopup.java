@@ -108,60 +108,59 @@ public class MiscReservationPopup extends JFrame {
         okButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                String text = datePicker1.getText();
-                String[] banana = text.split(" ");
-                String[] cuckoo = {};
-                try {
-                    cuckoo = banana[1].split(",");
+            super.mousePressed(e);
+            String text = datePicker1.getText();
+            String[] banana = text.split(" ");
+            String[] cuckoo = {};
+            try {
+                cuckoo = banana[1].split(",");
 
-                    if (cuckoo[0].length() == 1)
-                        text = "0";
-                    else
-                        text = "";
-                    text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
-                    DateFormat df = new SimpleDateFormat("dd-MMM-yy");
-                    Date date = new Date();
-                    df.parse(text);
-                    Calendar temp = Calendar.getInstance(Locale.FRANCE);
-                    temp.setTime(date);
-                    int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
-                    String[] output = new String[9];
-                    output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
-                    int heureDebut = comboBox1.getSelectedIndex();
-                    int heureFin = comboBox2.getSelectedIndex() + 2;
+                if (cuckoo[0].length() == 1)
+                    text = "0";
+                else
+                    text = "";
+                text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
+                DateFormat df = new SimpleDateFormat("dd-MMM-yy");
+                Date date = new Date();
+                df.parse(text);
+                Calendar temp = Calendar.getInstance(Locale.FRANCE);
+                temp.setTime(date);
+                int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
+                String[] output = new String[9];
+                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
+                int heureDebut = comboBox1.getSelectedIndex();
+                int heureFin = comboBox2.getSelectedIndex() + 2;
 
-                    Date dateDebut = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
-                    Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
+                Date dateDebut = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
+                Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
 
+                Reservation baseR = new Reservation(-1,
+                        dateDebut.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
+                        dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime()
+                        , "", textArea1.getText(),
+                        Reservation.State.NP, (Room) comboBox3.getSelectedItem());
 
-                    Reservation baseR = new Reservation(-1,
-                            dateDebut.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
-                            dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime()
-                            , "", textArea1.getText(),
-                            Reservation.State.NP, (Room) comboBox3.getSelectedItem());
-
-                    switch (tabbedPane1.getSelectedIndex())
-                    {
-                        case 0: // concours
-                            new AdmissionExam(baseR);
-                            break;
-                        case 1: // jury
-                            new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
-                            break;
-                        case 2: // défense
-                            new Defence(baseR, (Student) comboBox6.getSelectedItem());
-                            break;
-                        case 3: // autre
-                            baseR.setLabel(textField1.getText());
-                            break;
-                    }
-
-                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-                } catch (ParseException | ArrayIndexOutOfBoundsException a) {
-                    String message = "Veuillez sélectionner une date.";
-                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                switch (tabbedPane1.getSelectedIndex())
+                {
+                    case 0: // concours
+                        new AdmissionExam(baseR);
+                        break;
+                    case 1: // jury
+                        new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
+                        break;
+                    case 2: // défense
+                        new Defence(baseR, (Student) comboBox6.getSelectedItem());
+                        break;
+                    case 3: // autre
+                        baseR.setLabel(textField1.getText());
+                        break;
                 }
+
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            } catch (ParseException | ArrayIndexOutOfBoundsException a) {
+                String message = "Veuillez sélectionner une date.";
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
             }
         });
     }

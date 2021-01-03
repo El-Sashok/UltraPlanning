@@ -54,7 +54,7 @@ public class LessonPopup extends JFrame {
 
     public LessonPopup(Timetable rootwindow) {
         setTitle("Réservation pour cours");
-        setSize(320, 330);
+        //setSize(320, 330);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -205,5 +205,7 @@ public class LessonPopup extends JFrame {
                 gSelector.setVisible(true);
             }
         });
+
+        this.pack();
     }
 }
