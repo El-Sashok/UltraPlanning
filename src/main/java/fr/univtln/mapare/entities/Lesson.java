@@ -88,20 +88,18 @@ public class Lesson extends Reservation {
             courseString += ", ...";
         temp = getManagers();
         String teacherString = temp.get(0).toString();
-        if (temp.size() > 1) {
-            teacherString += ", ...";
-        }
-        temp = getGroups();
-        System.out.println(temp);
-        /*String groupString = temp.get(0).toString();
         if (temp.size() > 1)
-            groupString += ", ...";*/
+            teacherString += ", ...";
+        temp = getGroups();
+        String groupString = temp.get(0).toString();
+        if (temp.size() > 1)
+            groupString += ", ...";
         output[0] = (dateDeb.getDayOfWeek().getValue() - 1) + "";
         output[1] = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0)) + "";
         output[2] = ((dateFin.getHour() - 9) * 2 + (dateFin.getMinute() == 30 ? 1 : 0)) + "";
         output[3] = courseString;
-        output[4] = teacherString;/*
-        output[5] = groupString;
+        output[4] = teacherString;
+        output[5] = groupString;/*
         output[6] = comboBox1.getSelectedItem() + "";
         output[7] = comboBox2.getSelectedIndex() + "";
         output[8] = textArea1.getText();*/

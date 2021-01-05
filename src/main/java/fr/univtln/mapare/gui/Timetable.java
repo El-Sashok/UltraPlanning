@@ -535,7 +535,7 @@ public class Timetable extends JFrame {
     void setToGroupAgenda(Group group) {
         for (Reservation r : allreservations) {
             if (r instanceof Lesson) {
-                if (((Lesson) r).getGroups().contains(group)) {
+                if (!((Lesson) r).getGroups().contains(group)) {
                     String[] temp = ((Lesson) r).getStringTable();
                     for (String s : temp) {
                         if(s != null)
