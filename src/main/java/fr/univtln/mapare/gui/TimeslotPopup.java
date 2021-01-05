@@ -1,6 +1,7 @@
 package fr.univtln.mapare.gui;
 
-import fr.univtln.mapare.entities.Session;
+import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.entities.Module;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -18,24 +19,58 @@ public class TimeslotPopup extends JFrame{
     private JLabel roomLabel;
     private JButton voirLaListeDButton;
     private JLabel notesLabel;
+    private JLabel modulesLabel;
+    private JLabel moduleLabel;
+    private JLabel enseignantsLabel;
+    private JLabel enseignantLabel;
+    private JLabel groupesLabel;
+    private JLabel groupeLabel;
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(String memo, JLabel bottomText, String roomName, Session.Status userType,
-                         Boolean[] cancelled) {
+    public TimeslotPopup(Reservation res, Session.Status userType) {
         setTitle("Détails du cours");
-        setSize(300, 300);
+        //setSize(300, 300);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+
+        String memo = res.getMemo();
+        String roomName = res.getRoom().toString();
         if (memo.equals("") || memo == null)
             memo = "Aucune note.";
         textArea1.setText(memo);
 
+        String teacherText = "";
+        for (Teacher t : res.getManagers())
+            teacherText += t + ", ";
+        teacherText = teacherText.substring(0, teacherText.length() - 2);
+        enseignantLabel.setText(teacherText);
+
+        if (res instanceof Lesson) {
+            String groupText = "";
+            for (Group t : ((Lesson) res).getGroups())
+                groupText += t + ", ";
+            groupText = groupText.substring(0, groupText.length() - 2);
+            groupeLabel.setText(groupText);
+
+            String moduleText = "";
+            for (Module t : ((Lesson) res).getModules())
+                moduleText += t + ", ";
+            moduleText = moduleText.substring(0, moduleText.length() - 2);
+            moduleLabel.setText(moduleText);
+        }
+        else {
+            groupeLabel.setVisible(false);
+            groupesLabel.setVisible(false);
+            moduleLabel.setVisible(false);
+            modulesLabel.setVisible(false);
+        }
+
         roomLabel.setText(roomName);
 
-        if (cancelled[0]) {
+        if (res.getState() == Reservation.State.CANCELLED) {
             deplacerCoursButton.setEnabled(false);
             annulerCoursButton.setEnabled(false);
         }
@@ -54,9 +89,7 @@ public class TimeslotPopup extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    bottomText.setText("<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>"
-                            + bottomText.getText());
-                    cancelled[0] = true;
+                    res.setState(Reservation.State.CANCELLED);
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
             });
@@ -76,5 +109,6 @@ public class TimeslotPopup extends JFrame{
             if (userType == Session.Status.STUDENT)
                 voirLaListeDButton.setVisible(false);
         }
+        this.pack();
     }
 }

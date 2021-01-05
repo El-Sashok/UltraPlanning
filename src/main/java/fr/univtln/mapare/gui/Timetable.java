@@ -504,7 +504,7 @@ public class Timetable extends JFrame {
             "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
             "18h30", "19h00"};
 
-    List<String[]>[] boutonChaine = new ArrayList[53];
+    List<Reservation>[] boutonChaine = new ArrayList[53];
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
 
@@ -542,8 +542,7 @@ public class Timetable extends JFrame {
                 LocalDateTime date = r.getStartDate();
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (((Lesson) r).getGroups().contains(group)) {
-                    String[] temp = ((Lesson) r).getStringTable();
-                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(temp);
+                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
                 }
             }
         }
@@ -559,8 +558,7 @@ public class Timetable extends JFrame {
                 LocalDateTime date = r.getStartDate();
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (r.getRoom().equals(room)) {
-                    String[] temp = ((Lesson) r).getStringTable();
-                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(temp);
+                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
                 }
             }
         }
@@ -606,32 +604,52 @@ public class Timetable extends JFrame {
             }
         }
 
-        for (String[] maillon : boutonChaine[i]) {
-            int dayNumber = Integer.parseInt(maillon[0]);
-            int dHourNumber = Integer.parseInt(maillon[1]);
-            int eHourNumber = Integer.parseInt(maillon[2]);
-            int lessonType = Integer.parseInt(maillon[7]);
+        for (Reservation maillon : boutonChaine[i]) {
+            LocalDateTime dateDeb = maillon.getStartDate();
+            LocalDateTime dateFin = maillon.getEndDate();
+            int dayNumber = dateDeb.getDayOfWeek().getValue() - 1;
+            int dHourNumber = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0));
+            int eHourNumber = ((dateFin.getHour() - 8) * 2 + (dateFin.getMinute() == 30 ? 1 : 0));
+
+            String displayText1 = "";
+            String displayText2 = "";
+            int colorType = 0;
 
             // We dont close the html tags. It's less "proper" but more readable.
-            String displayText1 = htmlTags + maillon[3] + "<br>" + maillon[4] + "<br>" + maillon[5];
-            String displayText2 = htmlTags + maillon[6] + "<br>" + lessonTypeEnum[lessonType] + "<br> ";
+            if (maillon instanceof Lesson) {
+                colorType = ((Lesson) maillon).getType().ordinal();
+                List templist = ((Lesson) maillon).getModules();
+                String courseString = templist.get(0).toString();
+                if (templist.size() > 1)
+                    courseString += ", ...";
+                templist = maillon.getManagers();
+                String teacherString = templist.get(0).toString();
+                if (templist.size() > 1)
+                    teacherString += ", ...";
+                templist = ((Lesson) maillon).getGroups();
+                String groupString = templist.get(0).toString();
+                if (templist.size() > 1)
+                    groupString += ", ...";
+                displayText1 = htmlTags + courseString + "<br>" + teacherString + "<br>" + groupString;
+                if (maillon.getState() == Reservation.State.CANCELLED)
+                    displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>";
+                displayText2 += htmlTags + maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+            }
 
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
 
-            Boolean[] cancelled = {false};
             MouseListener timeslotPopupCaller = new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    TimeslotPopup popup = new TimeslotPopup(maillon[8], Semaine[dayNumber][midhour + 1], maillon[6],
-                            SUStatus, cancelled);
+                    TimeslotPopup popup = new TimeslotPopup(maillon, SUStatus);
                     popup.setVisible(true);
                 }
             };
 
             for (int j = dHourNumber; j < eHourNumber; j++) {
-                allhours[dayNumber * JL + j].setBackground(colorTypeEnum[lessonType]);
+                allhours[dayNumber * JL + j].setBackground(colorTypeEnum[colorType]);
                 allhours[dayNumber * JL + j].addMouseListener(timeslotPopupCaller);
                 Semaine[dayNumber][j].setText(paddingText);
             }
@@ -715,7 +733,7 @@ public class Timetable extends JFrame {
             panel.setBorder(null);
 
         for (int i = 0; i < 53; i++) {
-            boutonChaine[i] = new ArrayList<String[]>();
+            boutonChaine[i] = new ArrayList<Reservation>();
         }
 
 

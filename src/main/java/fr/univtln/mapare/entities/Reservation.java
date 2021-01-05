@@ -132,6 +132,6 @@ public class Reservation implements Entity {
 
 
     public enum State {
-        NP, CANCELED, POSTPONED
+        NP, CANCELLED, POSTPONED
     }
 }
