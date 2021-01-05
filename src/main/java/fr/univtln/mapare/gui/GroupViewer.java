@@ -20,7 +20,7 @@ public class GroupViewer extends JFrame {
 
     private JFrame thisframe = this;
 
-    public GroupViewer() {
+    public GroupViewer(Timetable rootwindow) {
         setTitle("Emploi du temps d'un groupe");
         setSize(350, 60);
         setResizable(resizeable);
@@ -38,10 +38,20 @@ public class GroupViewer extends JFrame {
         List<Group> groupList = Group.getGroupList();
         for (Group group : groupList)
             comboBox1.addItem(group);
+
+        okButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                rootwindow.setToGroupAgenda((Group) comboBox1.getSelectedItem());
+                rootwindow.buttonFunc(rootwindow.lastButton);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public static void main(String[] args) {
-        GroupViewer gv = new GroupViewer();
+        GroupViewer gv = new GroupViewer(null);
         gv.setVisible(true);
     }
 }

@@ -1,7 +1,6 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.Controllers;
-import fr.univtln.mapare.controllers.GroupController;
 import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Lesson;
 import fr.univtln.mapare.entities.Reservation;
@@ -16,6 +15,7 @@ import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 
@@ -531,17 +531,17 @@ public class Timetable extends JFrame {
     private Session.Status SUStatus;
 
     private List<Reservation> allreservations;
+    private Group currgroup;
 
     void setToGroupAgenda(Group group) {
+        currgroup = group;
         for (Reservation r : allreservations) {
             if (r instanceof Lesson) {
-                if (!((Lesson) r).getGroups().contains(group)) {
+                LocalDateTime date = r.getStartDate();
+                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+                if (((Lesson) r).getGroups().contains(group)) {
                     String[] temp = ((Lesson) r).getStringTable();
-                    for (String s : temp) {
-                        if(s != null)
-                            System.out.println(s);
-                    }
-                    System.out.println();
+                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(temp);
                 }
             }
         }
@@ -588,7 +588,7 @@ public class Timetable extends JFrame {
         }
 
         for (String[] maillon : boutonChaine[i]) {
-            int dayNumber = Integer.parseInt(maillon[0]) - 1;
+            int dayNumber = Integer.parseInt(maillon[0]);
             int dHourNumber = Integer.parseInt(maillon[1]);
             int eHourNumber = Integer.parseInt(maillon[2]);
             int lessonType = Integer.parseInt(maillon[7]);
@@ -768,16 +768,19 @@ public class Timetable extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                GroupViewer gv = new GroupViewer();
+                GroupViewer gv = new GroupViewer(thisframe);
                 gv.setVisible(true);
             }
         });
     }
 
+    public void refresh() {
+        setToGroupAgenda(currgroup);
+    }
+
     public static void main(String[] args) throws SQLException {
         Controllers.loadDB();
         Timetable M = new Timetable(Session.Status.MANAGER);
-        M.setToGroupAgenda(null);
         M.setVisible(true);
     }
 }

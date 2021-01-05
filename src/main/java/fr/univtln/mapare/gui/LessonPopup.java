@@ -137,17 +137,7 @@ public class LessonPopup extends JFrame {
                         groupList,
                         teacherList);
 
-                /*
-                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
-                output[1] = heureDebut + "";
-                output[2] = heureFin + "";
-                output[3] = courseString;
-                output[4] = teacherString;
-                output[5] = groupString;
-                output[6] = comboBox1.getSelectedItem() + "";
-                output[7] = comboBox2.getSelectedIndex() + "";
-                output[8] = textArea1.getText();
-                */
+                rootwindow.refresh();
 
                 rootwindow.buttonFunc(rootwindow.lastButton);
 

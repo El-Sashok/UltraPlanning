@@ -96,17 +96,17 @@ public class Lesson extends Reservation {
             groupString += ", ...";
         output[0] = (dateDeb.getDayOfWeek().getValue() - 1) + "";
         output[1] = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0)) + "";
-        output[2] = ((dateFin.getHour() - 9) * 2 + (dateFin.getMinute() == 30 ? 1 : 0)) + "";
+        output[2] = ((dateFin.getHour() - 8) * 2 + (dateFin.getMinute() == 30 ? 1 : 0)) + "";
         output[3] = courseString;
         output[4] = teacherString;
-        output[5] = groupString;/*
-        output[6] = comboBox1.getSelectedItem() + "";
-        output[7] = comboBox2.getSelectedIndex() + "";
-        output[8] = textArea1.getText();*/
+        output[5] = groupString;
+        output[6] = getRoom() + ""; //comboBox1.getSelectedItem() + "";
+        output[7] = type.ordinal() + "";//comboBox2.getSelectedIndex() + "";
+        output[8] = getMemo();
         return output;
     }
 
     public enum Type {
-        TD, TP, CM, CC, CT
+        TD, CM, TP, CC, CT
     }
 }
