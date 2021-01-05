@@ -24,6 +24,7 @@ public class DefenceDAO extends AbstractDAO<Defence> {
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        Reservation.popReservationList(reservation);
         reservationDAO.close();
 
         StudentDAO studentDAO = new StudentDAO();

@@ -43,6 +43,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        Reservation.popReservationList(reservation);
         reservationDAO.close();
 
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
