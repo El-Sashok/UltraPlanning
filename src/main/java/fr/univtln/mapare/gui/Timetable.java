@@ -535,6 +535,8 @@ public class Timetable extends JFrame {
 
     void setToGroupAgenda(Group group) {
         currgroup = group;
+        for (int i = 0; i < 53; i++)
+            boutonChaine[i].clear();
         for (Reservation r : allreservations) {
             if (r instanceof Lesson) {
                 LocalDateTime date = r.getStartDate();
