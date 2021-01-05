@@ -93,7 +93,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                         reservations.add(lesson);
                         lessonDAO.close();
                         break;
-                    case " ADMISSION_EXAM":
+                    case "ADMISSION_EXAM":
                         AdmissionExamDAO admissionExamDAO = new AdmissionExamDAO();
                         AdmissionExam admissionExam = admissionExamDAO.find(findAllRS.getLong("ID")).get();
                         reservations.add(admissionExam);
