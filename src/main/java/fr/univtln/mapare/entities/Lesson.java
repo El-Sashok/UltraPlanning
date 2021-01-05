@@ -88,8 +88,9 @@ public class Lesson extends Reservation {
             courseString += ", ...";
         temp = getManagers();
         String teacherString = temp.get(0).toString();
-        if (temp.size() > 1)
+        if (temp.size() > 1) {
             teacherString += ", ...";
+        }
         temp = getGroups();
         System.out.println(temp);
         /*String groupString = temp.get(0).toString();

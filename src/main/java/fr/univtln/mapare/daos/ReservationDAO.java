@@ -97,9 +97,9 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
                 case "LESSON":
                     LessonDAO lessonDAO = new LessonDAO();
                     Lesson lesson = lessonDAO.find(findAllRS.getLong("ID")).get();
-                    for (Teacher t: managers) {
+                    /*for (Teacher t: managers) {
                         lesson.addTeacher(t);
-                    }
+                    }*/
                     reservations.add(lesson);
                     lessonDAO.close();
                     break;
