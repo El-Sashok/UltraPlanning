@@ -1,10 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.Controllers;
-import fr.univtln.mapare.entities.Group;
-import fr.univtln.mapare.entities.Lesson;
-import fr.univtln.mapare.entities.Reservation;
-import fr.univtln.mapare.entities.Session;
+import fr.univtln.mapare.entities.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -531,10 +528,13 @@ public class Timetable extends JFrame {
     private Session.Status SUStatus;
 
     private List<Reservation> allreservations;
+
     private Group currgroup;
+    private Room curroom;
 
     void setToGroupAgenda(Group group) {
         currgroup = group;
+        curroom = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
         for (Reservation r : allreservations) {
@@ -542,6 +542,23 @@ public class Timetable extends JFrame {
                 LocalDateTime date = r.getStartDate();
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (((Lesson) r).getGroups().contains(group)) {
+                    String[] temp = ((Lesson) r).getStringTable();
+                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(temp);
+                }
+            }
+        }
+    }
+
+    void setToRoomAgenda(Room room) {
+        curroom = room;
+        currgroup = null;
+        for (int i = 0; i < 53; i++)
+            boutonChaine[i].clear();
+        for (Reservation r : allreservations) {
+            if (r instanceof Lesson) {
+                LocalDateTime date = r.getStartDate();
+                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+                if (r.getRoom().equals(room)) {
                     String[] temp = ((Lesson) r).getStringTable();
                     boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(temp);
                 }
@@ -752,7 +769,7 @@ public class Timetable extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                RoomViewer rv = new RoomViewer();
+                RoomViewer rv = new RoomViewer(thisframe);
                 rv.setVisible(true);
             }
         });
@@ -777,7 +794,10 @@ public class Timetable extends JFrame {
     }
 
     public void refresh() {
-        setToGroupAgenda(currgroup);
+        if(currgroup != null)
+            setToGroupAgenda(currgroup);
+        else
+            setToRoomAgenda(curroom);
     }
 
     public static void main(String[] args) throws SQLException {

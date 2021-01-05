@@ -1,5 +1,6 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Room;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class RoomViewer extends JFrame {
 
     private JFrame thisframe = this;
 
-    public RoomViewer() {
+    public RoomViewer(Timetable rootwindow) {
         setTitle("Emploi du temps d'une salle");
         setSize(350, 60);
         setResizable(resizeable);
@@ -37,10 +38,19 @@ public class RoomViewer extends JFrame {
         List<Room> roomlist = Room.getRoomList();
         for (Room room : roomlist)
             comboBox1.addItem(room);
+        okButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                rootwindow.setToRoomAgenda((Room) comboBox1.getSelectedItem());
+                rootwindow.buttonFunc(rootwindow.lastButton);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public static void main(String[] args) {
-        RoomViewer rv = new RoomViewer();
+        RoomViewer rv = new RoomViewer(null);
         rv.setVisible(true);
     }
 }
