@@ -1,15 +1,21 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import fr.univtln.mapare.controllers.LessonController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.EmptySelectionListException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.TimeBreakExceptions.GroupTimeBreakException;
+import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
+import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
+import fr.univtln.mapare.exceptions.TimeBreakExceptions.StudentTimeBreakException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,8 +109,6 @@ public class LessonPopup extends JFrame {
                 Calendar temp = Calendar.getInstance(Locale.FRANCE);
                 temp.setTime(date);
                 int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
-                String[] output = new String[9];
-                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
                 int heureDebut = comboBox4.getSelectedIndex();
                 int heureFin = comboBox6.getSelectedIndex() + 2;
                 if (heureFin <= heureDebut + 1)
@@ -113,43 +117,28 @@ public class LessonPopup extends JFrame {
                 Date dateDeb = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
                 Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
 
-                // TODO: Do the Database associated operations and check for conflicts before confirming.
-                Lesson servation = new Lesson(-1,
-                        dateDeb.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
+                if (groupList.isEmpty())
+                    throw new EmptySelectionListException("Aucun groupe selectionné.");
+
+                if (courseList.isEmpty())
+                    throw new EmptySelectionListException("Aucun module selectionné.");
+
+                if (teacherList.isEmpty())
+                    throw new EmptySelectionListException("Aucun enseignant selectionné.");
+
+                LessonController.createLesson(dateDeb.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
                         dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
                         "",
                         textArea1.getText(),
                         Reservation.State.NP,
                         (Room) comboBox1.getSelectedItem(),
-                        Lesson.Type.TD);
+                        Lesson.Type.TD,
+                        courseList,
+                        groupList,
+                        teacherList);
 
-                if (groupList.isEmpty())
-                    throw new EmptySelectionListException("Aucun groupe selectionné.");
-
-                servation.setGroups(groupList);
-                String groupString = "";
-                for (Group g : groupList)
-                    groupString += g + ", ";
-                groupString = groupString.substring(0, groupString.length() - 2);
-
-                if (courseList.isEmpty())
-                    throw new EmptySelectionListException("Aucun module selectionné.");
-
-                servation.setCourses(courseList);
-                String courseString = "";
-                for (Module m : courseList)
-                    courseString += m + ", ";
-                courseString = courseString.substring(0, courseString.length() - 2);
-
-                if (teacherList.isEmpty())
-                    throw new EmptySelectionListException("Aucun enseignant selectionné.");
-
-                servation.setManagers(teacherList);
-                String teacherString = "";
-                for (Teacher t : teacherList)
-                    teacherString += t + ", ";
-                teacherString = teacherString.substring(0, teacherString.length() - 2);
-
+                /*
+                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
                 output[1] = heureDebut + "";
                 output[2] = heureFin + "";
                 output[3] = courseString;
@@ -158,8 +147,7 @@ public class LessonPopup extends JFrame {
                 output[6] = comboBox1.getSelectedItem() + "";
                 output[7] = comboBox2.getSelectedIndex() + "";
                 output[8] = textArea1.getText();
-
-                rootwindow.boutonChaine[boutonNb].add(output);
+                */
 
                 rootwindow.buttonFunc(rootwindow.lastButton);
 
@@ -173,6 +161,21 @@ public class LessonPopup extends JFrame {
                 JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (EmptySelectionListException emptySelectionListException) {
                 String message = emptySelectionListException.getMessage();
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException throwables) {
+                String message = "Reservation incorrecte";
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (StudentTimeBreakException studentTimeBreakException) {
+                String message = "Etudiant(s) indisponible(s) pour cette horaire.";
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (ManagerTimeBreakException managerTimeBreakException) {
+                String message = "Enseignant(s) indisponible(s) pour cette horaire.";
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (RoomTimeBreakException roomTimeBreakException) {
+                String message = "Salle indisponible pour cette horaire.";
+                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+            } catch (GroupTimeBreakException groupTimeBreakException) {
+                String message = "Groupe(s) indisponible(s) pour cette horaire.";
                 JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
             }
             }

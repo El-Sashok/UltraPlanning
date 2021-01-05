@@ -6,7 +6,7 @@ import fr.univtln.mapare.entities.AdmissionExamLabel;
 
 import java.sql.SQLException;
 
-public class AdmissionExamLabelController {
+public abstract class AdmissionExamLabelController {
     public static void loadLabels() throws SQLException {
         /*AdmissionExamLabelDAO labelDAO = new AdmissionExamLabelDAO();
         labelDAO.findAll();

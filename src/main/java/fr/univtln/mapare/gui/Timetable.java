@@ -2,6 +2,9 @@ package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.Controllers;
 import fr.univtln.mapare.controllers.GroupController;
+import fr.univtln.mapare.entities.Group;
+import fr.univtln.mapare.entities.Lesson;
+import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.entities.Session;
 
 import javax.swing.*;
@@ -527,6 +530,23 @@ public class Timetable extends JFrame {
 
     private Session.Status SUStatus;
 
+    private List<Reservation> allreservations;
+
+    void setToGroupAgenda(Group group) {
+        for (Reservation r : allreservations) {
+            if (r instanceof Lesson) {
+                if (((Lesson) r).getGroups().contains(group)) {
+                    String[] temp = ((Lesson) r).getStringTable();
+                    for (String s : temp) {
+                        if(s != null)
+                            System.out.println(s);
+                    }
+                    System.out.println();
+                }
+            }
+        }
+    }
+
     void buttonFunc(int i) {
         if (lastButton != -1)
             boutons[lastButton].setBorder(lineBorder);
@@ -619,6 +639,7 @@ public class Timetable extends JFrame {
         add(rootPanel);
         setLocationRelativeTo(null);
         SUStatus = status;
+        allreservations = Reservation.getReservationList();
 
         init();
         if (SUStatus == Session.Status.MANAGER)
@@ -677,6 +698,8 @@ public class Timetable extends JFrame {
         for (int i = 0; i < 53; i++) {
             boutonChaine[i] = new ArrayList<String[]>();
         }
+
+
 
         for (int i = 0; i < boutons.length; i++) {
             int finalI = i;
@@ -754,6 +777,7 @@ public class Timetable extends JFrame {
     public static void main(String[] args) throws SQLException {
         Controllers.loadDB();
         Timetable M = new Timetable(Session.Status.MANAGER);
+        M.setToGroupAgenda(null);
         M.setVisible(true);
     }
 }

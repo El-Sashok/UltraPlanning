@@ -11,7 +11,9 @@ import java.util.List;
 
 public abstract class LessonController {
 
-    public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, Lesson.Type type, List<Module> modules, List<Group> groups, List<Teacher> managers) throws SQLException {
+    public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
+                                    Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
+                                    List<Group> groups, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
 
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
