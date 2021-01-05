@@ -43,6 +43,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        Reservation.popReservationList(reservation);
         reservationDAO.close();
 
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
@@ -64,7 +65,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         findModulesPS.setLong(1, id);
         ResultSet rs_findGroupsPS = findGroupsPS.executeQuery();
         GroupDAO groupDAO = new GroupDAO();
-        while (rs_findGroupsPS.next()) groups.add(groupDAO.fromResultSet(rs_findGroupsPS));
+        while (rs_findGroupsPS.next()) groups.add(groupDAO.find(rs_findGroupsPS.getLong("CLASS_GROUP")).get());
         groupDAO.close();
         ResultSet rs_findModulesPS = findModulesPS.executeQuery();
         ModuleDAO moduleDAO = new ModuleDAO();

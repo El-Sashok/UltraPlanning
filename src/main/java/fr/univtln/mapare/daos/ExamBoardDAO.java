@@ -24,6 +24,7 @@ public class ExamBoardDAO extends AbstractDAO<ExamBoard> {
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        Reservation.popReservationList(reservation);
         reservationDAO.close();
 
         YeargroupDAO yeargroupDAO = new YeargroupDAO();

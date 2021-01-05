@@ -41,6 +41,7 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+        Reservation.popReservationList(reservation);
         reservationDAO.close();
 
         AdmissionExam admissionExam = new AdmissionExam(reservation, admissionExamLabel);
