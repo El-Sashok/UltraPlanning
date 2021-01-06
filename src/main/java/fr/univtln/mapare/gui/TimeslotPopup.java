@@ -28,7 +28,7 @@ public class TimeslotPopup extends JFrame{
 
     private JFrame thisframe = this;
 
-    public TimeslotPopup(Reservation res, Session.Status userType) {
+    public TimeslotPopup(Reservation res, Timetable rootwindow) {
         setTitle("Détails du cours");
         //setSize(300, 300);
         setResizable(resizeable);
@@ -60,12 +60,22 @@ public class TimeslotPopup extends JFrame{
                 moduleText += t + ", ";
             moduleText = moduleText.substring(0, moduleText.length() - 2);
             moduleLabel.setText(moduleText);
+
+            voirLaListeDButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    RollCallPopup rcp = new RollCallPopup(((Lesson) res).getGroups());
+                    rcp.setVisible(true);
+                }
+            });
         }
         else {
             groupeLabel.setVisible(false);
             groupesLabel.setVisible(false);
             moduleLabel.setVisible(false);
             modulesLabel.setVisible(false);
+            voirLaListeDButton.setVisible(false);
         }
 
         roomLabel.setText(roomName);
@@ -75,7 +85,7 @@ public class TimeslotPopup extends JFrame{
             annulerCoursButton.setEnabled(false);
         }
 
-        if (userType == Session.Status.MANAGER) {
+        if (rootwindow.SUStatus == Session.Status.MANAGER) {
             deplacerCoursButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -106,9 +116,20 @@ public class TimeslotPopup extends JFrame{
                     JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            if (userType == Session.Status.STUDENT)
+            if (rootwindow.SUStatus == Session.Status.STUDENT)
                 voirLaListeDButton.setVisible(false);
         }
+
+        voirLEmploiDuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                rootwindow.setToRoomAgenda(res.getRoom());
+                rootwindow.refresh();
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+
         this.pack();
     }
 }

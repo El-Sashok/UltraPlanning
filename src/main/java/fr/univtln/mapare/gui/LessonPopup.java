@@ -139,8 +139,6 @@ public class LessonPopup extends JFrame {
 
                 rootwindow.refresh();
 
-                rootwindow.buttonFunc(rootwindow.lastButton);
-
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             } catch (ParseException | ArrayIndexOutOfBoundsException a) {
                 String message = "Veuillez sélectionner une date.";

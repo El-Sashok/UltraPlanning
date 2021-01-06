@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -525,7 +526,7 @@ public class Timetable extends JFrame {
 
     private JMenuBar menuBar;
 
-    private Session.Status SUStatus;
+    Session.Status SUStatus;
 
     private List<Reservation> allreservations;
 
@@ -643,7 +644,7 @@ public class Timetable extends JFrame {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    TimeslotPopup popup = new TimeslotPopup(maillon, SUStatus);
+                    TimeslotPopup popup = new TimeslotPopup(maillon, thisframe);
                     popup.setVisible(true);
                 }
             };
@@ -809,6 +810,26 @@ public class Timetable extends JFrame {
                 gv.setVisible(true);
             }
         });
+
+        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBar.add(deconnexion);
+        deconnexion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Launcher launcher = new Launcher();
+                launcher.setVisible(true);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public void refresh() {
@@ -816,6 +837,7 @@ public class Timetable extends JFrame {
             setToGroupAgenda(currgroup);
         else
             setToRoomAgenda(curroom);
+        buttonFunc(lastButton);
     }
 
     public static void main(String[] args) throws SQLException {
