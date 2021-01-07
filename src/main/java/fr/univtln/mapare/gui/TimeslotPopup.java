@@ -25,6 +25,8 @@ public class TimeslotPopup extends JFrame{
     private JLabel enseignantLabel;
     private JLabel groupesLabel;
     private JLabel groupeLabel;
+    private JLabel heureDebLabel;
+    private JLabel heureFinLabel;
 
     private JFrame thisframe = this;
 
@@ -35,6 +37,9 @@ public class TimeslotPopup extends JFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+
+        heureDebLabel.setText(res.getStartDate().getHour() + "h" + (res.getStartDate().getMinute() == 0 ? "00" : 30));
+        heureFinLabel.setText(res.getEndDate().getHour() + "h" + (res.getEndDate().getMinute() == 0 ? "00" : 30));
 
         String memo = res.getMemo();
         String roomName = res.getRoom().toString();
