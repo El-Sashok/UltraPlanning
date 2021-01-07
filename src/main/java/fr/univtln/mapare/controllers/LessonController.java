@@ -16,22 +16,34 @@ public abstract class LessonController {
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
                 if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){
-                    for (Teacher dbTeacher : r.getManagers())
-                        for (Teacher LocalTeacher : managers)
-                            if (dbTeacher.getId() == LocalTeacher.getId())
+                    for (Teacher dbTeacher : r.getManagers()){
+                        for (Teacher LocalTeacher : managers){
+                            if (dbTeacher.getId() == LocalTeacher.getId()) {
                                 throw new ManagerTimeBreakException(LocalTeacher);
-                    if (r.getRoom().getId() == room.getId())
+                            }
+                        }
+                    }
+                    if (r.getRoom().getId() == room.getId()) {
                         throw new RoomTimeBreakException(room);
-                    else if (r instanceof Lesson)
-                        for (Group dbGroup : ((Lesson) r).getGroups())
-                            for (Group LocalGroup : groups)
-                                if (dbGroup.getId() == LocalGroup.getId())
+                    }
+                    else if (r instanceof Lesson){
+                        for (Group dbGroup : ((Lesson) r).getGroups()){
+                            for (Group LocalGroup : groups){
+                                if (dbGroup.getId() == LocalGroup.getId()) {
                                     throw new GroupTimeBreakException(LocalGroup);
-                    else if (r instanceof Defence)
-                        for (Group g : groups)
-                            for (Student s : g.getStudents())
-                                if (s.getId() == ((Defence) r).getStudent().getId())
+                                }
+                            }
+                        }
+                    }
+                    else if (r instanceof Defence){
+                        for (Group g : groups){
+                            for (Student s : g.getStudents()){
+                                if (s.getId() == ((Defence) r).getStudent().getId()) {
                                     throw new StudentTimeBreakException(s);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
