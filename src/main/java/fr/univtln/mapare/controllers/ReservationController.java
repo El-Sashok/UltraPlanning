@@ -2,14 +2,13 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.daos.RoomDAO;
-import fr.univtln.mapare.entities.Reservation;
-import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.entities.Teacher;
+import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ReservationController {
@@ -20,7 +19,57 @@ public abstract class ReservationController {
         reservationDAO.close();
     }
 
-    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
+    public static List<Room> findFreeRooms(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Room> rooms = new ArrayList<>(Room.getRoomList());
+        for (Reservation r : Reservation.getReservationList())
+            if (r.getState() == Reservation.State.NP)
+                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate))
+                    rooms.removeIf(room -> room.getId() == r.getRoom().getId());
+        return rooms;
+    }
+
+    public static List<Reservation> findPersonalReservations() {
+        List<Reservation> reservations = new ArrayList<>();
+        for (Reservation r : Reservation.getReservationList()){
+            if (Session.getStatus() == Session.Status.STUDENT) {
+                if (r instanceof Lesson){
+                    group:
+                    for (Group g : ((Lesson) r).getGroups()){
+                        for (Student s : g.getStudents()){
+                            if (s.getEmail().equals(Session.getLogin())) {
+                                reservations.add(r);
+                                break group;
+                            }
+                        }
+                    }
+                }
+                else if (r instanceof Defence) {
+                    if (((Defence) r).getStudent().getEmail().equals(Session.getLogin())){
+                        reservations.add(r);
+                    }
+                }
+                else if (r instanceof AdmissionExam){
+                    for (Student s : ((AdmissionExam) r).getStudents()){
+                        if (s.getEmail().equals(Session.getLogin())){
+                            reservations.add(r);
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (Session.getStatus() == Session.Status.TEACHER) {
+                for (Teacher t : r.getManagers()){
+                    if (t.getEmail().equals(Session.getLogin())){
+                        reservations.add(r);
+                        break;
+                    }
+                }
+            }
+        }
+        return reservations;
+    }
+
+    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException {
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
                 if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
