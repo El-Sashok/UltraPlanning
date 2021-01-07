@@ -22,7 +22,7 @@ public class GroupViewer extends JFrame {
 
     public GroupViewer(Timetable rootwindow) {
         setTitle("Emploi du temps d'un groupe");
-        setSize(350, 60);
+//        setSize(350, 60);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -48,6 +48,8 @@ public class GroupViewer extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+
+        this.pack();
     }
 
     public static void main(String[] args) {

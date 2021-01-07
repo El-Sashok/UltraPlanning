@@ -16,11 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 import static fr.univtln.mapare.gui.Timetable.hourList;
@@ -95,27 +92,16 @@ public class LessonPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
-            String text = datePicker1.getText();
+            LocalDate date = datePicker1.getDate();
             try {
-                String[] banana = text.split(" ");
-                String[] cuckoo = banana[1].split(",");
-                if (cuckoo[0].length() == 1)
-                    text = "0";
-                else
-                    text = "";
-                text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
-                DateFormat df = new SimpleDateFormat("dd-MMM-yy");
-                Date date = df.parse(text);
-                Calendar temp = Calendar.getInstance(Locale.FRANCE);
-                temp.setTime(date);
-                int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
                 int heureDebut = comboBox4.getSelectedIndex();
+                LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
+                System.out.println(dateDeb);
                 int heureFin = comboBox6.getSelectedIndex() + 2;
+                LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
+                System.out.println(dateFin);
                 if (heureFin <= heureDebut + 1)
                     throw new IncorrectEndHourException();
-
-                Date dateDeb = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
-                Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
 
                 if (groupList.isEmpty())
                     throw new EmptySelectionListException("Aucun groupe selectionné.");
@@ -126,8 +112,8 @@ public class LessonPopup extends JFrame {
                 if (teacherList.isEmpty())
                     throw new EmptySelectionListException("Aucun enseignant selectionné.");
 
-                LessonController.createLesson(dateDeb.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
-                        dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
+                LessonController.createLesson(dateDeb,
+                        dateFin,
                         "",
                         textArea1.getText(),
                         Reservation.State.NP,
@@ -140,7 +126,7 @@ public class LessonPopup extends JFrame {
                 rootwindow.refresh();
 
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            } catch (ParseException | ArrayIndexOutOfBoundsException a) {
+            } catch (ArrayIndexOutOfBoundsException a) {
                 String message = "Veuillez sélectionner une date.";
                 JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (IncorrectEndHourException b) {

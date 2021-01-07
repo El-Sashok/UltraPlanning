@@ -22,7 +22,7 @@ public class RoomViewer extends JFrame {
 
     public RoomViewer(Timetable rootwindow) {
         setTitle("Emploi du temps d'une salle");
-        setSize(350, 60);
+//        setSize(350, 60);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -47,6 +47,7 @@ public class RoomViewer extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+        this.pack();
     }
 
     public static void main(String[] args) {

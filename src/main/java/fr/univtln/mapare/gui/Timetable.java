@@ -671,7 +671,7 @@ public class Timetable extends JFrame {
 
     public Timetable(Session.Status status) {
         setTitle("Emploi Du Temps");
-        setSize(1400, 950);
+        setSize(1400, 1000);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(rootPanel);
