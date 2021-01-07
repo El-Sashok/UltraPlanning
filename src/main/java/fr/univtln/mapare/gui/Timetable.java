@@ -1,6 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 
 import javax.swing.*;
@@ -529,9 +530,10 @@ public class Timetable extends JFrame {
     Session.Status SUStatus;
 
     private List<Reservation> allreservations;
+    private List<Reservation> privatereservations = null;
 
-    private Group currgroup;
-    private Room curroom;
+    private Group currgroup = null;
+    private Room curroom = null;
 
     void setToGroupAgenda(Group group) {
         currgroup = group;
@@ -547,6 +549,7 @@ public class Timetable extends JFrame {
                 }
             }
         }
+        buttonFunc(lastButton);
     }
 
     void setToRoomAgenda(Room room) {
@@ -563,6 +566,24 @@ public class Timetable extends JFrame {
                 }
             }
         }
+        buttonFunc(lastButton);
+    }
+
+    void setToPersonalAgenda() {
+        currgroup = null;
+        curroom = null;
+        for (int i = 0; i < 53; i++)
+            boutonChaine[i].clear();
+        if (privatereservations == null)
+            privatereservations = ReservationController.findPersonalReservations();
+        for (Reservation r : privatereservations) {
+            if (r instanceof Lesson) {
+                LocalDateTime date = r.getStartDate();
+                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+                boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
+            }
+        }
+        buttonFunc(lastButton);
     }
 
     void buttonFunc(int i) {
@@ -737,8 +758,6 @@ public class Timetable extends JFrame {
             boutonChaine[i] = new ArrayList<Reservation>();
         }
 
-
-
         for (int i = 0; i < boutons.length; i++) {
             int finalI = i;
             boutons[i].addMouseListener(new MouseAdapter() {
@@ -753,27 +772,30 @@ public class Timetable extends JFrame {
         }
         buttonFunc(weekNumber - 1);
 
-
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        JMenuItem findRoom = new JMenuItem("Trouver Salle") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBar.add(findRoom);
-        findRoom.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder();
-                frf.setVisible(true);
-            }
-        });
+        if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
+            JMenuItem persView = new JMenuItem("EDT personnel") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBar.add(persView);
+            persView.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    setToPersonalAgenda();
+                }
+            });
+
+            setToPersonalAgenda();
+        }
+
 
         JMenuItem roomView = new JMenuItem("EDT par salle") {
             @Override
@@ -811,6 +833,24 @@ public class Timetable extends JFrame {
             }
         });
 
+        JMenuItem findRoom = new JMenuItem("Trouver Salle") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBar.add(findRoom);
+        findRoom.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                FreeRoomFinder frf = new FreeRoomFinder();
+                frf.setVisible(true);
+            }
+        });
+
         JMenuItem deconnexion = new JMenuItem("Deconnexion") {
             @Override
             public Dimension getMaximumSize() {
@@ -833,11 +873,12 @@ public class Timetable extends JFrame {
     }
 
     public void refresh() {
-        if(currgroup != null)
+        if (currgroup != null)
             setToGroupAgenda(currgroup);
-        else
+        else if (curroom != null)
             setToRoomAgenda(curroom);
-        buttonFunc(lastButton);
+        else
+            setToPersonalAgenda();
     }
 
     public static void main(String[] args) throws SQLException {

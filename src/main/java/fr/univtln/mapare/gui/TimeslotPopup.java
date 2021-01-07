@@ -105,6 +105,7 @@ public class TimeslotPopup extends JFrame{
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
                     res.setState(Reservation.State.CANCELLED);
+                    rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
             });
@@ -130,7 +131,7 @@ public class TimeslotPopup extends JFrame{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 rootwindow.setToRoomAgenda(res.getRoom());
-                rootwindow.refresh();
+                rootwindow.buttonFunc(rootwindow.lastButton);
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });

@@ -65,7 +65,7 @@
           <text value="Chercher"/>
         </properties>
       </component>
-      <component id="b357f" class="com.github.lgooddatepicker.components.DatePicker">
+      <component id="b8aa6" class="com.github.lgooddatepicker.components.DatePicker" binding="datePicker1" default-binding="true">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

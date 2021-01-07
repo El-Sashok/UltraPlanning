@@ -69,7 +69,7 @@ public abstract class ReservationController {
         return reservations;
     }
 
-    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException {
+    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
                 if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {

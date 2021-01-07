@@ -98,13 +98,11 @@ public class LessonPopup extends JFrame {
                 if (date == null)
                     throw new NoDateSelectedException();
                 int heureDebut = comboBox4.getSelectedIndex();
-                LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
-                System.out.println(dateDeb);
                 int heureFin = comboBox6.getSelectedIndex() + 2;
-                LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
-                System.out.println(dateFin);
                 if (heureFin <= heureDebut + 1)
                     throw new IncorrectEndHourException();
+                LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
+                LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
 
                 if (groupList.isEmpty())
                     throw new EmptySelectionListException("Aucun groupe selectionné.");
