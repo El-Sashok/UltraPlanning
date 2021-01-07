@@ -6,6 +6,7 @@ import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.EmptySelectionListException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.NoDateSelectedException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
@@ -92,8 +93,10 @@ public class LessonPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
-            LocalDate date = datePicker1.getDate();
             try {
+                LocalDate date = datePicker1.getDate();
+                if (date == null)
+                    throw new NoDateSelectedException();
                 int heureDebut = comboBox4.getSelectedIndex();
                 LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
                 System.out.println(dateDeb);
@@ -126,7 +129,7 @@ public class LessonPopup extends JFrame {
                 rootwindow.refresh();
 
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            } catch (ArrayIndexOutOfBoundsException a) {
+            } catch (NoDateSelectedException a) {
                 String message = "Veuillez sélectionner une date.";
                 JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
             } catch (IncorrectEndHourException b) {
