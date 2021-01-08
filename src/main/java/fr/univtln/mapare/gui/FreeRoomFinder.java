@@ -66,12 +66,10 @@ public class FreeRoomFinder extends JFrame {
                     LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
                     LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
 
-                    System.out.println(dateDeb);
-                    System.out.println(dateFin);
-
                     roomListModel.clear();
 
-                    List<Room> recv = ReservationController.findFreeRooms(dateDeb, dateFin);
+                    List<Room> recv = ReservationController.findFreeRooms(dateDeb.plusMinutes(1),
+                            dateFin.minusMinutes(1));
                     for (Room r : recv)
                         roomListModel.addElement(r);
                     if (recv.size() == 0)
