@@ -492,10 +492,10 @@ public class Timetable extends JFrame {
 
         private JLabel[] jourLabels = {lundiLabel, mardiLabel, mercrediLabel, jeudiLabel, vendrediLabel, samediLabel};
 
-    private Border lineBorder = BorderFactory.createLineBorder(Color.black);
-    private Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
-    private Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
-    private Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
+    private static final Border lineBorder = BorderFactory.createLineBorder(Color.black);
+    private static final Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
+    private final static Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
+    private final static Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
 
     int lastButton = -1;
 
@@ -506,7 +506,7 @@ public class Timetable extends JFrame {
             "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
             "18h30", "19h00"};
 
-    List<Reservation>[] boutonChaine = new ArrayList[53];
+    final List<Reservation>[] boutonChaine = new ArrayList[53];
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
 
@@ -525,7 +525,7 @@ public class Timetable extends JFrame {
 
     static String paddingText = htmlTags + " <br> <br> <br></body></html>";
 
-    private JMenuBar menuBar;
+    private JMenuBar menuBarre;
 
     Session.Status SUStatus;
 
@@ -714,7 +714,7 @@ public class Timetable extends JFrame {
 
     public void managerInit() {
         JMenu addingMenu = new JMenu("Ajout");
-        menuBar.add(addingMenu);
+        menuBarre.add(addingMenu);
         JMenuItem addLesson = new JMenuItem("Ajouter Cours");
         addingMenu.add(addLesson);
         addLesson.addMouseListener(new MouseAdapter() {
@@ -731,7 +731,7 @@ public class Timetable extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                MiscReservationPopup rp = new MiscReservationPopup();
+                MiscReservationPopup rp = new MiscReservationPopup(thisframe);
                 rp.setVisible(true);
             }
         });
@@ -762,7 +762,7 @@ public class Timetable extends JFrame {
             panel.setBorder(null);
 
         for (int i = 0; i < 53; i++) {
-            boutonChaine[i] = new ArrayList<Reservation>();
+            boutonChaine[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < boutons.length; i++) {
@@ -779,8 +779,8 @@ public class Timetable extends JFrame {
         }
         buttonFunc(weekNumber - 1);
 
-        menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
+        menuBarre = new JMenuBar();
+        setJMenuBar(menuBarre);
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
             JMenuItem persView = new JMenuItem("EDT personnel") {
@@ -791,7 +791,7 @@ public class Timetable extends JFrame {
                     return dim;
                 }
             };
-            menuBar.add(persView);
+            menuBarre.add(persView);
             persView.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -812,7 +812,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(roomView);
+        menuBarre.add(roomView);
         roomView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -830,7 +830,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(groupView);
+        menuBarre.add(groupView);
         groupView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -848,12 +848,12 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(findRoom);
+        menuBarre.add(findRoom);
         findRoom.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder();
+                FreeRoomFinder frf = new FreeRoomFinder(thisframe);
                 frf.setVisible(true);
             }
         });
@@ -866,7 +866,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(deconnexion);
+        menuBarre.add(deconnexion);
         deconnexion.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -890,7 +890,7 @@ public class Timetable extends JFrame {
 
     public static void main(String[] args) throws SQLException {
         Controllers.loadDB();
-        Timetable M = new Timetable(Session.Status.MANAGER);
-        M.setVisible(true);
+        Timetable m = new Timetable(Session.Status.MANAGER);
+        m.setVisible(true);
     }
 }

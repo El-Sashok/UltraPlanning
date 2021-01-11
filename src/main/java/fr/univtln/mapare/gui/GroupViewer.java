@@ -1,7 +1,6 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.entities.Group;
-import fr.univtln.mapare.entities.Room;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -22,7 +21,6 @@ public class GroupViewer extends JFrame {
 
     public GroupViewer(Timetable rootwindow) {
         setTitle("Emploi du temps d'un groupe");
-//        setSize(350, 60);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

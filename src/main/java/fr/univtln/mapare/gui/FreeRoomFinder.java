@@ -9,6 +9,7 @@ import fr.univtln.mapare.exceptions.NoDateSelectedException;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,7 @@ public class FreeRoomFinder extends JFrame {
 
     private JFrame thisframe = this;
 
-    public FreeRoomFinder() {
+    public FreeRoomFinder(Timetable rootwindow) {
         setTitle("Trouver une Salle libre");
         setSize(320, 300);
         setResizable(resizeable);
@@ -82,6 +83,16 @@ public class FreeRoomFinder extends JFrame {
                     String message = "Veuillez choisir une heure de fin supérieure à l'heure de début de plus d'une" +
                             " heure.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        list1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) {
+                    rootwindow.setToRoomAgenda((Room) list1.getSelectedValue());
+                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
             }
         });

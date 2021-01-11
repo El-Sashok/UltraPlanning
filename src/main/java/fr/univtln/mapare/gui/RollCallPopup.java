@@ -4,9 +4,6 @@ import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Student;
 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.util.List;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
@@ -19,7 +16,6 @@ public class RollCallPopup extends JFrame {
     JFrame thisframe = this;
 
     public RollCallPopup(List<Group> rollCallList) {
-        //setTitle("Liste d'appel");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

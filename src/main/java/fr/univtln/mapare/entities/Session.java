@@ -46,6 +46,6 @@ public class Session implements Entity{
 
 
     public enum Status {
-        STUDENT, TEACHER, MANAGER, ADMIN
+        STUDENT, TEACHER, MANAGER, ADMIN, INVITE
     }
 }

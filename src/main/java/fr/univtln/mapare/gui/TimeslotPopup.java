@@ -32,7 +32,6 @@ public class TimeslotPopup extends JFrame{
 
     public TimeslotPopup(Reservation res, Timetable rootwindow) {
         setTitle("Détails du cours");
-        //setSize(300, 300);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -86,8 +85,8 @@ public class TimeslotPopup extends JFrame{
         roomLabel.setText(roomName);
 
         if (res.getState() == Reservation.State.CANCELLED) {
-            deplacerCoursButton.setEnabled(false);
-            annulerCoursButton.setEnabled(false);
+            deplacerCoursButton.setVisible(false);
+            annulerCoursButton.setText("Annuler annulation");
         }
 
         if (rootwindow.SUStatus == Session.Status.MANAGER) {
@@ -104,7 +103,10 @@ public class TimeslotPopup extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    res.setState(Reservation.State.CANCELLED);
+                    if (res.getState() == Reservation.State.CANCELLED)
+                        res.setState(Reservation.State.NP);
+                    else
+                        res.setState(Reservation.State.CANCELLED);
                     rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
@@ -122,8 +124,10 @@ public class TimeslotPopup extends JFrame{
                     JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            if (rootwindow.SUStatus == Session.Status.STUDENT)
+            if (rootwindow.SUStatus == Session.Status.STUDENT || rootwindow.SUStatus == Session.Status.INVITE)
                 voirLaListeDButton.setVisible(false);
+            if (rootwindow.SUStatus == Session.Status.INVITE)
+                deplacerCoursButton.setVisible(false);
         }
 
         voirLEmploiDuButton.addMouseListener(new MouseAdapter() {

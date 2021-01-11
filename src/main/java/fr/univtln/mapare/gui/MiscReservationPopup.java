@@ -2,6 +2,7 @@ package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.entities.Module;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -22,14 +23,14 @@ public class MiscReservationPopup extends JFrame {
     private JPanel panel1;
     private JPanel panel2;
     private JLabel dateLabel;
-    private JLabel heureDébutLabel;
+    private JLabel heureDebutLabel;
     private JLabel heureFinLabel;
     private JLabel salleLabel;
     private DatePicker datePicker1;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
     private JComboBox comboBox3;
-    private JLabel intituléLabel;
+    private JLabel intituleLabel;
     private JTextField textField1;
     private JLabel concoursLabel;
     private JComboBox comboBox4;
@@ -37,30 +38,38 @@ public class MiscReservationPopup extends JFrame {
     private JLabel enseignantsLabel;
     private JComboBox comboBox5;
     private JLabel etudiantLabel;
-    private JLabel enseignantsLabel1;
+    private JLabel enseignantsLabel2;
     private JComboBox comboBox6;
     private JButton listeDEnseignantsButton1;
     private JButton listeDEnseignantsButton;
     private JButton okButton;
     private JButton cancelButton;
-    private JLabel enseignantsLabel2;
+    private JLabel enseignantsLabel3;
     private JButton listeDEnseignantsButton2;
     private JLabel memoLabel;
     private JTextArea textArea1;
-
-    private List<Teacher> teacherList;
+    private JLabel modulesLabel;
+    private JLabel groupesLabel;
+    private JLabel enseignantsLabel1;
+    private JLabel typeLabel;
+    private JComboBox comboBox7;
+    private JButton listeDeModulesButton;
+    private JButton listeDeGroupesButton;
+    private JButton listeDEnseignantsButton3;
 
     private JFrame thisframe = this;
 
-    public MiscReservationPopup() {
+    public MiscReservationPopup(Timetable rootwindow) {
         setTitle("Réservation de salle");
-        setSize(310, 300);
+        setSize(450, 450);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
 
-        teacherList = new ArrayList<Teacher>();
+        List<Module> courseList = new ArrayList<>();
+        List<Group> groupList = new ArrayList<>();
+        List<Teacher> teacherList = new ArrayList<>();
 
         for (int i = 0; i < hourList.length - 2; i++)
             comboBox1.addItem(hourList[i]);
@@ -68,22 +77,20 @@ public class MiscReservationPopup extends JFrame {
         for (int i = 2; i < hourList.length; i++)
             comboBox2.addItem(hourList[i]);
 
-        List<Room> roomlist = Room.getRoomList();
-        for (Room r : roomlist) {
+        for (Room r : Room.getRoomList())
             comboBox3.addItem(r);
-        }
 
-        List<AdmissionExamLabel> examList = AdmissionExamLabel.getAdmissionExamLabelList();
-        for (AdmissionExamLabel exam : examList)
+        for (AdmissionExamLabel exam : AdmissionExamLabel.getAdmissionExamLabelList())
             comboBox4.addItem(exam);
 
-        List<Yeargroup> promoList = Yeargroup.getYeargroupList();
-        for (Yeargroup promo : promoList)
+        for (Yeargroup promo : Yeargroup.getYeargroupList())
             comboBox5.addItem(promo);
 
-        List<Student> studentList = Student.getStudentList();
-        for (Student student : studentList)
+        for (Student student : Student.getStudentList())
             comboBox6.addItem(student);
+
+        for (String enumType : rootwindow.lessonTypeEnum)
+            comboBox7.addItem(enumType);
 
         MouseListener teacherListCaller = new MouseAdapter() {
             @Override
@@ -96,6 +103,26 @@ public class MiscReservationPopup extends JFrame {
         listeDEnseignantsButton.addMouseListener(teacherListCaller);
         listeDEnseignantsButton1.addMouseListener(teacherListCaller);
         listeDEnseignantsButton2.addMouseListener(teacherListCaller);
+        listeDEnseignantsButton3.addMouseListener(teacherListCaller);
+
+        listeDeModulesButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                EntityListSelector<Module> mSelector = new EntityListSelector<>(Module.getModuleList(), courseList);
+                mSelector.setVisible(true);
+            }
+        });
+
+        listeDeGroupesButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                EntityListSelector<Group> gSelector = new EntityListSelector<>(Group.getGroupList(), groupList);
+                gSelector.setVisible(true);
+            }
+        });
+
         cancelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -103,7 +130,6 @@ public class MiscReservationPopup extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
-
 
         okButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -142,16 +168,16 @@ public class MiscReservationPopup extends JFrame {
 
                 switch (tabbedPane1.getSelectedIndex())
                 {
-                    case 0: // concours
+                    case 1: // concours
                         new AdmissionExam(baseR, (AdmissionExamLabel) comboBox4.getSelectedItem());
                         break;
-                    case 1: // jury
+                    case 2: // jury
                         new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
                         break;
-                    case 2: // défense
+                    case 3: // défense
                         new Defence(baseR, (Student) comboBox6.getSelectedItem());
                         break;
-                    case 3: // autre
+                    case 4: // autre
                         baseR.setLabel(textField1.getText());
                         break;
                 }
@@ -163,10 +189,5 @@ public class MiscReservationPopup extends JFrame {
             }
             }
         });
-    }
-
-    public static void main(String[] args) {
-        MiscReservationPopup dummy = new MiscReservationPopup();
-        dummy.setVisible(true);
     }
 }

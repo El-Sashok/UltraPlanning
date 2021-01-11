@@ -10,7 +10,7 @@ import static fr.univtln.mapare.gui.Timetable.resizeable;
 
 public class MoveLessonPopup extends JFrame {
     private JPanel panel1;
-    private JLabel heureDébutLabel;
+    private JLabel heureDebutLabel;
     private JLabel heureFinLabel;
     private JButton okButton;
     private JButton annulerButton;

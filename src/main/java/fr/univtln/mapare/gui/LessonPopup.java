@@ -29,7 +29,7 @@ public class LessonPopup extends JFrame {
     private JButton okButton;
     private JLabel dateLabel;
     private JLabel modulesLabel;
-    private JLabel heureDébutLabel;
+    private JLabel heureDebutLabel;
     private JComboBox comboBox4;
     private JComboBox comboBox6;
     private JLabel groupesLabel;
@@ -48,13 +48,8 @@ public class LessonPopup extends JFrame {
 
     private JFrame thisframe = this;
 
-    private Timetable rootwindow;
-
-
-
     public LessonPopup(Timetable rootwindow) {
         setTitle("Réservation pour cours");
-        //setSize(320, 330);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -66,7 +61,6 @@ public class LessonPopup extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
-        this.rootwindow = rootwindow;
 
         for (int i = 0; i < hourList.length - 2; i++)
             comboBox4.addItem(hourList[i]);
@@ -161,7 +155,6 @@ public class LessonPopup extends JFrame {
                 mSelector.setVisible(true);
             }
         });
-
 
         listeDeGroupesButton.addMouseListener(new MouseAdapter() {
             @Override

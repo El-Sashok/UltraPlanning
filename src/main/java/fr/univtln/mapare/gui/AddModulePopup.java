@@ -24,7 +24,6 @@ public class AddModulePopup extends JFrame {
 
     public AddModulePopup() {
         setTitle("Ajouter un nouveau module");
-        setSize(400, 100);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -57,6 +56,8 @@ public class AddModulePopup extends JFrame {
                 }
             }
         });
+
+        this.pack();
     }
 
     public static void main(String[] args) {
