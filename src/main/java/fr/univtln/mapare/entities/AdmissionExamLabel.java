@@ -3,12 +3,23 @@ package fr.univtln.mapare.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe entité d'un intitulé de concours
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class AdmissionExamLabel implements Entity {
     private long id;
     private String label;
     private static final List<AdmissionExamLabel> ADMISSIONEXAMLABELS = new ArrayList<>();
 
     //Constructor
+
+    /**
+     * Constructeur d'un intitulé de concours
+     * @param id identifiant de l'intitulé de concours
+     * @param label Nom de de l'intitulé de concours
+     */
     public AdmissionExamLabel(long id, String label) {
         this.id = id;
         this.label = label;
@@ -17,28 +28,49 @@ public class AdmissionExamLabel implements Entity {
     }
 
     //Getters & Setters
+
+    /**
+     * @return l'identifiant de l'intitulé de concours
+     */
     @Override
     public long getId() {
         return id;
     }
 
+    /**
+     * Défini l'identifiant d'un concours
+     * @param id l'identifiant d'un concours
+     */
     @Override
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * @return La liste de tout les intitulés de concours
+     */
     public static List<AdmissionExamLabel> getAdmissionExamLabelList() {
         return ADMISSIONEXAMLABELS;
     }
 
+    /**
+     * Supprime un intitulé de la liste de tout les intitulés de concours
+     */
     public void popAdmissionExamLabelInList(AdmissionExamLabel admissionExamLabel) {
         ADMISSIONEXAMLABELS.remove(admissionExamLabel);
     }
 
+    /**
+     * @return Le nom d'un intitulé de concours
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Défini le nom d'un intitulé de concours
+     * @param label Le nom d'un intitulé de concours
+     */
     public void setLabel(String label) {
         this.label = label;
     }
