@@ -2,8 +2,8 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;

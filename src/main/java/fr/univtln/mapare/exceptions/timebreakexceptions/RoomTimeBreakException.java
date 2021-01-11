@@ -1,4 +1,4 @@
-package fr.univtln.mapare.exceptions.TimeBreakExceptions;
+package fr.univtln.mapare.exceptions.timebreakexceptions;
 
 import fr.univtln.mapare.entities.Room;
 

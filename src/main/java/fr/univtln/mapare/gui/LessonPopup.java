@@ -7,7 +7,7 @@ import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.EmptySelectionListException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.NoDateSelectedException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.*;
+import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

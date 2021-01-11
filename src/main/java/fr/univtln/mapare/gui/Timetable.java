@@ -574,7 +574,7 @@ public class Timetable extends JFrame {
         curroom = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
-        if (privatereservations == null)
+        if (privatereservations == null && (SUStatus == Session.Status.TEACHER || SUStatus == Session.Status.STUDENT))
             privatereservations = ReservationController.findPersonalReservations();
         for (Reservation r : privatereservations) {
             if (r instanceof Lesson) {
