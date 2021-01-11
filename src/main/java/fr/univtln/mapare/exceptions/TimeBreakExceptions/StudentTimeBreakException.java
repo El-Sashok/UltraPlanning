@@ -1,4 +1,4 @@
-package fr.univtln.mapare.exceptions.timebreakexceptions;
+package fr.univtln.mapare.exceptions.TimeBreakExceptions;
 
 import fr.univtln.mapare.entities.Student;
 

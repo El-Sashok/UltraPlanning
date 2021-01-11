@@ -3,7 +3,7 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
-import fr.univtln.mapare.exceptions.timebreakexceptions.*;
+import fr.univtln.mapare.exceptions.TimeBreakExceptions.*;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
