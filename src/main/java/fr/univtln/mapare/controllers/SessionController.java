@@ -31,7 +31,7 @@ public abstract class SessionController {
 
             if (!dbInfo.isEmpty()) {
                 if (dbInfo.get("PASSWORD").get().equals(hashPassword(typedPassword))) {
-                    new Session(Long.valueOf(dbInfo.get("ID").get()),
+                    Session.login(Long.valueOf(dbInfo.get("ID").get()),
                             dbInfo.get("LOGIN").get(),
                             dbInfo.get("PASSWORD").get(),
                             Session.Status.valueOf(dbInfo.get("STATUS").get()));

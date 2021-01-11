@@ -17,7 +17,7 @@ public class EntityListSelector<E extends Entity> extends JFrame {
     private JButton addEntityButton;
     private JComboBox comboBox1;
     private JScrollPane scrollPane1;
-    private DefaultListModel listModel;
+    private DefaultListModel<E> listModel;
     private JList entityJList;
     private JButton okButton1;
     private JButton cancelButton;
@@ -59,7 +59,7 @@ public class EntityListSelector<E extends Entity> extends JFrame {
             comboBox1.addItem(e);
         }
 
-        listModel = new DefaultListModel<E>();
+        listModel = new DefaultListModel<>();
         for (E elem : returnList) {
             listModel.addElement(elem);
             comboBox1.removeItem(elem);
@@ -82,7 +82,7 @@ public class EntityListSelector<E extends Entity> extends JFrame {
                 super.mousePressed(e);
                 returnList.clear();
                 for (int i = 0; i < listModel.getSize(); i++)
-                    returnList.add((E) listModel.getElementAt(i));
+                    returnList.add(listModel.getElementAt(i));
 
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
