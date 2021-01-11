@@ -1,7 +1,6 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.ModuleController;
-import fr.univtln.mapare.entities.Module;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

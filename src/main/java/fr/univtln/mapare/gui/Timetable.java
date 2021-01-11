@@ -645,7 +645,14 @@ public class Timetable extends JFrame {
                 if (templist.size() > 1)
                     courseString += ", ...";
                 templist = maillon.getManagers();
-                String teacherString = templist.get(0).toString();
+                String teacherString = "";
+                try {
+                    teacherString = templist.get(0).toString();
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(maillon);
+                    System.out.println(maillon.getId());
+                    System.out.println(maillon.getManagers());
+                }
                 if (templist.size() > 1)
                     teacherString += ", ...";
                 templist = ((Lesson) maillon).getGroups();

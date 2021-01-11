@@ -160,7 +160,7 @@ public class LessonPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                EntityListSelector mSelector = EntityListSelector.getModuleSelector(courseList);
+                EntityListSelector<Module> mSelector = new EntityListSelector<>(Module.getModuleList(), courseList);
                 mSelector.setVisible(true);
             }
         });
@@ -170,7 +170,7 @@ public class LessonPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                EntityListSelector gSelector = EntityListSelector.getGroupSelector(groupList);
+                EntityListSelector<Group> gSelector = new EntityListSelector<>(Group.getGroupList(), groupList);
                 gSelector.setVisible(true);
             }
         });
@@ -179,7 +179,7 @@ public class LessonPopup extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                EntityListSelector gSelector = EntityListSelector.getTeacherSelector(teacherList);
+                EntityListSelector<Teacher> gSelector = new EntityListSelector<>(Teacher.getTeacherList(), teacherList);
                 gSelector.setVisible(true);
             }
         });
