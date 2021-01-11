@@ -64,7 +64,7 @@ public class Yeargroup implements Entity {
                 "label='" + label + '\'' +
                 ", groups=" + groups +
                 '}';
-    }*/
+    }
 
     public Yeargroup addGroup(Group g) {
         groups.add(g);
