@@ -8,23 +8,25 @@ import java.sql.SQLException;
 
 public abstract class ModuleController {
 
+    private ModuleController() {}
+
     public static void loadModules() throws SQLException {
-        ModuleDAO moduleDAO = new ModuleDAO();
-        moduleDAO.findAll();
-        moduleDAO.close();
+        try (ModuleDAO moduleDAO = new ModuleDAO()) {
+            moduleDAO.findAll();
+        }
     }
 
     public static void remove(Module module) throws SQLException {
-        ModuleDAO moduleDAO = new ModuleDAO();
-        moduleDAO.remove(module.getId());
-        moduleDAO.close();
+        try (ModuleDAO moduleDAO = new ModuleDAO()) {
+            moduleDAO.remove(module.getId());
+        }
         Module.popModuleInList(module);
     }
 
     public static void createModule(String label, int nbHour) throws SQLException {
         Module module = new Module(-1, label, nbHour);
-        ModuleDAO moduleDAO = new ModuleDAO();
-        Module newModuleId = moduleDAO.persist(module);
-        moduleDAO.close();
+        try (ModuleDAO moduleDAO = new ModuleDAO()) {
+            Module newModuleId = moduleDAO.persist(module);
+        }
     }
 }

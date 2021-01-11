@@ -24,14 +24,9 @@ public class Reservation implements Entity {
         this.memo = memo;
         this.state = state;
         this.room = room;
-        this.managers = new ArrayList<Teacher>();
+        this.managers = new ArrayList<>();
         if (id != -1) // To differentiate the ones which are yet in database
             RESERVATIONS.add(this);
-    }
-
-    //TODO: delete later, used for tests
-    protected Reservation(String label) {
-        this.label = label;
     }
 
     //Getters & Setters

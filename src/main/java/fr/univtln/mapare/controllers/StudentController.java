@@ -7,16 +7,18 @@ import java.sql.SQLException;
 
 public abstract class StudentController {
 
+    private StudentController() {}
+
     public static void loadStudents() throws SQLException {
-        StudentDAO studentDAO = new StudentDAO();
-        studentDAO.findAll();
-        studentDAO.close();
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            studentDAO.findAll();
+        }
     }
 
     public static void remove(Student student) throws SQLException {
-        StudentDAO studentDAO = new StudentDAO();
-        studentDAO.remove(student.getId());
-        studentDAO.close();
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            studentDAO.remove(student.getId());
+        }
         Student.popStudentInList(student);
     }
 

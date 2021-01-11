@@ -1,7 +1,6 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
-import fr.univtln.mapare.daos.RoomDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
@@ -13,10 +12,12 @@ import java.util.List;
 
 public abstract class ReservationController {
 
+    private ReservationController() {}
+
     public static void loadReservations() throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        reservationDAO.findAll();
-        reservationDAO.close();
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservationDAO.findAll();
+        }
     }
 
     public static List<Room> findFreeRooms(LocalDateTime startDate, LocalDateTime endDate) {
@@ -85,9 +86,9 @@ public abstract class ReservationController {
 
         Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
         for (Teacher t : managers) reservation.addTeacher(t);
-        ReservationDAO reservationDAO = new ReservationDAO();
-        reservationDAO.persist(reservation);
-        reservationDAO.close();
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservationDAO.persist(reservation);
+        }
     }
 
 }

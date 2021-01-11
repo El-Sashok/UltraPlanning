@@ -7,16 +7,18 @@ import java.sql.SQLException;
 
 public abstract class YeargroupController {
 
+    private YeargroupController() {}
+
     public static void loadYeargroup() throws SQLException {
-        YeargroupDAO yeargroupDAO = new YeargroupDAO();
-        yeargroupDAO.findAll();
-        yeargroupDAO.close();
+        try (YeargroupDAO yeargroupDAO = new YeargroupDAO()) {
+            yeargroupDAO.findAll();
+        }
     }
 
     public static void remove(Yeargroup yeargroup) throws SQLException {
-        YeargroupDAO yeargroupDAO = new YeargroupDAO();
-        yeargroupDAO.remove(yeargroup);
-        yeargroupDAO.close();
+        try (YeargroupDAO yeargroupDAO = new YeargroupDAO()) {
+            yeargroupDAO.remove(yeargroup);
+        }
         Yeargroup.popYeargroupInList(yeargroup);
     }
 

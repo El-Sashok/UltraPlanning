@@ -11,6 +11,8 @@ import java.util.List;
 
 public abstract class LessonController {
 
+    private LessonController() {}
+
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
                                     List<Group> groups, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
@@ -54,8 +56,8 @@ public abstract class LessonController {
         for (Module m : modules) lesson.addModule(m);
         for (Group g : groups) lesson.addGroup(g);
         for (Teacher t : managers) lesson.addTeacher(t);
-        LessonDAO lessonDAO = new LessonDAO();
-        lessonDAO.persist(lesson);
-        lessonDAO.close();
+        try (LessonDAO lessonDAO = new LessonDAO()) {
+            lessonDAO.persist(lesson);
+        }
     }
 }

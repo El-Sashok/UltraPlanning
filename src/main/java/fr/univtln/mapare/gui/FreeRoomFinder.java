@@ -9,7 +9,6 @@ import fr.univtln.mapare.exceptions.NoDateSelectedException;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +20,7 @@ public class FreeRoomFinder extends JFrame {
     private JLabel dateLabel;
     private JPanel panel1;
     private JScrollPane scrollPane1;
-    private JLabel heureDébutLabel;
+    private JLabel heureDebutLabel;
     private JComboBox comboBox2;
     private JLabel heureFinLabel;
     private JComboBox comboBox3;
@@ -45,10 +44,10 @@ public class FreeRoomFinder extends JFrame {
         for (int i = 2; i < hourList.length; i++)
             comboBox3.addItem(hourList[i]);
 
-        DefaultListModel<String> noResults = new DefaultListModel<String>();
+        DefaultListModel<String> noResults = new DefaultListModel<>();
         noResults.addElement("No results");
         list1.setModel(noResults);
-        DefaultListModel<Room> roomListModel = new DefaultListModel<Room>();
+        DefaultListModel<Room> roomListModel = new DefaultListModel<>();
 
 
         chercherButton.addMouseListener(new MouseAdapter() {
@@ -72,7 +71,7 @@ public class FreeRoomFinder extends JFrame {
                             dateFin.minusMinutes(1));
                     for (Room r : recv)
                         roomListModel.addElement(r);
-                    if (recv.size() == 0)
+                    if (recv.isEmpty())
                         list1.setModel(noResults);
                     else
                         list1.setModel(roomListModel);
