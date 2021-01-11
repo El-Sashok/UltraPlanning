@@ -7,10 +7,10 @@ import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.EmptySelectionListException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.NoDateSelectedException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.GroupTimeBreakException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.StudentTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
