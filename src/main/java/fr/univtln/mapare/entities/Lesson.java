@@ -1,8 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 
 public class Lesson extends Reservation {
@@ -14,8 +12,8 @@ public class Lesson extends Reservation {
     public Lesson(long id, LocalDateTime startDate, LocalDateTime endDate, String label, String memo, State state, Room room, Type type) {
         super(id, startDate, endDate, label, memo, state, room);
         this.type = type;
-        this.module = new ArrayList<Module>();
-        this.groups = new ArrayList<Group>();
+        this.module = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
     public Lesson(Reservation reservation, Type type) {
@@ -28,8 +26,8 @@ public class Lesson extends Reservation {
                 reservation.getRoom());
         setManagers(reservation.getManagers());
         this.type = type;
-        this.module = new ArrayList<Module>();
-        this.groups = new ArrayList<Group>();
+        this.module = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
 
     //Getters & Setters

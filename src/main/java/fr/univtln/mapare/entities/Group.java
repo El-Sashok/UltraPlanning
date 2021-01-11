@@ -1,7 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Group implements Entity {
@@ -14,7 +13,7 @@ public class Group implements Entity {
     public Group(long id, String label) {
         this.id = id;
         this.label = label;
-        this.students = new ArrayList<Student>();
+        this.students = new ArrayList<>();
         if (id != -1) // To differentiate which ones aren't in the database yet
             GROUPS.add(this);
     }
@@ -54,14 +53,12 @@ public class Group implements Entity {
         this.students = students;
     }
 
-    //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Group{" +
                 "label='" + label + '\'' +
                 ", students=" + students +
                 '}';
-    }*/
+    }
     @Override
     public String toString() {
         return label;

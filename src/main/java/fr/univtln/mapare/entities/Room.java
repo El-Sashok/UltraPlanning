@@ -1,7 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Room implements Entity {
@@ -90,8 +89,7 @@ public class Room implements Entity {
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Room{" +
                 "building='" + building + '\'' +
                 ", number=" + number +
@@ -99,5 +97,5 @@ public class Room implements Entity {
                 ", label='" + label + '\'' +
                 ", info='" + info + '\'' +
                 '}';
-    }*/
+    }
 }

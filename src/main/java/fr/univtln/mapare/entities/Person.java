@@ -10,7 +10,7 @@ public abstract class Person implements Entity {
     private final String email;
 
     //Constructor
-    public Person(long id, String lastName, String firstName, Date birthdate, String email) {
+    protected Person(long id, String lastName, String firstName, Date birthdate, String email) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -49,15 +49,14 @@ public abstract class Person implements Entity {
     public void setId(long id) { this.id = id; }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Person{" +
                 "lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", birthdate=" + birthdate +
                 ", email='" + email + '\'' +
                 '}';
-    }*/
+    }
 
     @Override
     public String toString() {

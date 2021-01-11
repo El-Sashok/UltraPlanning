@@ -24,10 +24,9 @@ public class Student extends Person {
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Student{" +
                 super.toString() +
                 '}';
-    }*/
+    }
 }

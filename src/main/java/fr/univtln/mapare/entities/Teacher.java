@@ -1,7 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +15,9 @@ public class Teacher extends Person {
         super(id, lastName, firstName, birthdate, email);
         this.laboratory = laboratory;
         this.role = role;
-        this.constraints = new ArrayList<Constraint>();
+        this.constraints = new ArrayList<>();
         if (id != -1) // To differentiate the ones which are yet in database
             TEACHERS.add(this);
-    }
-
-    private Teacher(String firstName, String lastName) {
-        super(firstName, lastName);
     }
 
     //Getters & Setters
@@ -59,15 +54,14 @@ public class Teacher extends Person {
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return  "Teacher{" +
                 super.toString() +
                 ", laboratory='" + laboratory + '\'' +
                 ", role=" + role +
                 ", constraints=" + constraints +
                 '}';
-    }*/
+    }
 
     public Teacher addConstraint(Constraint c) {
         constraints.add(c);

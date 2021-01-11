@@ -9,10 +9,6 @@ public class Yeargroup implements Entity {
     private List<Group> groups;
     private static final List<Yeargroup> YEARGROUPS = new ArrayList<>();
 
-    private Yeargroup(String label) {
-        this.label = label;
-    }
-
     @Override
     public String toString() {
         return label;
@@ -63,8 +59,7 @@ public class Yeargroup implements Entity {
     }
 
     //Methods
-    /*@Override
-    public String toString() {
+    public String print() {
         return "Yeargroup{" +
                 "label='" + label + '\'' +
                 ", groups=" + groups +

@@ -16,16 +16,15 @@ public class AdmissionExam extends Reservation {
     }
 
     public AdmissionExam(Reservation reservation, AdmissionExamLabel admissionExamLabel) {
-        super(reservation.getId(),
+        this(reservation.getId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getLabel(),
                 reservation.getMemo(),
                 reservation.getState(),
-                reservation.getRoom());
+                reservation.getRoom(),
+                admissionExamLabel);
         setManagers(reservation.getManagers());
-        this.admissionExamLabel = admissionExamLabel;
-        this.students = new ArrayList<>();
     }
 
     //Getters & Setters
@@ -46,6 +45,7 @@ public class AdmissionExam extends Reservation {
     }
 
     //Methods
+    @Override
     public String print() {
         return "AdmissionExam{" +
                 super.print() +

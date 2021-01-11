@@ -1,6 +1,5 @@
 package fr.univtln.mapare.datasources;
 
-import fr.univtln.mapare.App;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;

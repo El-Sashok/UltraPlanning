@@ -1,8 +1,6 @@
 package fr.univtln.mapare.entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Defence extends Reservation {
     private Student student;
