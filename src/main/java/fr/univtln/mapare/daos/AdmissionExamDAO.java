@@ -39,10 +39,11 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
                 return (AdmissionExam) r;
         }
 
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        Reservation.popReservationList(reservation);
-        reservationDAO.close();
+        Reservation reservation;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            Reservation.popReservationList(reservation);
+        }
 
         AdmissionExam admissionExam = new AdmissionExam(reservation, admissionExamLabel);
         for (Student s: students)
@@ -58,22 +59,24 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
         findPS.setLong(1, id);
         findStudentsPS.setLong(1, id);
         ResultSet rs_findStudentsPS = findStudentsPS.executeQuery();
-        StudentDAO studentDAO = new StudentDAO();
-        while (rs_findStudentsPS.next()) students.add(studentDAO.find(rs_findStudentsPS.getLong("STUDENT")).get());
-        studentDAO.close();
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            while (rs_findStudentsPS.next()) students.add(studentDAO.find(rs_findStudentsPS.getLong("STUDENT")).get());
+        }
         ResultSet rs_findPS = findPS.executeQuery();
-        AdmissionExamLabelDAO admissionExamLabelDAO = new AdmissionExamLabelDAO();
-        while (rs_findPS.next())
-            admissionExam = fromResultSet(rs_findPS, admissionExamLabelDAO.find(rs_findPS.getLong("LABEL")).get(), students);
+        try (AdmissionExamLabelDAO admissionExamLabelDAO = new AdmissionExamLabelDAO()) {
+            while (rs_findPS.next())
+                admissionExam = fromResultSet(rs_findPS, admissionExamLabelDAO.find(rs_findPS.getLong("LABEL")).get(), students);
+        }
 
         return Optional.ofNullable(admissionExam);
     }
 
     @Override
     public AdmissionExam persist(AdmissionExam admissionExam) throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(admissionExam, "ADMISSION_EXAM");
-        reservationDAO.close();
+        Reservation r;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            r = reservationDAO.persist(admissionExam, "ADMISSION_EXAM");
+        }
         Reservation.popReservationList(r);
 
         admissionExam.setId(r.getId());

@@ -22,23 +22,26 @@ public class ExamBoardDAO extends AbstractDAO<ExamBoard> {
                 return (ExamBoard) r;
         }
 
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        Reservation.popReservationList(reservation);
-        reservationDAO.close();
+        Reservation reservation;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            Reservation.popReservationList(reservation);
+        }
 
-        YeargroupDAO yeargroupDAO = new YeargroupDAO();
-        Yeargroup yeargroup = yeargroupDAO.find(resultSet.getLong("YEARGROUP")).get();
-        yeargroupDAO.close();
+        Yeargroup yeargroup;
+        try (YeargroupDAO yeargroupDAO = new YeargroupDAO()) {
+            yeargroup = yeargroupDAO.find(resultSet.getLong("YEARGROUP")).get();
+        }
 
         return new ExamBoard(reservation, yeargroup);
     }
 
     @Override
     public ExamBoard persist(ExamBoard examBoard) throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(examBoard, "EXAM_BOARD");
-        reservationDAO.close();
+        Reservation r;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            r = reservationDAO.persist(examBoard, "EXAM_BOARD");
+        }
         Reservation.popReservationList(r);
 
         examBoard.setId(r.getId());

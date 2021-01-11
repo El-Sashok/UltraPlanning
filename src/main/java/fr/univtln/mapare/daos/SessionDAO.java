@@ -24,6 +24,7 @@ public class SessionDAO extends AbstractDAO<Session> {
                 Session.Status.valueOf(resultSet.getString("STATUS")));
     }
 
+    @Override
     public Session persist() throws SQLException { return persist((Session) null); }
 
     @Override
@@ -32,6 +33,7 @@ public class SessionDAO extends AbstractDAO<Session> {
         return super.persist();
     }
 
+    @Override
     public void update() throws SQLException { update(null); }
 
     @Override

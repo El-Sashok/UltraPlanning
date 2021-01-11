@@ -22,23 +22,26 @@ public class DefenceDAO extends AbstractDAO<Defence> {
                 return (Defence) r;
         }
 
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        Reservation.popReservationList(reservation);
-        reservationDAO.close();
+        Reservation reservation;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            Reservation.popReservationList(reservation);
+        }
 
-        StudentDAO studentDAO = new StudentDAO();
-        Student student = studentDAO.find(resultSet.getLong("STUDENT")).get();
-        studentDAO.close();
+        Student student;
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            student = studentDAO.find(resultSet.getLong("STUDENT")).get();
+        }
 
         return new Defence(reservation, student);
     }
 
     @Override
     public Defence persist(Defence defence) throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(defence,"DEFENCE");
-        reservationDAO.close();
+        Reservation r;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            r = reservationDAO.persist(defence, "DEFENCE");
+        }
         Reservation.popReservationList(r);
 
         defence.setId(r.getId());

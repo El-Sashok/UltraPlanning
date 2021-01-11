@@ -41,10 +41,11 @@ public class LessonDAO extends AbstractDAO<Lesson> {
                 return (Lesson) r;
         }
 
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation reservation = reservationDAO.find(resultSet.getLong("ID")).get();
-        Reservation.popReservationList(reservation);
-        reservationDAO.close();
+        Reservation reservation;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservation = reservationDAO.find(resultSet.getLong("ID")).get();
+            Reservation.popReservationList(reservation);
+        }
 
         Lesson lesson = new Lesson(reservation, Lesson.Type.valueOf(resultSet.getString("TYPE")));
         for (Group g: groups)
@@ -64,13 +65,13 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         findGroupsPS.setLong(1, id);
         findModulesPS.setLong(1, id);
         ResultSet rs_findGroupsPS = findGroupsPS.executeQuery();
-        GroupDAO groupDAO = new GroupDAO();
-        while (rs_findGroupsPS.next()) groups.add(groupDAO.find(rs_findGroupsPS.getLong("CLASS_GROUP")).get());
-        groupDAO.close();
+        try (GroupDAO groupDAO = new GroupDAO()) {
+            while (rs_findGroupsPS.next()) groups.add(groupDAO.find(rs_findGroupsPS.getLong("CLASS_GROUP")).get());
+        }
         ResultSet rs_findModulesPS = findModulesPS.executeQuery();
-        ModuleDAO moduleDAO = new ModuleDAO();
-        while (rs_findModulesPS.next()) modules.add(moduleDAO.find(rs_findModulesPS.getLong("MODULE")).get());
-        moduleDAO.close();
+        try (ModuleDAO moduleDAO = new ModuleDAO()) {
+            while (rs_findModulesPS.next()) modules.add(moduleDAO.find(rs_findModulesPS.getLong("MODULE")).get());
+        }
         ResultSet rs_findPS = findPS.executeQuery();
         while (rs_findPS.next()) lesson = fromResultSet(rs_findPS, groups, modules);
 
@@ -79,9 +80,10 @@ public class LessonDAO extends AbstractDAO<Lesson> {
 
     @Override
     public Lesson persist(Lesson lesson) throws SQLException {
-        ReservationDAO reservationDAO = new ReservationDAO();
-        Reservation r = reservationDAO.persist(lesson, "LESSON");
-        reservationDAO.close();
+        Reservation r;
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            r = reservationDAO.persist(lesson, "LESSON");
+        }
         Reservation.popReservationList(r);
 
         lesson.setId(r.getId());
@@ -131,6 +133,7 @@ public class LessonDAO extends AbstractDAO<Lesson> {
     }
 
     private void updateModule(Lesson lesson) throws SQLException {
+        // Not implemented yet
     }
 
     private void populateModule(PreparedStatement popGroupPS, Lesson lesson, Module module) throws SQLException {

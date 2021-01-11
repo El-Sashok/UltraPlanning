@@ -51,15 +51,15 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
 
         findGroupsPS.setLong(1, id);
         ResultSet findGroupsRS = findGroupsPS.executeQuery();
-        GroupDAO groupDAO = new GroupDAO();
-        while (findGroupsRS.next()) {
-            Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
-            if (optionalGroup.isPresent())
-                groups.add(optionalGroup.get());
-            else
-                throw new NotFoundException();
+        try (GroupDAO groupDAO = new GroupDAO()) {
+            while (findGroupsRS.next()) {
+                Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
+                if (optionalGroup.isPresent())
+                    groups.add(optionalGroup.get());
+                else
+                    throw new NotFoundException();
+            }
         }
-        groupDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) yeargroup = fromResultSet(findRS, groups);
@@ -70,22 +70,22 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     public List<Yeargroup> findAll() throws SQLException {
         List<Yeargroup> yeargroups = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
-        GroupDAO groupDAO = new GroupDAO();
-        while (findAllRS.next()) {
-            List<Group> groups = new ArrayList<>();
-            findGroupsPS.setLong(1, findAllRS.getLong("ID"));
-            ResultSet findGroupsRS = findGroupsPS.executeQuery();
+        try (GroupDAO groupDAO = new GroupDAO()) {
+            while (findAllRS.next()) {
+                List<Group> groups = new ArrayList<>();
+                findGroupsPS.setLong(1, findAllRS.getLong("ID"));
+                ResultSet findGroupsRS = findGroupsPS.executeQuery();
 
-            while (findGroupsRS.next()) {
-                Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
-                if (optionalGroup.isPresent())
-                    groups.add(optionalGroup.get());
-                else
-                    throw new NotFoundException();
+                while (findGroupsRS.next()) {
+                    Optional<Group> optionalGroup = groupDAO.find(findGroupsRS.getLong("CLASS_GROUP"));
+                    if (optionalGroup.isPresent())
+                        groups.add(optionalGroup.get());
+                    else
+                        throw new NotFoundException();
+                }
+                yeargroups.add(fromResultSet(findAllRS, groups));
             }
-            yeargroups.add(fromResultSet(findAllRS, groups));
         }
-        groupDAO.close();
         return yeargroups;
     }
 

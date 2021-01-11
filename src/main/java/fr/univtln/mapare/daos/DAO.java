@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Entity;
-import fr.univtln.mapare.exceptions.DataAccessException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -53,15 +53,15 @@ public class GroupDAO extends AbstractDAO<Group>{
 
         findMembersPS.setLong(1, id);
         ResultSet findMembersRS = findMembersPS.executeQuery();
-        StudentDAO studentDAO = new StudentDAO();
-        while (findMembersRS.next()) {
-            Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
-            if (optionalStudent.isPresent())
-                students.add(optionalStudent.get());
-            else
-                throw new NotFoundException();
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            while (findMembersRS.next()) {
+                Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
+                if (optionalStudent.isPresent())
+                    students.add(optionalStudent.get());
+                else
+                    throw new NotFoundException();
+            }
         }
-        studentDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) group = fromResultSet(findRS, students);
@@ -72,22 +72,22 @@ public class GroupDAO extends AbstractDAO<Group>{
     public List<Group> findAll() throws SQLException {
         List<Group> groups = new ArrayList<>();
         ResultSet findAllRS = findAllPS.executeQuery();
-        StudentDAO studentDAO = new StudentDAO();
-        while (findAllRS.next()) {
-            List<Student> students = new ArrayList<>();
-            findMembersPS.setLong(1, findAllRS.getLong("ID"));
-            ResultSet findMembersRS = findMembersPS.executeQuery();
+        try (StudentDAO studentDAO = new StudentDAO()) {
+            while (findAllRS.next()) {
+                List<Student> students = new ArrayList<>();
+                findMembersPS.setLong(1, findAllRS.getLong("ID"));
+                ResultSet findMembersRS = findMembersPS.executeQuery();
 
-            while (findMembersRS.next()) {
-                Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
-                if (optionalStudent.isPresent())
-                    students.add(optionalStudent.get());
-                else
-                    throw new NotFoundException();
+                while (findMembersRS.next()) {
+                    Optional<Student> optionalStudent = studentDAO.find(findMembersRS.getInt("STUDENT"));
+                    if (optionalStudent.isPresent())
+                        students.add(optionalStudent.get());
+                    else
+                        throw new NotFoundException();
+                }
+                groups.add(fromResultSet(findAllRS, students));
             }
-            groups.add(fromResultSet(findAllRS, students));
         }
-        studentDAO.close();
         return groups;
     }
 

@@ -18,7 +18,7 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
     protected final PreparedStatement findPS;
     protected final PreparedStatement findAllPS;
 
-    public AbstractDAO(String persistPS, String updatePS) throws SQLException {
+    protected AbstractDAO(String persistPS, String updatePS) throws SQLException {
         this.connection = DBCPDataSource.getConnection();
         this.findPS = connection.prepareStatement("SELECT * FROM " + getTableName() + " WHERE ID=?");
         this.findAllPS = connection.prepareStatement("SELECT * FROM " + getTableName());

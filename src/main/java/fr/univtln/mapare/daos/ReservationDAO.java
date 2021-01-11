@@ -37,9 +37,10 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
             if (r.getId() == resultSet.getLong("ID"))
                 return r;
         }
-        RoomDAO roomDAO = new RoomDAO();
-        Room room = roomDAO.find(resultSet.getLong("ROOM")).get();
-        roomDAO.close();
+        Room room;
+        try (RoomDAO roomDAO = new RoomDAO()) {
+            room = roomDAO.find(resultSet.getLong("ROOM")).get();
+        }
 
         Reservation reservation = new Reservation(resultSet.getLong("ID"),
                 resultSet.getTimestamp("START").toLocalDateTime(),
@@ -59,15 +60,15 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         List<Teacher> managers = new ArrayList<>();
         findManagersPS.setLong(1, id);
         ResultSet findManagersRS = findManagersPS.executeQuery();
-        TeacherDAO teacherDAO = new TeacherDAO();
-        while (findManagersRS.next()) {
-            Optional<Teacher> optionalManager = teacherDAO.find(findManagersRS.getLong("MANAGER"));
-            if (optionalManager.isPresent())
-                managers.add(optionalManager.get());
-            else
-                throw new NotFoundException();
+        try (TeacherDAO teacherDAO = new TeacherDAO()) {
+            while (findManagersRS.next()) {
+                Optional<Teacher> optionalManager = teacherDAO.find(findManagersRS.getLong("MANAGER"));
+                if (optionalManager.isPresent())
+                    managers.add(optionalManager.get());
+                else
+                    throw new NotFoundException();
+            }
         }
-        teacherDAO.close();
         findPS.setLong(1, id);
         ResultSet findRS = findPS.executeQuery();
         if (findRS.next()) reservation = fromResultSet(findRS, managers);
@@ -88,28 +89,28 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
             else {
                 switch (findAllRS.getString("TYPE")) {
                     case "LESSON":
-                        LessonDAO lessonDAO = new LessonDAO();
-                        Lesson lesson = lessonDAO.find(findAllRS.getLong("ID")).get();
-                        reservations.add(lesson);
-                        lessonDAO.close();
+                        try (LessonDAO lessonDAO = new LessonDAO()) {
+                            Lesson lesson = lessonDAO.find(findAllRS.getLong("ID")).get();
+                            reservations.add(lesson);
+                        }
                         break;
                     case "ADMISSION_EXAM":
-                        AdmissionExamDAO admissionExamDAO = new AdmissionExamDAO();
-                        AdmissionExam admissionExam = admissionExamDAO.find(findAllRS.getLong("ID")).get();
-                        reservations.add(admissionExam);
-                        admissionExamDAO.close();
+                        try (AdmissionExamDAO admissionExamDAO = new AdmissionExamDAO()) {
+                            AdmissionExam admissionExam = admissionExamDAO.find(findAllRS.getLong("ID")).get();
+                            reservations.add(admissionExam);
+                        }
                         break;
                     case "DEFENCE":
-                        DefenceDAO defenceDAO = new DefenceDAO();
-                        Defence defence = defenceDAO.find(findAllRS.getLong("ID")).get();
-                        reservations.add(defence);
-                        defenceDAO.close();
+                        try (DefenceDAO defenceDAO = new DefenceDAO()) {
+                            Defence defence = defenceDAO.find(findAllRS.getLong("ID")).get();
+                            reservations.add(defence);
+                        }
                         break;
                     case "EXAM_BOARD":
-                        ExamBoardDAO examBoardDAO = new ExamBoardDAO();
-                        ExamBoard examBoard = examBoardDAO.find(findAllRS.getLong("ID")).get();
-                        reservations.add(examBoard);
-                        examBoardDAO.close();
+                        try (ExamBoardDAO examBoardDAO = new ExamBoardDAO()) {
+                            ExamBoard examBoard = examBoardDAO.find(findAllRS.getLong("ID")).get();
+                            reservations.add(examBoard);
+                        }
                         break;
                     default:
                         break;
@@ -170,7 +171,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
     }
 
     public void updateManager(Reservation reservation, Teacher manager) {
-
+        // Not implemented yet
     }
 
     private void populateManager(PreparedStatement popManagerPS, Reservation reservation, Teacher manager) throws SQLException {
