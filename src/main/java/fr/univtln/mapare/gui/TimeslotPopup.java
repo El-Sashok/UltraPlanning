@@ -1,5 +1,6 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
@@ -111,10 +113,26 @@ public class TimeslotPopup extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    if (res.getState() == Reservation.State.CANCELLED)
-                        res.setState(Reservation.State.NP);
-                    else
-                        res.setState(Reservation.State.CANCELLED);
+                    if (res.getState() == Reservation.State.CANCELLED) {
+                        try {
+                            ReservationController.changeStatusReservation(res, Reservation.State.NP);
+                            res.setState(Reservation.State.NP);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment de la mise à jour de la base de données.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else {
+                        try {
+                            ReservationController.changeStatusReservation(res, Reservation.State.CANCELLED);
+                            res.setState(Reservation.State.CANCELLED);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment de la mise à jour de la base de données.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                     rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }

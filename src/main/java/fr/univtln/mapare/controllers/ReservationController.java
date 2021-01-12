@@ -2,12 +2,11 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.UpdateExceptions.EmptyAttributeException;
-import fr.univtln.mapare.exceptions.UpdateExceptions.NotChangedException;
+import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

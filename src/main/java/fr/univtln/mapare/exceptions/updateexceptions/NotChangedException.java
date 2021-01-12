@@ -1,4 +1,4 @@
-package fr.univtln.mapare.exceptions.UpdateExceptions;
+package fr.univtln.mapare.exceptions.updateexceptions;
 
 import fr.univtln.mapare.entities.Entity;
 
