@@ -2,10 +2,12 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.NotChangedException;
+import fr.univtln.mapare.exceptions.UpdateExceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.UpdateExceptions.NotChangedException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
 
+import java.io.StringReader;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -94,9 +96,40 @@ public abstract class ReservationController {
         if (reservation.getState() == state) //If state is not modified, throw an exception
             throw new NotChangedException(reservation);
 
-        reservation.setState(state); //Change status
+        reservation.setState(state);
+        update(reservation);
+    }
 
-        try (ReservationDAO reservationDAO = new ReservationDAO()) { //Need to check the class to put the good type in BDD
+    public static void addManagerReservation(Reservation reservation, Teacher manager) throws SQLException, NotChangedException {
+        for (Teacher m : reservation.getManagers())
+            if (m == manager) //If manager is already there, throw an exception
+                throw new NotChangedException(reservation);
+
+        //TODO check horaire prof
+
+        reservation.addTeacher(manager);
+        update(reservation);
+    }
+
+    public static void removeManagerReservation(Reservation reservation, Teacher manager) throws SQLException, EmptyAttributeException {
+        if (reservation.getManagers().size() == 1)
+            if (reservation.getManagers().get(0) == manager) //if manager is the sole in list, throw an exception
+                throw new EmptyAttributeException("removeManagerReservation", reservation);
+
+        reservation.removeTeacher(manager);
+        update(reservation);
+    }
+
+    public static void changeMemoReservation(Reservation reservation, String memo) throws SQLException, NotChangedException{
+        if (reservation.getMemo().equals(memo))
+            throw new NotChangedException(reservation);
+
+        reservation.setMemo(memo);
+        update(reservation);
+    }
+
+    private static void update(Reservation reservation) throws SQLException{
+        try (ReservationDAO reservationDAO = new ReservationDAO()) { //Need to check the class to put the good type in DB
             if (Lesson.class.equals(reservation.getClass())) {
                 reservationDAO.update(reservation, "LESSON");
             } else if (AdmissionExam.class.equals(reservation.getClass())) {
