@@ -22,6 +22,6 @@ public abstract class Controllers {
         return (dbStart.isAfter(localStart) && dbStart.isBefore(localEnd)) ||
                 (dbEnd.isAfter(localStart) && dbEnd.isBefore(localEnd)) ||
                 (dbStart.isBefore(localStart) && dbEnd.isAfter(localEnd)) ||
-                dbStart.isEqual(localStart) || dbEnd;
+                dbStart.isEqual(localStart) || dbEnd.isEqual(localEnd);
     }
 }
