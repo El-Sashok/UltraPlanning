@@ -662,15 +662,11 @@ public class Timetable extends JFrame {
             else {
                 displayText1 = HTMLTAGS + " <br> <br>" + maillon.getLabel();
                 displayText2 += HTMLTAGS + maillon.getRoom() + "<br> <br> ";
-                //System.out.println(displayText1);
-                //System.out.println(displayText2);
                 colorType = 5;
             }
 
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
-            System.out.println(maillon.getLabel());
-            System.out.println(midhour);
 
             MouseListener timeslotPopupCaller = new MouseAdapter() {
                 @Override
