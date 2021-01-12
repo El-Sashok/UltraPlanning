@@ -49,8 +49,14 @@ public class TimeslotPopup extends JFrame{
         String teacherText = "";
         for (Teacher t : res.getManagers())
             teacherText += t + ", ";
-        teacherText = teacherText.substring(0, teacherText.length() - 2);
-        enseignantLabel.setText(teacherText);
+        if (teacherText != "") {
+            teacherText = teacherText.substring(0, teacherText.length() - 2);
+            enseignantLabel.setText(teacherText);
+        }
+        else {
+            enseignantLabel.setVisible(false);
+            enseignantsLabel.setVisible(false);
+        }
 
         if (res instanceof Lesson) {
             String groupText = "";

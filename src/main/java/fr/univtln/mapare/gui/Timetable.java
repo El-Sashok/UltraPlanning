@@ -634,36 +634,52 @@ public class Timetable extends JFrame {
             int dHourNumber = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0));
             int eHourNumber = ((dateFin.getHour() - 8) * 2 + (dateFin.getMinute() == 30 ? 1 : 0));
 
-            String displayText1;
-            String displayText2 = "";
-            if (maillon.getState() == Reservation.State.CANCELLED)
-                displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>";
+            String displayText1 = HTMLTAGS;
+            String displayText2 = HTMLTAGS;
             int colorType = 0;
+
+
+            List templist = maillon.getManagers();
+            String teacherString = "";
+            if (!templist.isEmpty())
+                teacherString = templist.get(0).toString();
+            if (templist.size() > 1)
+                teacherString += ", ...";
 
             // We dont close the html tags. It's less "proper" but more readable.
             if (maillon instanceof Lesson) {
                 colorType = ((Lesson) maillon).getType().ordinal();
-                List templist = ((Lesson) maillon).getModules();
+                templist = ((Lesson) maillon).getModules();
                 String courseString = templist.get(0).toString();
                 if (templist.size() > 1)
                     courseString += ", ...";
-                templist = maillon.getManagers();
-                String teacherString = "";
-                teacherString = templist.get(0).toString();
-                if (templist.size() > 1)
-                    teacherString += ", ...";
                 templist = ((Lesson) maillon).getGroups();
                 String groupString = templist.get(0).toString();
                 if (templist.size() > 1)
                     groupString += ", ...";
-                displayText1 = HTMLTAGS + courseString + "<br>" + teacherString + "<br>" + groupString;
-                displayText2 += HTMLTAGS + maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+                displayText1 += courseString + "<br>" + teacherString + "<br>" + groupString;
+                displayText2 += maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+            }
+            else if (maillon instanceof AdmissionExam) {
+                displayText1 += " <br>" + ((AdmissionExam) maillon).getAdmissionExamLabel() + "<br>" + teacherString;
+                displayText2 += maillon.getRoom() + "<br> <br> ";
+                colorType = 3;
+            }
+            else if (maillon instanceof Defence) {
+                displayText1 += "Soutenance <br>" + teacherString + "<br>" + ((Defence) maillon).getStudent();
+                displayText2 += maillon.getRoom() + "<br> <br> ";
+                colorType = 4;
             }
             else {
-                displayText1 = HTMLTAGS + " <br> <br>" + maillon.getLabel();
-                displayText2 += HTMLTAGS + maillon.getRoom() + "<br> <br> ";
+                displayText1 += " <br> <br>" + maillon.getLabel();
+                displayText2 += maillon.getRoom() + "<br> <br> ";
                 colorType = 5;
             }
+
+            if (maillon.getState() == Reservation.State.CANCELLED)
+                displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>" + displayText2;
+            else
+                displayText2 += "<br> ";
 
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
