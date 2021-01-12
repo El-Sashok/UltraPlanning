@@ -90,6 +90,7 @@ public class TimeslotPopup extends JFrame{
         }
 
         roomLabel.setText(roomName);
+        roomLabel.setToolTipText(res.getRoom().getInfo());
 
         if (res.getState() == Reservation.State.CANCELLED) {
             deplacerCoursButton.setVisible(false);

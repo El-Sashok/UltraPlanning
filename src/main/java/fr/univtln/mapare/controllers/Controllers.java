@@ -21,6 +21,7 @@ public abstract class Controllers {
     public static boolean checkTimeBreak(LocalDateTime dbStart, LocalDateTime dbEnd, LocalDateTime localStart, LocalDateTime localEnd) {
         return (dbStart.isAfter(localStart) && dbStart.isBefore(localEnd)) ||
                 (dbEnd.isAfter(localStart) && dbEnd.isBefore(localEnd)) ||
-                (dbStart.isBefore(localStart) && dbEnd.isAfter(localEnd));
+                (dbStart.isBefore(localStart) && dbEnd.isAfter(localEnd)) ||
+                dbStart.isEqual(localStart) || dbEnd;
     }
 }
