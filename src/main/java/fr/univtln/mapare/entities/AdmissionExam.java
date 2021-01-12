@@ -74,4 +74,9 @@ public class AdmissionExam extends Reservation {
         students.add(s);
         return this;
     }
+
+    public AdmissionExam removeStudent(Student s) {
+        students.remove(s);
+        return this;
+    }
 }

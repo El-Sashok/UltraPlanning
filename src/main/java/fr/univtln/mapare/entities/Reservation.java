@@ -130,6 +130,11 @@ public class Reservation implements Entity {
         return this;
     }
 
+    public Reservation removeTeacher(Teacher t) {
+        managers.remove(t);
+        return this;
+    }
+
 
     public enum State {
         NP, CANCELED, POSTPONED

@@ -72,8 +72,18 @@ public class Lesson extends Reservation {
         return this;
     }
 
+    public Lesson removeModule(Module c) {
+        module.remove(c);
+        return this;
+    }
+
     public Lesson addGroup(Group g) {
         groups.add(g);
+        return this;
+    }
+
+    public Lesson removeGroup(Module c) {
+        module.remove(c);
         return this;
     }
 

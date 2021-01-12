@@ -71,4 +71,9 @@ public class Group implements Entity {
         students.add(s);
         return this;
     }
+
+    public Group removeStudent(Student s) {
+        students.remove(s);
+        return this;
+    }
 }
