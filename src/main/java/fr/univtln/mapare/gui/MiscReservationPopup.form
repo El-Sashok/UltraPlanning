@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="458"/>
+      <xy x="20" y="20" width="500" height="493"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -17,7 +17,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="bd6f0" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="bd6f0" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Cours"/>
@@ -39,14 +39,6 @@
                 </constraints>
                 <properties>
                   <text value="  Groupes"/>
-                </properties>
-              </component>
-              <component id="dfd3e" class="javax.swing.JLabel" binding="enseignantsLabel1" default-binding="true">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="  Enseignants"/>
                 </properties>
               </component>
               <component id="8eae9" class="javax.swing.JLabel" binding="typeLabel" default-binding="true">
@@ -79,14 +71,6 @@
                   <text value="Liste de Groupes"/>
                 </properties>
               </component>
-              <component id="388a1" class="javax.swing.JButton" binding="listeDEnseignantsButton3" default-binding="true">
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Liste d'Enseignants"/>
-                </properties>
-              </component>
             </children>
           </grid>
           <grid id="fe1d0" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -111,25 +95,25 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="460f4" class="javax.swing.JLabel" binding="enseignantsLabel3" default-binding="true">
+              <component id="355dd" class="javax.swing.JLabel" binding="etudiantsLabel" default-binding="true">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="  Enseignants"/>
+                  <text value="  Etudiants"/>
                 </properties>
               </component>
-              <component id="9bdf5" class="javax.swing.JButton" binding="listeDEnseignantsButton2" default-binding="true">
+              <component id="cf778" class="javax.swing.JButton" binding="listeDEtudiantsButton" default-binding="true">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Liste d'Enseignants"/>
+                  <text value="Liste d'Etudiants"/>
                 </properties>
               </component>
             </children>
           </grid>
-          <grid id="3c10e" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="3c10e" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Jury"/>
@@ -145,31 +129,15 @@
                   <text value="  Promotion"/>
                 </properties>
               </component>
-              <component id="69593" class="javax.swing.JLabel" binding="enseignantsLabel" default-binding="true">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="  Enseignants"/>
-                </properties>
-              </component>
               <component id="f09d3" class="javax.swing.JComboBox" binding="comboBox5" default-binding="true">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="18da2" class="javax.swing.JButton" binding="listeDEnseignantsButton" default-binding="true">
-                <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Liste d'Enseignants"/>
-                </properties>
-              </component>
             </children>
           </grid>
-          <grid id="f2ce3" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="f2ce3" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Soutenance"/>
@@ -185,27 +153,11 @@
                   <text value="  Etudiant"/>
                 </properties>
               </component>
-              <component id="64106" class="javax.swing.JLabel" binding="enseignantsLabel2" default-binding="true">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="  Enseignants"/>
-                </properties>
-              </component>
               <component id="1bb0" class="javax.swing.JComboBox" binding="comboBox6" default-binding="true">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
-              </component>
-              <component id="a0426" class="javax.swing.JButton" binding="listeDEnseignantsButton1" default-binding="true">
-                <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Liste d'Enseignants"/>
-                </properties>
               </component>
             </children>
           </grid>
@@ -237,7 +189,7 @@
           </grid>
         </children>
       </tabbedpane>
-      <grid id="f93ad" binding="panel2" default-binding="true" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="f93ad" binding="panel2" default-binding="true" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -316,6 +268,22 @@
               </grid>
             </constraints>
             <properties/>
+          </component>
+          <component id="69593" class="javax.swing.JLabel" binding="enseignantsLabel" default-binding="true">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Enseignants"/>
+            </properties>
+          </component>
+          <component id="18da2" class="javax.swing.JButton" binding="listeDEnseignantsButton" default-binding="true">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Liste d'Enseignants"/>
+            </properties>
           </component>
         </children>
       </grid>
