@@ -100,24 +100,16 @@ public abstract class ReservationController {
         update(reservation);
     }
 
-    public static void addManagerReservation(Reservation reservation, Teacher manager) throws SQLException, NotChangedException {
-        for (Teacher m : reservation.getManagers())
-            if (m == manager) //If manager is already there, throw an exception
-                throw new NotChangedException(reservation);
+    public static void changeManagersReservation(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException{
+        if (managers.size() == 0) //if managers is empty
+            throw new EmptyAttributeException("changeManagersReservation", reservation);
+        if (reservation.getManagers().containsAll(managers)) //if it's the same list
+            throw new NotChangedException(reservation);
 
-        //TODO check horaire prof
-
-        reservation.addTeacher(manager);
+        for (Teacher m : managers) //TODO check horaire prof
+            reservation.addTeacher(m);
         update(reservation);
-    }
 
-    public static void removeManagerReservation(Reservation reservation, Teacher manager) throws SQLException, EmptyAttributeException {
-        if (reservation.getManagers().size() == 1)
-            if (reservation.getManagers().get(0) == manager) //if manager is the sole in list, throw an exception
-                throw new EmptyAttributeException("removeManagerReservation", reservation);
-
-        reservation.removeTeacher(manager);
-        update(reservation);
     }
 
     public static void changeMemoReservation(Reservation reservation, String memo) throws SQLException, NotChangedException{
