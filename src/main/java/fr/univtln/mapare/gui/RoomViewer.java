@@ -41,7 +41,6 @@ public class RoomViewer extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 rootwindow.setToRoomAgenda((Room) comboBox1.getSelectedItem());
-                rootwindow.buttonFunc(rootwindow.lastButton);
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });

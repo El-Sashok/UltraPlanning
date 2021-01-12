@@ -42,7 +42,6 @@ public class GroupViewer extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 rootwindow.setToGroupAgenda((Group) comboBox1.getSelectedItem());
-                rootwindow.buttonFunc(rootwindow.lastButton);
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });

@@ -135,7 +135,6 @@ public class TimeslotPopup extends JFrame{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 rootwindow.setToRoomAgenda(res.getRoom());
-                rootwindow.buttonFunc(rootwindow.lastButton);
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
