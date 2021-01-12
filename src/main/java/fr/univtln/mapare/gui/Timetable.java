@@ -494,8 +494,8 @@ public class Timetable extends JFrame {
 
     private static final Border lineBorder = BorderFactory.createLineBorder(Color.black);
     private static final Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
-    private final static Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
-    private final static Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
+    private static final Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
+    private static final Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
 
     int lastButton = -1;
 
@@ -515,15 +515,15 @@ public class Timetable extends JFrame {
     Color TPColor = new Color(220, 175, 220);
     Color CCColor = new Color(255, 204, 221);
     Color CTColor = new Color(248, 158, 163);
-    Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor};
+    Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor, Color.white};
 
     Color defaultColor = new Color(238, 238, 238);
 
-    private Timetable thisframe = this;
+    private final Timetable thisframe = this;
 
-    static String htmlTags = "<html><body><center><font size=\"2\">";
+    static final String HTMLTAGS = "<html><body><center><font size=\"2\">";
 
-    static String paddingText = htmlTags + " <br> <br> <br></body></html>";
+    static final String PADDINGTEXT = HTMLTAGS + " <br> <br> <br></body></html>";
 
     private JMenuBar menuBarre;
 
@@ -558,7 +558,7 @@ public class Timetable extends JFrame {
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
         for (Reservation r : allreservations) {
-            if (r instanceof Lesson) {
+            if (true) {
                 LocalDateTime date = r.getStartDate();
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (r.getRoom().equals(room)) {
@@ -622,7 +622,7 @@ public class Timetable extends JFrame {
         int JL = Jeudi.length;
         for (int j = 0; j < SL; j++) {
             for (int k = 0; k < JL; k++) {
-                Semaine[j][k].setText(paddingText);
+                Semaine[j][k].setText(PADDINGTEXT);
             }
         }
 
@@ -633,8 +633,10 @@ public class Timetable extends JFrame {
             int dHourNumber = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0));
             int eHourNumber = ((dateFin.getHour() - 8) * 2 + (dateFin.getMinute() == 30 ? 1 : 0));
 
-            String displayText1 = "";
+            String displayText1;
             String displayText2 = "";
+            if (maillon.getState() == Reservation.State.CANCELLED)
+                displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>";
             int colorType = 0;
 
             // We dont close the html tags. It's less "proper" but more readable.
@@ -646,23 +648,20 @@ public class Timetable extends JFrame {
                     courseString += ", ...";
                 templist = maillon.getManagers();
                 String teacherString = "";
-                try {
-                    teacherString = templist.get(0).toString();
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println(maillon);
-                    System.out.println(maillon.getId());
-                    System.out.println(maillon.getManagers());
-                }
+                teacherString = templist.get(0).toString();
                 if (templist.size() > 1)
                     teacherString += ", ...";
                 templist = ((Lesson) maillon).getGroups();
                 String groupString = templist.get(0).toString();
                 if (templist.size() > 1)
                     groupString += ", ...";
-                displayText1 = htmlTags + courseString + "<br>" + teacherString + "<br>" + groupString;
-                if (maillon.getState() == Reservation.State.CANCELLED)
-                    displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>";
-                displayText2 += htmlTags + maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+                displayText1 = HTMLTAGS + courseString + "<br>" + teacherString + "<br>" + groupString;
+                displayText2 += HTMLTAGS + maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+            }
+            else {
+                displayText1 = HTMLTAGS + " <br> <br>" + maillon.getLabel();
+                displayText2 += HTMLTAGS + maillon.getRoom() + "<br> <br> ";
+                colorType = 5;
             }
 
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
@@ -680,7 +679,7 @@ public class Timetable extends JFrame {
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 allhours[dayNumber * JL + j].setBackground(colorTypeEnum[colorType]);
                 allhours[dayNumber * JL + j].addMouseListener(timeslotPopupCaller);
-                Semaine[dayNumber][j].setText(paddingText);
+                Semaine[dayNumber][j].setText(PADDINGTEXT);
             }
             Semaine[dayNumber][midhour].setText(displayText1);
             Semaine[dayNumber][midhour + 1].setText(displayText2);
