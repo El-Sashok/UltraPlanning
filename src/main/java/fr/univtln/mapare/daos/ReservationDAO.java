@@ -145,6 +145,12 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         super.update();
     }
 
+    public void update(Reservation reservation, String type) throws SQLException {
+        populate(updatePS, reservation, type);
+        updatePS.setLong(8, reservation.getId());
+        super.update();
+    }
+
     private void populate(PreparedStatement popPS, Reservation reservation) throws SQLException {
         populate(popPS, reservation, null);
     }
