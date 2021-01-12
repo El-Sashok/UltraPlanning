@@ -1,8 +1,8 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
-import fr.univtln.mapare.daos.RoomDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.NotChangedException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.TimeBreakExceptions.RoomTimeBreakException;
 
@@ -90,4 +90,24 @@ public abstract class ReservationController {
         reservationDAO.close();
     }
 
+    public static void changeStatusReservation(Reservation reservation, Reservation.State state) throws SQLException, NotChangedException {
+        if (reservation.getState() == state) //If state is not modified, throw an exception
+            throw new NotChangedException(reservation);
+
+        reservation.setState(state); //Change status
+
+        try (ReservationDAO reservationDAO = new ReservationDAO()) { //Need to check the class to put the good type in BDD
+            if (Lesson.class.equals(reservation.getClass())) {
+                reservationDAO.update(reservation, "LESSON");
+            } else if (AdmissionExam.class.equals(reservation.getClass())) {
+                reservationDAO.update(reservation, "ADMISSION_EXAM");
+            } else if (Defence.class.equals(reservation.getClass())) {
+                reservationDAO.update(reservation, "DEFENCE");
+            } else if (ExamBoard.class.equals(reservation.getClass())) {
+                reservationDAO.update(reservation, "EXAM_BOARD");
+            } else {
+                reservationDAO.update(reservation);
+            }
+        }
+    }
 }
