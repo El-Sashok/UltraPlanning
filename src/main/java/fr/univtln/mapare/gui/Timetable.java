@@ -731,23 +731,13 @@ public class Timetable extends JFrame {
     public void managerInit() {
         JMenu addingMenu = new JMenu("Ajout");
         menuBarre.add(addingMenu);
-        JMenuItem addLesson = new JMenuItem("Ajouter Cours");
-        addingMenu.add(addLesson);
-        addLesson.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                LessonPopup rp = new LessonPopup(thisframe);
-                rp.setVisible(true);
-            }
-        });
         JMenuItem addReservation = new JMenuItem("Ajouter Reservation");
         addingMenu.add(addReservation);
         addReservation.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                MiscReservationPopup rp = new MiscReservationPopup(thisframe);
+                ReservationPopup rp = new ReservationPopup(thisframe);
                 rp.setVisible(true);
             }
         });
