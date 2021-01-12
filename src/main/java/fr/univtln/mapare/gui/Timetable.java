@@ -636,7 +636,7 @@ public class Timetable extends JFrame {
 
             String displayText1 = HTMLTAGS;
             String displayText2 = HTMLTAGS;
-            int colorType = 0;
+            int colorType = 5;
 
 
             List templist = maillon.getManagers();
@@ -659,22 +659,21 @@ public class Timetable extends JFrame {
                     groupString += ", ...";
                 displayText1 += courseString + "<br>" + teacherString + "<br>" + groupString;
                 displayText2 += maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
-            }
-            else if (maillon instanceof AdmissionExam) {
-                displayText1 += " <br>" + ((AdmissionExam) maillon).getAdmissionExamLabel() + "<br>" + teacherString;
+            } else {
                 displayText2 += maillon.getRoom() + "<br> <br> ";
-                colorType = 3;
+                if (maillon instanceof AdmissionExam) {
+                    displayText1 += " <br>" + ((AdmissionExam) maillon).getAdmissionExamLabel() + "<br>" + teacherString;
+                    colorType = 3;
+                } else if (maillon instanceof Defence) {
+                    displayText1 += "Soutenance <br>" + teacherString + "<br>" + ((Defence) maillon).getStudent();
+                    colorType = 4;
+                } else if (maillon instanceof ExamBoard) {
+                    displayText1 += "Jury <br>" + ((ExamBoard) maillon).getYeargroup() + "<br>" + teacherString;
+                } else {
+                    displayText1 += " <br> <br>" + maillon.getLabel();
+                }
             }
-            else if (maillon instanceof Defence) {
-                displayText1 += "Soutenance <br>" + teacherString + "<br>" + ((Defence) maillon).getStudent();
-                displayText2 += maillon.getRoom() + "<br> <br> ";
-                colorType = 4;
-            }
-            else {
-                displayText1 += " <br> <br>" + maillon.getLabel();
-                displayText2 += maillon.getRoom() + "<br> <br> ";
-                colorType = 5;
-            }
+
 
             if (maillon.getState() == Reservation.State.CANCELLED)
                 displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>" + displayText2;
@@ -722,6 +721,7 @@ public class Timetable extends JFrame {
         setLocationRelativeTo(null);
         SUStatus = status;
         allreservations = Reservation.getReservationList();
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         init();
         if (SUStatus == Session.Status.MANAGER)

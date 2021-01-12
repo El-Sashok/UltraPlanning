@@ -30,6 +30,7 @@ public class EntityListSelector<E extends Entity> extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
         entityJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         entityJList.setLayoutOrientation(JList.VERTICAL);
         entityJList.setVisibleRowCount(-1);

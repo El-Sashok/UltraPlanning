@@ -25,6 +25,7 @@ public class GroupViewer extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
         annulerButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

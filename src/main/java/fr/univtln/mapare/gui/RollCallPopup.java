@@ -20,6 +20,7 @@ public class RollCallPopup extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         DefaultListModel model = new DefaultListModel();
         for (Group g : rollCallList)

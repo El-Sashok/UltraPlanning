@@ -66,6 +66,7 @@ public class MiscReservationPopup extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         List<Module> courseList = new ArrayList<>();
         List<Group> groupList = new ArrayList<>();
