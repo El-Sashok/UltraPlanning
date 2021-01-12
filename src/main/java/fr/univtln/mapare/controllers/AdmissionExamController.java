@@ -14,6 +14,7 @@ public abstract class AdmissionExamController {
                                            List<Student> students)
             throws SQLException {
         AdmissionExam aem = new AdmissionExam(reservation, label);
+        aem.setManagers(managers);
         for (Student s : students)
             aem.addStudent(s);
         try (AdmissionExamDAO aemDAO = new AdmissionExamDAO()) {
