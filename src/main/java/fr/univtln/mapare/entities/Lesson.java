@@ -17,17 +17,15 @@ public class Lesson extends Reservation {
     }
 
     public Lesson(Reservation reservation, Type type) {
-        super(reservation.getId(),
+        this(reservation.getId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getLabel(),
                 reservation.getMemo(),
                 reservation.getState(),
-                reservation.getRoom());
+                reservation.getRoom(),
+                type);
         setManagers(reservation.getManagers());
-        this.type = type;
-        this.module = new ArrayList<>();
-        this.groups = new ArrayList<>();
     }
 
     //Getters & Setters

@@ -15,10 +15,10 @@ public class EntityListSelector<E extends Entity> extends JFrame {
     private JPanel panel2;
     private JButton retirerDeLaListeButton;
     private JButton addEntityButton;
-    private JComboBox comboBox1;
+    private JComboBox<E> comboBox1;
     private JScrollPane scrollPane1;
     private DefaultListModel<E> listModel;
-    private JList entityJList;
+    private JList<E> entityJList;
     private JButton okButton1;
     private JButton cancelButton;
     private JFrame thisframe = this;
@@ -71,9 +71,11 @@ public class EntityListSelector<E extends Entity> extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                E current = (E) comboBox1.getSelectedItem();
-                listModel.addElement(current);
-                comboBox1.removeItemAt(comboBox1.getSelectedIndex());
+                if (comboBox1.getItemCount() > 0) {
+                    E current = (E) comboBox1.getSelectedItem();
+                    listModel.addElement(current);
+                    comboBox1.removeItemAt(comboBox1.getSelectedIndex());
+                }
             }
         });
 

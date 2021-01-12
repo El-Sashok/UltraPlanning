@@ -1,17 +1,28 @@
 package fr.univtln.mapare.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import fr.univtln.mapare.controllers.*;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.exceptions.EmptySelectionListException;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.NoDateSelectedException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -140,61 +151,92 @@ public class MiscReservationPopup extends JFrame {
         okButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-            super.mousePressed(e);
-            String text = datePicker1.getText();
-            String[] banana = text.split(" ");
-            String[] cuckoo = {};
-            try {
-                cuckoo = banana[1].split(",");
+                super.mousePressed(e);
+                try {
+                    switch (tabbedPane1.getSelectedIndex()) {
+                        case 0: // cours
+                            if (groupList.isEmpty())
+                                throw new EmptySelectionListException("Veuillez sélectionner au moins un groupe.");
+                            if (courseList.isEmpty())
+                                throw new EmptySelectionListException("Veuillez sélectionner au moins un module.");
+                        case 1: // concours
+                        case 2: // jury
+                        case 3: // soutenance
+                            if (teacherList.isEmpty())
+                                throw new EmptySelectionListException("Veuillez sélectionner au moins un enseignant.");
+                            break;
+                        case 4: // autre
+                            break;
+                    }
 
-                if (cuckoo[0].length() == 1)
-                    text = "0";
-                else
-                    text = "";
-                text += cuckoo[0] + "-" + banana[0].substring(0, 3) + "-" + banana[2].substring(2);
-                DateFormat df = new SimpleDateFormat("dd-MMM-yy");
-                Date date = new Date();
-                df.parse(text);
-                Calendar temp = Calendar.getInstance(Locale.FRANCE);
-                temp.setTime(date);
-                int boutonNb = temp.get(Calendar.WEEK_OF_YEAR) - 1;
-                String[] output = new String[9];
-                output[0] = (temp.get(Calendar.DAY_OF_WEEK) - 1) + "";
-                int heureDebut = comboBox1.getSelectedIndex();
-                int heureFin = comboBox2.getSelectedIndex() + 2;
+                    if (tabbedPane1.getSelectedIndex() == 1 && studentList.isEmpty())
+                        throw new EmptySelectionListException("Veuillez sélectionner au moins un étudiant.");
 
-                Date dateDebut = new Date(date.getTime() + (heureDebut + 16) * 1800 * 1000);
-                Date dateFin = new Date(date.getTime() + (heureFin + 16) * 1800 * 1000);
+                    LocalDate date = datePicker1.getDate();
+                    if (date == null)
+                        throw new NoDateSelectedException();
+                    int heureDebut = comboBox1.getSelectedIndex();
+                    int heureFin = comboBox2.getSelectedIndex() + 2;
+                    if (heureFin <= heureDebut + 1)
+                        throw new IncorrectEndHourException();
 
-                Reservation baseR = new Reservation(-1,
-                        dateDebut.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime(),
-                        dateFin.toInstant().atZone(ZoneId.of("Europe/Paris")).toLocalDateTime()
-                        , "", textArea1.getText(),
-                        Reservation.State.NP, (Room) comboBox3.getSelectedItem());
+                    LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
+                    LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
 
-                switch (tabbedPane1.getSelectedIndex())
-                {
-                    case 0: // cours
-                        break;
-                    case 1: // concours
-                        new AdmissionExam(baseR, (AdmissionExamLabel) comboBox4.getSelectedItem());
-                        break;
-                    case 2: // jury
-                        new ExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem());
-                        break;
-                    case 3: // soutenance
-                        new Defence(baseR, (Student) comboBox6.getSelectedItem());
-                        break;
-                    case 4: // autre
-                        baseR.setLabel(textField1.getText());
-                        break;
+                    Reservation baseR = new Reservation(-1, dateDeb, dateFin, "", textArea1.getText(),
+                            Reservation.State.NP, (Room) comboBox3.getSelectedItem());
+
+                    switch (tabbedPane1.getSelectedIndex()) {
+                        case 0: // cours
+                            LessonController.createLesson(baseR, (Lesson.Type) comboBox7.getSelectedItem(),
+                                    courseList, groupList, teacherList);
+                            break;
+                        case 1: // concours
+                            AdmissionExamController.createAdmissionExam(baseR,
+                                    (AdmissionExamLabel) comboBox4.getSelectedItem(), teacherList, studentList);
+                            break;
+                        case 2: // jury
+                            ExamBoardController.createExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem(), teacherList);
+                            break;
+                        case 3: // soutenance
+                            DefenceController.createDefence(baseR, (Student) comboBox6.getSelectedItem(), teacherList);
+                            break;
+                        case 4: // autre
+                            baseR.setLabel(textField1.getText());
+                            ReservationController.createReservation(baseR, teacherList);
+                            break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + tabbedPane1.getSelectedIndex());
+                    }
+
+                    thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+                } catch (NoDateSelectedException a) {
+                    String message = "Veuillez sélectionner une date.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (IncorrectEndHourException b) {
+                    String message = "Veuillez choisir une heure de fin supérieure à l'heure de début de plus d'une" +
+                            " heure.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (EmptySelectionListException emptySelectionListException) {
+                    String message = emptySelectionListException.getMessage();
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException throwables) {
+                    String message = "Reservation incorrecte";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (StudentTimeBreakException studentTimeBreakException) {
+                    String message = "Etudiant(s) indisponible(s) pour cette horaire.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (ManagerTimeBreakException managerTimeBreakException) {
+                    String message = "Enseignant(s) indisponible(s) pour cette horaire.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (RoomTimeBreakException roomTimeBreakException) {
+                    String message = "Salle indisponible pour cette horaire.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (GroupTimeBreakException groupTimeBreakException) {
+                    String message = "Groupe(s) indisponible(s) pour cette horaire.";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
 
-                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            } catch (ParseException | ArrayIndexOutOfBoundsException a) {
-                String message = "Veuillez sélectionner une date.";
-                JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
             }
         });
     }

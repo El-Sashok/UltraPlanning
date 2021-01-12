@@ -60,4 +60,11 @@ public abstract class LessonController {
             lessonDAO.persist(lesson);
         }
     }
+
+    public static void createLesson(Reservation res, Lesson.Type type, List<Module> modules, List<Group> groups,
+                                    List<Teacher> managers) throws GroupTimeBreakException, SQLException,
+            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
+        createLesson(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(), res.getRoom(),
+                type, modules, groups, managers);
+    }
 }

@@ -91,4 +91,9 @@ public abstract class ReservationController {
         }
     }
 
+    public static void createReservation(Reservation res, List<Teacher> managers) throws RoomTimeBreakException,
+            SQLException, ManagerTimeBreakException {
+        createReservation(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(),
+                res.getRoom(), managers);
+    }
 }
