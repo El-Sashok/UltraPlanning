@@ -209,6 +209,7 @@ public class MiscReservationPopup extends JFrame {
                             throw new IllegalStateException("Unexpected value: " + tabbedPane1.getSelectedIndex());
                     }
 
+                    rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (NoDateSelectedException a) {
                     String message = "Veuillez sélectionner une date.";
