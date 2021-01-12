@@ -188,7 +188,7 @@ public class MiscReservationPopup extends JFrame {
 
                     switch (tabbedPane1.getSelectedIndex()) {
                         case 0: // cours
-                            LessonController.createLesson(baseR, (Lesson.Type) comboBox7.getSelectedItem(),
+                            LessonController.createLesson(baseR, Lesson.Type.values()[comboBox7.getSelectedIndex()],
                                     courseList, groupList, teacherList);
                             break;
                         case 1: // concours
