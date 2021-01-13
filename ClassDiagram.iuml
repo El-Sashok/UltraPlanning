@@ -29,8 +29,9 @@ class Course {
 }
 
 class Constraint {
-    -Date startDate
-    -Date endDate
+    -Day dayOfTheWeek
+    -Hour startHour
+    -Hour endHour
 }
 
 class Group {
