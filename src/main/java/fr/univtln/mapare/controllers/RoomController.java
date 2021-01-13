@@ -9,12 +9,21 @@ public abstract class RoomController {
 
     private RoomController() {}
 
+    /**
+     * Fonction d'initialisation : Elle permet de charger tout les salles
+     * @throws SQLException Exception SQL
+     */
     public static void loadRooms() throws SQLException {
         try (RoomDAO roomDAO = new RoomDAO()) {
             roomDAO.findAll();
         }
     }
 
+    /**
+     * Permet de supprimer une salle
+     * @param room La salle à supprimer
+     * @throws SQLException Exception SQL
+     */
     public static void remove(Room room) throws SQLException {
         try (RoomDAO roomDAO = new RoomDAO()) {
             roomDAO.remove(room.getId());
@@ -22,6 +31,15 @@ public abstract class RoomController {
         Room.popRoomInList(room);
     }
 
+    /**
+     * Permet de créer une nouvelle salle
+     * @param building Le bâtiment dans lequel se situe la salle
+     * @param number Le numéro de la salle
+     * @param capacity Le nombre de personne que peut accueillir la salle
+     * @param label Intitulé de la salle
+     * @param info Information complémentaires
+     * @throws SQLException Exception SQL
+     */
     public static void createRoom(String building, int number, int capacity, String label, String info) throws SQLException {
         Room room = new Room(-1, building, number, capacity, label, info);
         try (RoomDAO roomDAO = new RoomDAO()) {

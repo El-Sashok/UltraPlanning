@@ -7,6 +7,10 @@ public abstract class Controllers {
 
     private Controllers() {}
 
+    /**
+     * Fonction d'initialisation : Elle permet d'initialiser toutes les listes nécessaire au bon fonctionnement du programme
+     * @throws SQLException Exception SQL
+     */
     public static void loadDB() throws SQLException {
         GroupController.loadGroups();
         ModuleController.loadModules();

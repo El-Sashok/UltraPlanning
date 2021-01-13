@@ -14,12 +14,22 @@ public abstract class ReservationController {
 
     private ReservationController() {}
 
+    /**
+     * Fonction d'initialisation : Elle permet de charger tout les réservations
+     * @throws SQLException Exception SQL
+     */
     public static void loadReservations() throws SQLException {
         try (ReservationDAO reservationDAO = new ReservationDAO()) {
             reservationDAO.findAll();
         }
     }
 
+    /**
+     * Permet de rechercher toutes les salles libres pendent un horaire donné
+     * @param startDate Début de l'horaire souhaité
+     * @param endDate Fin de l'horaire souhaité
+     * @return Une liste de salles
+     */
     public static List<Room> findFreeRooms(LocalDateTime startDate, LocalDateTime endDate) {
         List<Room> rooms = new ArrayList<>(Room.getRoomList());
         for (Reservation r : Reservation.getReservationList())
@@ -29,6 +39,10 @@ public abstract class ReservationController {
         return rooms;
     }
 
+    /**
+     * Permet de récupérer l'emploie du temps de la personne connectée
+     * @return Une Liste de réservations
+     */
     public static List<Reservation> findPersonalReservations() {
         List<Reservation> reservations = new ArrayList<>();
         for (Reservation r : Reservation.getReservationList()){
@@ -70,15 +84,28 @@ public abstract class ReservationController {
         return reservations;
     }
 
+    /**
+     * Permet de créer une réservation simple
+     * @param startDate Début de la réservation
+     * @param endDate Fin de la réservation
+     * @param label Intitulé de la réservation
+     * @param memo Informations complémentaires
+     * @param state État de la réservation
+     * @param room Salle dans laquelle se déroule la réservation
+     * @param managers Liste des Enseignant en charge de la salle
+     * @throws SQLException Exception SQL
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
-        for (Reservation r : Reservation.getReservationList()){
-            if (r.getState() == Reservation.State.NP) {
-                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+        for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
+            if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
+                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) { // vérifie les collision de réservation
                     for (Teacher dbTeacher : r.getManagers())
                         for (Teacher LocalTeacher : managers)
-                            if (dbTeacher.getId() == LocalTeacher.getId())
+                            if (dbTeacher.getId() == LocalTeacher.getId()) // vérifie si un enseignant est déjà occupé pendant cette horaire
                                 throw new ManagerTimeBreakException(LocalTeacher);
-                    if (r.getRoom().getId() == room.getId())
+                    if (r.getRoom().getId() == room.getId()) // vérifie si la salle n'est pas déjà occupée
                         throw new RoomTimeBreakException(room);
                 }
             }

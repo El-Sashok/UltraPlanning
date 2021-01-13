@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe entité d'une contrainte d' emploie du temps
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class Constraint implements Entity {
     private long id;
     private LocalDateTime startDate;
@@ -12,6 +17,13 @@ public class Constraint implements Entity {
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
 
     //Constructors
+
+    /**
+     * Constructeur d'une contrainte d' emploie du temps
+     * @param id Identifiant d'une contrainte d' emploie du temps
+     * @param startDate Début d'une contrainte d' emploie du temps
+     * @param endDate Fin d'une contrainte d' emploie du temps
+     */
     public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.startDate = startDate;
@@ -19,7 +31,15 @@ public class Constraint implements Entity {
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
+
     //Needed for TeacherDao
+    /**
+     * Constructeur d'une contrainte d' emploie du temps avec un Teacher
+     * @param id Identifiant d'une contrainte d' emploie du temps
+     * @param startDate Début d'une contrainte d' emploie du temps
+     * @param endDate Fin d'une contrainte d' emploie du temps
+     * @param teacherID Identifiant d'un Enseignant
+     */
     public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate, long teacherID) {
         this.id = id;
         this.startDate = startDate;

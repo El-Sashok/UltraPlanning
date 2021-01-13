@@ -12,27 +12,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Classe DAO d'un concours
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
     private final PreparedStatement findStudentsPS;
     private final PreparedStatement persistStudentPS;
-    private final PreparedStatement updateStudentPS;
 
+    /**
+     * Constructeur d'une DAO de concours
+     * @throws SQLException
+     */
     public AdmissionExamDAO() throws SQLException {
         super("INSERT INTO ADMISSIONEXAM(ID, LABEL) VALUES (?,?)",
                 "UPDATE ADMISSIONEXAM SET ID=?, LABEL=? WHERE ID=?");
         findStudentsPS = connection.prepareStatement("SELECT * FROM ADMISSIONEXAM_STUDENTS WHERE ADMISSIONEXAM=?");
         persistStudentPS = connection.prepareStatement("INSERT INTO ADMISSIONEXAM_STUDENTS(ADMISSIONEXAM, STUDENT) VALUES (?,?)");
-        updateStudentPS = connection.prepareStatement("UPDATE ADMISSIONEXAM_STUDENTS SET ADMISSIONEXAM=?, STUDENT=? WHERE ID=?");
-
-
-
     }
 
+    /**
+     * /!\ Mettode non implémenté /!\
+     * @param resultSet .
+     * @return null
+     * @throws SQLException Exception SQL
+     */
     @Override
     protected AdmissionExam fromResultSet(ResultSet resultSet) throws SQLException {
         return null;
     }
 
+    /**
+     * Permet de créer une entité concours à partir d'un resultset
+     * @param resultSet ResultSet qui contient les information pour créer l'entité
+     * @param admissionExamLabel Intitulé du concours
+     * @param students Liste d'étudiants qui participent au concours
+     * @return une entité concours
+     * @throws SQLException Exception SQL
+     */
     protected AdmissionExam fromResultSet(ResultSet resultSet, AdmissionExamLabel admissionExamLabel, List<Student> students) throws SQLException {
         for (Reservation r: Reservation.getReservationList()) {
             if (r.getId() == resultSet.getLong("ID") && r instanceof AdmissionExam)
@@ -94,11 +112,22 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
         super.update();
     }
 
+    /**
+     * Permet de peupler les Prepared Statements pour AdmissionExam
+     * @param popPS La Prepared Statements à peupler
+     * @param admissionExam L'entité concours qui détiens les informations
+     * @throws SQLException Exception SQL
+     */
     private void populate(PreparedStatement popPS, AdmissionExam admissionExam) throws SQLException {
         popPS.setLong(1, admissionExam.getId());
         popPS.setLong(2, admissionExam.getAdmissionExamLabel().getId());
     }
 
+    /**
+     * Permet de sauvegarder dans la base de donnée les étudiants inscrit concours
+     * @param admissionExam L'entité concours
+     * @throws SQLException Exception SQL
+     */
     private void persistStudents(AdmissionExam admissionExam) throws SQLException {
         for (Student s: admissionExam.getStudents()) {
             populateStudent(persistStudentPS, admissionExam, s);
@@ -106,12 +135,13 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
         }
     }
 
-    private void updateStudent(AdmissionExam admissionExam, Student student, long admissionExamStudentID) throws SQLException {
-        populateStudent(updateStudentPS, admissionExam, student);
-        updateStudentPS.setLong(3, admissionExamStudentID);
-        updateStudentPS.executeUpdate();
-    }
-
+    /**
+     * Permet de peupler les Prepared Statements pour AdmissionExam_Students
+     * @param popStudentPS La Prepared Statements à peupler
+     * @param admissionExam L'entité concours qui détiens les informations
+     * @param student l'étudiant impliqué
+     * @throws SQLException Exception SQL
+     */
     private void populateStudent(PreparedStatement popStudentPS, AdmissionExam admissionExam, Student student) throws SQLException {
         popStudentPS.setLong(1, admissionExam.getId());
         popStudentPS.setLong(2, student.getId());
