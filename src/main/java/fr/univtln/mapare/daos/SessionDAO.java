@@ -18,10 +18,11 @@ public class SessionDAO extends AbstractDAO<Session> {
 
     @Override
     protected Session fromResultSet(ResultSet resultSet) throws SQLException {
-        return new Session(resultSet.getLong("ID"),
+        /*return new Session(resultSet.getLong("ID"),
                 resultSet.getString("LOGIN"),
                 resultSet.getString("PASSWORD"),
-                Session.Status.valueOf(resultSet.getString("STATUS")));
+                Session.Status.valueOf(resultSet.getString("STATUS")));*/
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -492,10 +492,10 @@ public class Timetable extends JFrame {
 
         private JLabel[] jourLabels = {lundiLabel, mardiLabel, mercrediLabel, jeudiLabel, vendrediLabel, samediLabel};
 
-    private Border lineBorder = BorderFactory.createLineBorder(Color.black);
-    private Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
-    private Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
-    private Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
+    private static final Border lineBorder = BorderFactory.createLineBorder(Color.black);
+    private static final Border topBorder = BorderFactory.createMatteBorder(1, 1, 0, 1, Color.black);
+    private static final Border midBorder = BorderFactory.createMatteBorder(0, 1, 0, 1, Color.black);
+    private static final Border bottomBorder = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.black);
 
     int lastButton = -1;
 
@@ -506,7 +506,7 @@ public class Timetable extends JFrame {
             "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
             "18h30", "19h00"};
 
-    List<Reservation>[] boutonChaine = new ArrayList[53];
+    final List<Reservation>[] boutonChaine = new ArrayList[53];
 
     String[] lessonTypeEnum = {"TD", "CM", "TP", "CC", "CT"};
 
@@ -515,17 +515,17 @@ public class Timetable extends JFrame {
     Color TPColor = new Color(220, 175, 220);
     Color CCColor = new Color(255, 204, 221);
     Color CTColor = new Color(248, 158, 163);
-    Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor};
+    Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor, Color.white};
 
     Color defaultColor = new Color(238, 238, 238);
 
-    private Timetable thisframe = this;
+    private final Timetable thisframe = this;
 
-    static String htmlTags = "<html><body><center><font size=\"2\">";
+    static final String HTMLTAGS = "<html><body><center><font size=\"2\">";
 
-    static String paddingText = htmlTags + " <br> <br> <br></body></html>";
+    static final String PADDINGTEXT = HTMLTAGS + " <br> <br> <br></body></html>";
 
-    private JMenuBar menuBar;
+    private JMenuBar menuBarre;
 
     Session.Status SUStatus;
 
@@ -558,7 +558,7 @@ public class Timetable extends JFrame {
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
         for (Reservation r : allreservations) {
-            if (r instanceof Lesson) {
+            if (true) {
                 LocalDateTime date = r.getStartDate();
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (r.getRoom().equals(room)) {
@@ -574,7 +574,7 @@ public class Timetable extends JFrame {
         curroom = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
-        if (privatereservations == null)
+        if (privatereservations == null && (SUStatus == Session.Status.TEACHER || SUStatus == Session.Status.STUDENT))
             privatereservations = ReservationController.findPersonalReservations();
         for (Reservation r : privatereservations) {
             if (r instanceof Lesson) {
@@ -622,41 +622,63 @@ public class Timetable extends JFrame {
         int JL = Jeudi.length;
         for (int j = 0; j < SL; j++) {
             for (int k = 0; k < JL; k++) {
-                Semaine[j][k].setText(paddingText);
+                Semaine[j][k].setText(PADDINGTEXT);
             }
         }
 
         for (Reservation maillon : boutonChaine[i]) {
+
             LocalDateTime dateDeb = maillon.getStartDate();
             LocalDateTime dateFin = maillon.getEndDate();
             int dayNumber = dateDeb.getDayOfWeek().getValue() - 1;
             int dHourNumber = ((dateDeb.getHour() - 8) * 2 + (dateDeb.getMinute() == 30 ? 1 : 0));
             int eHourNumber = ((dateFin.getHour() - 8) * 2 + (dateFin.getMinute() == 30 ? 1 : 0));
 
-            String displayText1 = "";
-            String displayText2 = "";
-            int colorType = 0;
+            String displayText1 = HTMLTAGS;
+            String displayText2 = HTMLTAGS;
+            int colorType = 5;
+
+
+            List templist = maillon.getManagers();
+            String teacherString = "";
+            if (!templist.isEmpty())
+                teacherString = templist.get(0).toString();
+            if (templist.size() > 1)
+                teacherString += ", ...";
 
             // We dont close the html tags. It's less "proper" but more readable.
             if (maillon instanceof Lesson) {
                 colorType = ((Lesson) maillon).getType().ordinal();
-                List templist = ((Lesson) maillon).getModules();
+                templist = ((Lesson) maillon).getModules();
                 String courseString = templist.get(0).toString();
                 if (templist.size() > 1)
                     courseString += ", ...";
-                templist = maillon.getManagers();
-                String teacherString = templist.get(0).toString();
-                if (templist.size() > 1)
-                    teacherString += ", ...";
                 templist = ((Lesson) maillon).getGroups();
                 String groupString = templist.get(0).toString();
                 if (templist.size() > 1)
                     groupString += ", ...";
-                displayText1 = htmlTags + courseString + "<br>" + teacherString + "<br>" + groupString;
-                if (maillon.getState() == Reservation.State.CANCELLED)
-                    displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>";
-                displayText2 += htmlTags + maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+                displayText1 += courseString + "<br>" + teacherString + "<br>" + groupString;
+                displayText2 += maillon.getRoom() + "<br>" + lessonTypeEnum[colorType] + "<br> ";
+            } else {
+                displayText2 += maillon.getRoom() + "<br> <br> ";
+                if (maillon instanceof AdmissionExam) {
+                    displayText1 += " <br>" + ((AdmissionExam) maillon).getAdmissionExamLabel() + "<br>" + teacherString;
+                    colorType = 3;
+                } else if (maillon instanceof Defence) {
+                    displayText1 += "Soutenance <br>" + teacherString + "<br>" + ((Defence) maillon).getStudent();
+                    colorType = 4;
+                } else if (maillon instanceof ExamBoard) {
+                    displayText1 += "Jury <br>" + ((ExamBoard) maillon).getYeargroup() + "<br>" + teacherString;
+                } else {
+                    displayText1 += " <br> <br>" + maillon.getLabel();
+                }
             }
+
+
+            if (maillon.getState() == Reservation.State.CANCELLED)
+                displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>" + displayText2;
+            else
+                displayText2 += "<br> ";
 
             int midhour = (int) (java.lang.Math.floor(((float) dHourNumber) / 2.0) +
                     java.lang.Math.floor(((float) eHourNumber - 1) / 2.0));
@@ -673,7 +695,7 @@ public class Timetable extends JFrame {
             for (int j = dHourNumber; j < eHourNumber; j++) {
                 allhours[dayNumber * JL + j].setBackground(colorTypeEnum[colorType]);
                 allhours[dayNumber * JL + j].addMouseListener(timeslotPopupCaller);
-                Semaine[dayNumber][j].setText(paddingText);
+                Semaine[dayNumber][j].setText(PADDINGTEXT);
             }
             Semaine[dayNumber][midhour].setText(displayText1);
             Semaine[dayNumber][midhour + 1].setText(displayText2);
@@ -699,6 +721,7 @@ public class Timetable extends JFrame {
         setLocationRelativeTo(null);
         SUStatus = status;
         allreservations = Reservation.getReservationList();
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         init();
         if (SUStatus == Session.Status.MANAGER)
@@ -707,24 +730,14 @@ public class Timetable extends JFrame {
 
     public void managerInit() {
         JMenu addingMenu = new JMenu("Ajout");
-        menuBar.add(addingMenu);
-        JMenuItem addLesson = new JMenuItem("Ajouter Cours");
-        addingMenu.add(addLesson);
-        addLesson.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                LessonPopup rp = new LessonPopup(thisframe);
-                rp.setVisible(true);
-            }
-        });
+        menuBarre.add(addingMenu);
         JMenuItem addReservation = new JMenuItem("Ajouter Reservation");
         addingMenu.add(addReservation);
         addReservation.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                MiscReservationPopup rp = new MiscReservationPopup();
+                ReservationPopup rp = new ReservationPopup(thisframe);
                 rp.setVisible(true);
             }
         });
@@ -755,7 +768,7 @@ public class Timetable extends JFrame {
             panel.setBorder(null);
 
         for (int i = 0; i < 53; i++) {
-            boutonChaine[i] = new ArrayList<Reservation>();
+            boutonChaine[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < boutons.length; i++) {
@@ -772,8 +785,8 @@ public class Timetable extends JFrame {
         }
         buttonFunc(weekNumber - 1);
 
-        menuBar = new JMenuBar();
-        setJMenuBar(menuBar);
+        menuBarre = new JMenuBar();
+        setJMenuBar(menuBarre);
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
             JMenuItem persView = new JMenuItem("EDT personnel") {
@@ -784,7 +797,7 @@ public class Timetable extends JFrame {
                     return dim;
                 }
             };
-            menuBar.add(persView);
+            menuBarre.add(persView);
             persView.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -805,7 +818,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(roomView);
+        menuBarre.add(roomView);
         roomView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -823,7 +836,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(groupView);
+        menuBarre.add(groupView);
         groupView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -841,12 +854,12 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(findRoom);
+        menuBarre.add(findRoom);
         findRoom.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder();
+                FreeRoomFinder frf = new FreeRoomFinder(thisframe);
                 frf.setVisible(true);
             }
         });
@@ -859,7 +872,7 @@ public class Timetable extends JFrame {
                 return dim;
             }
         };
-        menuBar.add(deconnexion);
+        menuBarre.add(deconnexion);
         deconnexion.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -883,7 +896,7 @@ public class Timetable extends JFrame {
 
     public static void main(String[] args) throws SQLException {
         Controllers.loadDB();
-        Timetable M = new Timetable(Session.Status.MANAGER);
-        M.setVisible(true);
+        Timetable m = new Timetable(Session.Status.MANAGER);
+        m.setVisible(true);
     }
 }

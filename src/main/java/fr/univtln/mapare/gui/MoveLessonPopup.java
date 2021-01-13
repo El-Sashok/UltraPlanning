@@ -10,7 +10,7 @@ import static fr.univtln.mapare.gui.Timetable.resizeable;
 
 public class MoveLessonPopup extends JFrame {
     private JPanel panel1;
-    private JLabel heureDébutLabel;
+    private JLabel heureDebutLabel;
     private JLabel heureFinLabel;
     private JButton okButton;
     private JButton annulerButton;
@@ -27,6 +27,7 @@ public class MoveLessonPopup extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
         annulerButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

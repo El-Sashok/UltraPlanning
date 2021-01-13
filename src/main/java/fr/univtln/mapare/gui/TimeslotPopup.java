@@ -1,5 +1,6 @@
 package fr.univtln.mapare.gui;
 
+import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
@@ -32,11 +34,11 @@ public class TimeslotPopup extends JFrame{
 
     public TimeslotPopup(Reservation res, Timetable rootwindow) {
         setTitle("Détails du cours");
-        //setSize(300, 300);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         heureDebLabel.setText(res.getStartDate().getHour() + "h" + (res.getStartDate().getMinute() == 0 ? "00" : 30));
         heureFinLabel.setText(res.getEndDate().getHour() + "h" + (res.getEndDate().getMinute() == 0 ? "00" : 30));
@@ -50,8 +52,14 @@ public class TimeslotPopup extends JFrame{
         String teacherText = "";
         for (Teacher t : res.getManagers())
             teacherText += t + ", ";
-        teacherText = teacherText.substring(0, teacherText.length() - 2);
-        enseignantLabel.setText(teacherText);
+        if (teacherText != "") {
+            teacherText = teacherText.substring(0, teacherText.length() - 2);
+            enseignantLabel.setText(teacherText);
+        }
+        else {
+            enseignantLabel.setVisible(false);
+            enseignantsLabel.setVisible(false);
+        }
 
         if (res instanceof Lesson) {
             String groupText = "";
@@ -84,10 +92,11 @@ public class TimeslotPopup extends JFrame{
         }
 
         roomLabel.setText(roomName);
+        roomLabel.setToolTipText(res.getRoom().getInfo());
 
         if (res.getState() == Reservation.State.CANCELLED) {
-            deplacerCoursButton.setEnabled(false);
-            annulerCoursButton.setEnabled(false);
+            deplacerCoursButton.setVisible(false);
+            annulerCoursButton.setText("Annuler annulation");
         }
 
         if (rootwindow.SUStatus == Session.Status.MANAGER) {
@@ -104,7 +113,26 @@ public class TimeslotPopup extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    res.setState(Reservation.State.CANCELLED);
+                    if (res.getState() == Reservation.State.CANCELLED) {
+                        try {
+                            ReservationController.changeStatusReservation(res, Reservation.State.NP);
+                            res.setState(Reservation.State.NP);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment de la mise à jour de la base de données.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else {
+                        try {
+                            ReservationController.changeStatusReservation(res, Reservation.State.CANCELLED);
+                            res.setState(Reservation.State.CANCELLED);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment de la mise à jour de la base de données.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                     rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 }
@@ -122,8 +150,10 @@ public class TimeslotPopup extends JFrame{
                     JOptionPane.showMessageDialog(null, msg, "Demande", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            if (rootwindow.SUStatus == Session.Status.STUDENT)
+            if (rootwindow.SUStatus == Session.Status.STUDENT || rootwindow.SUStatus == Session.Status.INVITE)
                 voirLaListeDButton.setVisible(false);
+            if (rootwindow.SUStatus == Session.Status.INVITE)
+                deplacerCoursButton.setVisible(false);
         }
 
         voirLEmploiDuButton.addMouseListener(new MouseAdapter() {
@@ -131,7 +161,6 @@ public class TimeslotPopup extends JFrame{
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 rootwindow.setToRoomAgenda(res.getRoom());
-                rootwindow.buttonFunc(rootwindow.lastButton);
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });

@@ -13,12 +13,13 @@ import java.sql.SQLException;
 
 public class Launcher extends JFrame {
     private JPanel rootPanel;
-    private JPasswordField PasswordField;
+    private JPasswordField passwordField;
     private JTextField emailTextField;
     private JLabel email;
     private JLabel password;
     private JButton submit;
     private JCheckBox rememberMe;
+    private JLabel connexionInviteLabel;
 
     private JFrame thisframe = this;
 
@@ -27,7 +28,7 @@ public class Launcher extends JFrame {
         * It wouldn't be a problem if this were tkinter.
         */
         try {
-            SessionController.login(emailTextField.getText(), String.valueOf(PasswordField.getPassword()));
+            SessionController.login(emailTextField.getText(), String.valueOf(passwordField.getPassword()));
 
             Timetable tt = new Timetable(Session.getStatus());
             tt.setVisible(true);
@@ -53,35 +54,38 @@ public class Launcher extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
+
+        connexionInviteLabel.setText("<html><body><u><font color=\"#0000EE\">" + connexionInviteLabel.getText());
 
         KeyListener enterFunc = new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-            }
-
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     buttonFunc();
                 }
             }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);
-            }
         };
 
         submit.addKeyListener(enterFunc);
         emailTextField.addKeyListener(enterFunc);
-        PasswordField.addKeyListener(enterFunc);
+        passwordField.addKeyListener(enterFunc);
 
         submit.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 buttonFunc();
+            }
+        });
+        connexionInviteLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Timetable tt = new Timetable(Session.Status.INVITE);
+                tt.setVisible(true);
+
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
     }

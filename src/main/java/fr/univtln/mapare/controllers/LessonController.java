@@ -3,7 +3,7 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
-import fr.univtln.mapare.exceptions.TimeBreakExceptions.*;
+import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -77,5 +77,12 @@ public abstract class LessonController {
         try (LessonDAO lessonDAO = new LessonDAO()) {
             lessonDAO.persist(lesson);
         }
+    }
+
+    public static void createLesson(Reservation res, Lesson.Type type, List<Module> modules, List<Group> groups,
+                                    List<Teacher> managers) throws GroupTimeBreakException, SQLException,
+            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
+        createLesson(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(), res.getRoom(),
+                type, modules, groups, managers);
     }
 }

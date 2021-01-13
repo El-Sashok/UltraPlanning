@@ -1,7 +1,6 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.ModuleController;
-import fr.univtln.mapare.entities.Module;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -25,11 +24,11 @@ public class AddModulePopup extends JFrame {
 
     public AddModulePopup() {
         setTitle("Ajouter un nouveau module");
-        setSize(400, 100);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
+        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         textField2.setText("0");
 
@@ -58,6 +57,8 @@ public class AddModulePopup extends JFrame {
                 }
             }
         });
+
+        this.pack();
     }
 
     public static void main(String[] args) {

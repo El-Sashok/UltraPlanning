@@ -1,44 +1,51 @@
 package fr.univtln.mapare.entities;
 
 public class Session implements Entity{
-    private static Long id;
-    private static Status status;
-    private static String login;
-    private static String hashedPassword;
-    private static Session instance;
+    private Long id;
+    private Status status;
+    private String login;
+    private String hashedPassword;
+    private static Session instance = null;
 
-    public Session(Long id, String login, String hashedPassword, Status status) {
-        Session.id = id;
-        Session.login = login;
-        Session.hashedPassword = hashedPassword;
-        Session.status = status;
-        Session.instance = this;
+    private Session(Long id, String login, String hashedPassword, Status status) {
+        this.id = id;
+        this.login = login;
+        this.hashedPassword = hashedPassword;
+        this.status = status;
     }
 
-    public static Status getStatus() { return Session.status; }
+    public static void login(Long id, String login, String hashedPassword, Status status) {
+        instance = new Session(id, login, hashedPassword, status);
+    }
+
+    public static void logout() {
+        instance = null;
+    }
+
+    public static Status getStatus() { return instance.status; }
 
     public static void setStatus(Status status){
-        Session.status = status;
+        instance.status = status;
     }
 
-    public static String getLogin() { return login; }
+    public static String getLogin() { return instance.login; }
 
-    public static void setLogin(String login) { Session.login = login; }
+    public static void setLogin(String login) { instance.login = login; }
 
-    public static String getHashedPassword() { return hashedPassword; }
+    public static String getHashedPassword() { return instance.hashedPassword; }
 
-    public static void setHashedPassword(String hashedPassword) { Session.hashedPassword = hashedPassword; }
+    public static void setHashedPassword(String hashedPassword) { instance.hashedPassword = hashedPassword; }
 
-    public static Session getInstance(){ return Session.instance; }
-
-    @Override
-    public long getId() { return Session.id; }
+    public static Session getInstance(){ return instance; }
 
     @Override
-    public void setId(long id) { Session.id = id; }
+    public long getId() { return instance.id; }
+
+    @Override
+    public void setId(long id) { instance.id = id; }
 
 
     public enum Status {
-        STUDENT, TEACHER, MANAGER, ADMIN
+        STUDENT, TEACHER, MANAGER, ADMIN, INVITE
     }
 }
