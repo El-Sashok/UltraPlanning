@@ -856,23 +856,43 @@ public class Timetable extends JFrame {
             }
         });
 
-        JMenuItem findRoom = new JMenuItem("Trouver Salle") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(findRoom);
-        findRoom.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder(thisframe);
-                frf.setVisible(true);
-            }
-        });
+        if (SUStatus != Session.Status.INVITE) {
+            JMenuItem findRoom = new JMenuItem("Trouver Salle") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(findRoom);
+            findRoom.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    FreeRoomFinder frf = new FreeRoomFinder(thisframe);
+                    frf.setVisible(true);
+                }
+            });
+
+            JMenuItem changePassword = new JMenuItem("Changer Mot de Passe") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(changePassword);
+            changePassword.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    PasswordChangePopup pcp = new PasswordChangePopup();
+                    pcp.setVisible(true);
+                }
+            });
+        }
 
         if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
             JMenuItem addReservation = new JMenuItem("Ajouter Reservation"){
