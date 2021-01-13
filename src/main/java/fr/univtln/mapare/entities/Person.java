@@ -8,7 +8,7 @@ public abstract class Person implements Entity {
     private final String lastName;
     private final String firstName;
     private final Date birthdate;
-    private final String email;
+    private String email;
 
     //Constructor
     protected Person(long id, String lastName, String firstName, Date birthdate, String email) {
@@ -41,6 +41,10 @@ public abstract class Person implements Entity {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
