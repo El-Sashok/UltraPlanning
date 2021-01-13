@@ -77,7 +77,6 @@ public abstract class TeacherController {
      * @param teacher L'enseignant
      * @param role Le nouveau statut de l'enseignant
      * @throws SQLException Exception SQL
-     * @throws EmptyAttributeException email est vide
      * @throws NotChangedException Aucune modification apportée
      */
     public static void changeStatus(Teacher teacher, Teacher.Role role) throws SQLException, NotChangedException {
@@ -95,7 +94,7 @@ public abstract class TeacherController {
      * @param teacher L'enseignant
      * @param laboratory Le nouveau laboratoire où est affilié l'enseignant
      * @throws SQLException Exception SQL
-     * @throws EmptyAttributeException email est vide
+     * @throws EmptyAttributeException laboratory est vide
      * @throws NotChangedException Aucune modification apportée
      */
     public static void changeLabo(Teacher teacher, String laboratory) throws SQLException, EmptyAttributeException, NotChangedException {

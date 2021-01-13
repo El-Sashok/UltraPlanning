@@ -52,7 +52,7 @@ public abstract class StudentController {
     /**
      * Permet de changer l'email d'un étudiant
      * @param student L'étudiant
-     * @param email La nouvelle adresse email de l'enseignant
+     * @param email La nouvelle adresse email de l'étudiant
      * @throws SQLException Exception SQL
      * @throws EmptyAttributeException email est vide
      * @throws NotChangedException Aucune modification apportée
