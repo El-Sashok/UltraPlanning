@@ -216,6 +216,14 @@ public class ReservationPopup extends JFrame {
                             throw new IllegalStateException("Unexpected value: " + tabbedPane1.getSelectedIndex());
                     }
 
+                    if (rootwindow.SUStatus == Session.Status.TEACHER) {
+                        for (Teacher t : Teacher.getTeacherList())
+                            if (t.getEmail().equals(Session.getLogin())) {
+                                if (teacherList.contains(t))
+                                    rootwindow.reloadPersonalReservations();
+                                break;
+                            }
+                    }
                     rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (NoDateSelectedException a) {

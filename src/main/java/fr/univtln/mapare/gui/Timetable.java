@@ -668,7 +668,10 @@ public class Timetable extends JFrame {
                 } else if (maillon instanceof ExamBoard) {
                     displayText1 += "Jury <br>" + ((ExamBoard) maillon).getYeargroup() + "<br>" + teacherString;
                 } else {
-                    displayText1 += " <br> <br>" + maillon.getLabel();
+                    String labeltext = maillon.getLabel();
+                    if ("".equals(labeltext))
+                        labeltext = "Réservation de salle";
+                    displayText1 += " <br> <br>" + labeltext;
                 }
             }
 
@@ -905,5 +908,9 @@ public class Timetable extends JFrame {
         Controllers.loadDB();
         Timetable m = new Timetable(Session.Status.MANAGER);
         m.setVisible(true);
+    }
+
+    public void reloadPersonalReservations() {
+        privatereservations = ReservationController.findPersonalReservations();
     }
 }
