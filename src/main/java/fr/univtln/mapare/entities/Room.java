@@ -2,6 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Room implements Entity {
     private long id;
@@ -97,5 +98,18 @@ public class Room implements Entity {
                 ", label='" + label + '\'' +
                 ", info='" + info + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Room)) return false;
+        Room room = (Room) o;
+        return id == room.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

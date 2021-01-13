@@ -15,7 +15,8 @@ public abstract class LessonController {
 
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
-                                    List<Group> groups, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
+                                    List<Group> groups, List<Teacher> managers) throws SQLException,
+            ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
 
         for (Reservation r : Reservation.getReservationList()){
             if (r.getState() == Reservation.State.NP) {
@@ -43,6 +44,15 @@ public abstract class LessonController {
                         for (Group g : groups){
                             for (Student s : g.getStudents()){
                                 if (s.getId() == ((Defence) r).getStudent().getId()) {
+                                    throw new StudentTimeBreakException(s);
+                                }
+                            }
+                        }
+                    }
+                    else if (r instanceof AdmissionExam){
+                        for (Group g : groups){
+                            for (Student s : g.getStudents()){
+                                if (((AdmissionExam) r).getStudents().contains(s)) {
                                     throw new StudentTimeBreakException(s);
                                 }
                             }
