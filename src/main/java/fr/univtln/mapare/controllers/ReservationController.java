@@ -114,7 +114,7 @@ public abstract class ReservationController {
         }
 
         Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
-        for (Teacher t : managers) reservation.addTeacher(t);
+        reservation.setManagers(managers);
         try (ReservationDAO reservationDAO = new ReservationDAO()) {
             reservationDAO.persist(reservation);
         }
