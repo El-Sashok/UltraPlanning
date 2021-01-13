@@ -41,7 +41,6 @@ public class ReservationPopup extends JFrame {
     private JComboBox comboBox1;
     private JComboBox comboBox2;
     private JComboBox comboBox3;
-    private JLabel intituleLabel;
     private JTextField textField1;
     private JLabel concoursLabel;
     private JComboBox comboBox4;
@@ -65,6 +64,8 @@ public class ReservationPopup extends JFrame {
     private JButton listeDeGroupesButton;
     private JLabel etudiantsLabel;
     private JButton listeDEtudiantsButton;
+    private JLabel intituléLabel;
+    private JLabel autreRéservationsLabel;
     private JButton listeDEnseignantsButton3;
 
     private JFrame thisframe = this;
@@ -77,6 +78,12 @@ public class ReservationPopup extends JFrame {
         add(panel1);
         setLocationRelativeTo(null);
         setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
+
+        if (rootwindow.SUStatus == Session.Status.TEACHER) {
+            tabbedPane1.setSelectedIndex(4);
+            tabbedPane1.setVisible(false);
+            System.out.println("haha");
+        }
 
         List<Module> courseList = new ArrayList<>();
         List<Group> groupList = new ArrayList<>();

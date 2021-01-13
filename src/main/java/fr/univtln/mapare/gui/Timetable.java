@@ -726,21 +726,30 @@ public class Timetable extends JFrame {
         init();
         if (SUStatus == Session.Status.MANAGER)
             managerInit();
+        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBarre.add(deconnexion);
+        deconnexion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Launcher launcher = new Launcher();
+                launcher.setVisible(true);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public void managerInit() {
         JMenu addingMenu = new JMenu("Ajout");
         menuBarre.add(addingMenu);
-        JMenuItem addReservation = new JMenuItem("Ajouter Reservation");
-        addingMenu.add(addReservation);
-        addReservation.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                ReservationPopup rp = new ReservationPopup(thisframe);
-                rp.setVisible(true);
-            }
-        });
         JMenuItem addModule = new JMenuItem("Ajouter Module");
         addingMenu.add(addModule);
         addModule.addMouseListener(new MouseAdapter() {
@@ -864,25 +873,25 @@ public class Timetable extends JFrame {
             }
         });
 
-        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(deconnexion);
-        deconnexion.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                Launcher launcher = new Launcher();
-                launcher.setVisible(true);
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            }
-        });
+        if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
+            JMenuItem addReservation = new JMenuItem("Ajouter Reservation"){
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(addReservation);
+            addReservation.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    ReservationPopup rp = new ReservationPopup(thisframe);
+                    rp.setVisible(true);
+                }
+            });
+        }
     }
 
     public void refresh() {
