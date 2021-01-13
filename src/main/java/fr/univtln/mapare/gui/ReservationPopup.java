@@ -72,7 +72,6 @@ public class ReservationPopup extends JFrame {
 
     public ReservationPopup(Timetable rootwindow) {
         setTitle("Réservation de salle");
-        setSize(450, 450);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -82,7 +81,6 @@ public class ReservationPopup extends JFrame {
         if (rootwindow.SUStatus == Session.Status.TEACHER) {
             tabbedPane1.setSelectedIndex(4);
             tabbedPane1.setVisible(false);
-            System.out.println("haha");
         }
 
         List<Module> courseList = new ArrayList<>();
@@ -255,5 +253,6 @@ public class ReservationPopup extends JFrame {
 
             }
         });
+        this.pack();
     }
 }

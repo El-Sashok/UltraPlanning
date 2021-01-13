@@ -33,7 +33,7 @@ public class TimeslotPopup extends JFrame{
     private JFrame thisframe = this;
 
     public TimeslotPopup(Reservation res, Timetable rootwindow) {
-        setTitle("Détails du cours");
+        setTitle("Détails de la Réservation");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

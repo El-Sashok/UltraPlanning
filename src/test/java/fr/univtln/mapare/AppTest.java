@@ -5,7 +5,9 @@ import static org.junit.Assert.assertEquals;
 import fr.univtln.mapare.entities.*;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -17,7 +19,7 @@ public class AppTest
      * Rigorous Test :-)
      */
     //Defines constraint
-    Constraint c1 = new Constraint(-1, LocalDateTime.now(), LocalDateTime.now());
+    Constraint c1 = new Constraint(-1, LocalDate.now(), LocalTime.now(), LocalTime.now());
     //Creates persons
     Teacher teacher1 = new Teacher(
             123,
@@ -60,8 +62,8 @@ public class AppTest
             new AdmissionExamLabel(-1, "TOEIC"));
     @Test
     public void testCreationCronstraint() {
-        assertEquals(c1.getStartDate(), LocalDateTime.now());
-        assertEquals(c1.getEndDate(), LocalDateTime.now());
+        assertEquals(c1.getStart(), LocalDateTime.now());
+        assertEquals(c1.getEnd(), LocalDateTime.now());
     }
     @Test
     public void testCreationTeacher() {

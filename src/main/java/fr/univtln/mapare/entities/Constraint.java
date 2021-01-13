@@ -1,6 +1,7 @@
 package fr.univtln.mapare.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,10 @@ import java.util.List;
  */
 public class Constraint implements Entity {
     private long id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private long teacherID; //needed for dao
+    private LocalDate day;
+    private LocalTime start;
+    private LocalTime end;
+    private Teacher teacher; //needed for dao
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
 
     //Constructors
@@ -21,13 +23,15 @@ public class Constraint implements Entity {
     /**
      * Constructeur d'une contrainte d' emploie du temps
      * @param id Identifiant d'une contrainte d' emploie du temps
-     * @param startDate Début d'une contrainte d' emploie du temps
-     * @param endDate Fin d'une contrainte d' emploie du temps
+     * @param day
+     * @param start Début d'une contrainte d' emploie du temps
+     * @param end Fin d'une contrainte d' emploie du temps
      */
-    public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate) {
+    public Constraint(long id, LocalDate day, LocalTime start, LocalTime end) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.day = day;
+        this.start = start;
+        this.end = end;
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
@@ -36,15 +40,17 @@ public class Constraint implements Entity {
     /**
      * Constructeur d'une contrainte d' emploie du temps avec un Teacher
      * @param id Identifiant d'une contrainte d' emploie du temps
-     * @param startDate Début d'une contrainte d' emploie du temps
-     * @param endDate Fin d'une contrainte d' emploie du temps
-     * @param teacherID Identifiant d'un Enseignant
+     * @param day
+     * @param start Début d'une contrainte d' emploie du temps
+     * @param end Fin d'une contrainte d' emploie du temps
+     * @param teacher Identifiant d'un Enseignant
      */
-    public Constraint(long id, LocalDateTime startDate, LocalDateTime endDate, long teacherID) {
+    public Constraint(long id, LocalDate day, LocalTime start, LocalTime end, Teacher teacher) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.teacherID = teacherID;
+        this.day = day;
+        this.start = start;
+        this.end = end;
+        this.teacher = teacher;
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
@@ -68,36 +74,44 @@ public class Constraint implements Entity {
         CONSTRAINTS.remove(constraint);
     }
 
-    public LocalDateTime getStartDate() {
-        return startDate;
+    public LocalDate getDay() {
+        return day;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
+    public void setDay(LocalDate day) {
+        this.day = day;
     }
 
-    public LocalDateTime getEndDate() {
-        return endDate;
+    public LocalTime getStart() {
+        return start;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
+    public void setStart(LocalTime start) {
+        this.start = start;
     }
 
-    public long getTeacherID() {
-        return teacherID;
+    public LocalTime getEnd() {
+        return end;
     }
 
-    public void setTeacherID(long teadherID) {
-        this.teacherID = teadherID;
+    public void setEnd(LocalTime end) {
+        this.end = end;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     //Methods
     @Override
     public String toString() {
         return "Constraint{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
+                "startDate=" + start +
+                ", endDate=" + end +
                 '}';
     }
 }
