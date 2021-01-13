@@ -41,7 +41,7 @@ public abstract class ModuleController {
     public static void createModule(String label, int nbHour) throws SQLException {
         Module module = new Module(-1, label, nbHour);
         try (ModuleDAO moduleDAO = new ModuleDAO()) {
-            Module newModuleId = moduleDAO.persist(module);
+            moduleDAO.persist(module);
         }
     }
 }
