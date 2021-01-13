@@ -2,6 +2,7 @@ package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Group;
 import fr.univtln.mapare.entities.Student;
+import fr.univtln.mapare.entities.Yeargroup;
 import fr.univtln.mapare.exceptions.NotFoundException;
 import lombok.extern.java.Log;
 
@@ -16,7 +17,8 @@ import java.util.Optional;
 public class GroupDAO extends AbstractDAO<Group>{
     private final PreparedStatement findMembersPS;
     private final PreparedStatement persistMemberPS;
-    private final PreparedStatement updateMemberPS;
+    private final PreparedStatement removeMemberPS;
+
 
     public GroupDAO() throws SQLException {
         super("INSERT INTO CLASS_GROUP(LABEL) VALUES (?)",
@@ -24,7 +26,7 @@ public class GroupDAO extends AbstractDAO<Group>{
 
         this.findMembersPS = connection.prepareStatement("SELECT * FROM GROUP_MEMBERS WHERE CLASS_GROUP=?");
         this.persistMemberPS = connection.prepareStatement("INSERT INTO GROUP_MEMBERS(CLASS_GROUP, STUDENT) VALUES (?,?)");
-        this.updateMemberPS = connection.prepareStatement("UPDATE GROUP_MEMBERS SET CLASS_GROUP=?, STUDENT=? WHERE ID=?");
+        this.removeMemberPS = connection.prepareStatement("DELETE FROM GROUP_MEMBERS WHERE ID=?");
     }
 
     @Override
@@ -123,10 +125,14 @@ public class GroupDAO extends AbstractDAO<Group>{
         persistMemberPS.executeUpdate();
     }
 
-    private void updateMember(Group group, Student student) throws SQLException {
-        populateMember(updateMemberPS, group, student);
-        updateMemberPS.setLong(3, group.getId());
-        updateMemberPS.executeUpdate();
+    public void updateMembers(Group group) throws SQLException {
+        findMembersPS.setLong(1, group.getId());
+        ResultSet findMembersRS = findMembersPS.executeQuery();
+        while (findMembersRS.next()) { // Remove former students
+            removeMemberPS.setLong(1, findMembersRS.getLong("ID"));
+            removeMemberPS.executeUpdate();
+        }
+        persistMembers(group); // Add new students
     }
 
     private void populateMember(PreparedStatement popGroupPS, Group group, Student student) throws SQLException {
