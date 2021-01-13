@@ -76,7 +76,7 @@ public class TeacherDAO extends AbstractDAO<Teacher> {
         Teacher.popTeacherInList(t);
         try (ConstraintDAO constraintDAO = new ConstraintDAO()) {
             for (Constraint c : teacher.getConstraints()) {
-                c.setTeacherID(t.getId());
+                c.setTeacher(t);
                 constraintDAO.persist(c);
             }
         }
