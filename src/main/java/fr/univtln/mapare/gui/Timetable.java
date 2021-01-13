@@ -577,11 +577,9 @@ public class Timetable extends JFrame {
         if (privatereservations == null && (SUStatus == Session.Status.TEACHER || SUStatus == Session.Status.STUDENT))
             privatereservations = ReservationController.findPersonalReservations();
         for (Reservation r : privatereservations) {
-            if (r instanceof Lesson) {
-                LocalDateTime date = r.getStartDate();
-                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-                boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
-            }
+            LocalDateTime date = r.getStartDate();
+            calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+            boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
         }
         buttonFunc(lastButton);
     }
