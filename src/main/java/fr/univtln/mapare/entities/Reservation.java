@@ -134,4 +134,8 @@ public class Reservation implements Entity {
     public enum State {
         NP, CANCELLED, POSTPONED
     }
+
+    public boolean isNP() {
+        return state == State.NP;
+    }
 }
