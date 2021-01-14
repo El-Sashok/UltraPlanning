@@ -2,6 +2,7 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ConstraintDAO;
 import fr.univtln.mapare.entities.Constraint;
+import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.entities.Teacher;
 
 import java.sql.SQLException;
@@ -20,17 +21,15 @@ public abstract class ConstraintController {
         }
     }
 
-    public static List<Constraint> findConstraints(Teacher t) throws SQLException {
-        try (ConstraintDAO cDAO = new ConstraintDAO()) {
-            return cDAO.findByTeacher(t.getId());
-        }
-    }
-
     public static void removeConstraint(Constraint c) throws SQLException {
         try (ConstraintDAO cDAO = new ConstraintDAO()) {
             cDAO.remove(c.getId());
             c.getTeacher().getConstraints().remove(c);
             Constraint.popConstraintInList(c);
         }
+    }
+
+    public static void checkConflicts(Reservation r, Constraint c) {
+        
     }
 }

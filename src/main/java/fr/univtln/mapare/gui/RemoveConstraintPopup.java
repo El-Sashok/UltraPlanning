@@ -38,12 +38,8 @@ public class RemoveConstraintPopup extends JFrame {
         });
 
         DefaultListModel<Constraint> listModel = new DefaultListModel<>();
-        try {
-            for (Constraint c : ConstraintController.findConstraints(TeacherController.findTeacher()))
-                listModel.addElement(c);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        for (Constraint c : TeacherController.findTeacher().getConstraints())
+            listModel.addElement(c);
 
         list1.setModel(listModel);
 
