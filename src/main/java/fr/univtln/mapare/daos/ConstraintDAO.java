@@ -48,7 +48,9 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
     @Override
     public Constraint persist(Constraint constraint) throws SQLException {
         long id = -1;
+        System.out.println("before");
         populate(persistPS, constraint);
+        System.out.println("after");
         return super.persist();
     }
 

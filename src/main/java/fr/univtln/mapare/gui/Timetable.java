@@ -895,7 +895,7 @@ public class Timetable extends JFrame {
         }
 
         if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
-            JMenuItem addReservation = new JMenuItem("Ajouter Reservation"){
+            JMenuItem addReservation = new JMenuItem("Ajouter Reservation") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -910,6 +910,47 @@ public class Timetable extends JFrame {
                     super.mousePressed(e);
                     ReservationPopup rp = new ReservationPopup(thisframe);
                     rp.setVisible(true);
+                }
+            });
+        }
+
+        if (SUStatus == Session.Status.TEACHER) {
+            JMenu constraintMenu = new JMenu("Contraintes");
+            menuBarre.add(constraintMenu);
+
+            JMenuItem addConstraint = new JMenuItem("Ajouter Contrainte") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            constraintMenu.add(addConstraint);
+            addConstraint.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddConstraintPopup acp = new AddConstraintPopup();
+                    acp.setVisible(true);
+                }
+            });
+
+            JMenuItem removeConstraint = new JMenuItem("Retirer Contrainte") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            constraintMenu.add(removeConstraint);
+            removeConstraint.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    RemoveConstraintPopup rcp = new RemoveConstraintPopup();
+                    rcp.setVisible(true);
                 }
             });
         }

@@ -1,6 +1,7 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.TeacherDAO;
+import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
@@ -109,4 +110,13 @@ public abstract class TeacherController {
         }
     }
 
+    public static Teacher findTeacher() {
+        Teacher ret = null;
+
+        for (Teacher t : Teacher.getTeacherList())
+            if (t.getEmail() == Session.getLogin())
+                return t;
+
+        return ret;
+    }
 }

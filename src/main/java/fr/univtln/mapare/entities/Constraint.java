@@ -109,6 +109,15 @@ public class Constraint implements Entity {
     //Methods
     @Override
     public String toString() {
+        return day.getDayOfWeek() + " de " + start + " à " + end;
+    }
+
+    /**
+     * @deprecated
+     * @return Returns a string
+     */
+    @Deprecated
+    public String print() {
         return "Constraint{" +
                 "startDate=" + start +
                 ", endDate=" + end +
