@@ -120,8 +120,16 @@ public abstract class LessonController {
 //            }
 //        }
 
-        int[] nbHoursG = new int[groups.size()];
-        int[] nbHoursM = new int[managers.size()];
+        long[] nbHoursG = new long[groups.size()];
+        long[] nbHoursM = new long[managers.size()];
+
+        for (int i = 0; i < nbHoursG.length; i++){
+            nbHoursG[i] = Duration.between(start, end).toHours();
+        }
+
+        for (int i = 0; i < nbHoursM.length; i++){
+            nbHoursG[i] = Duration.between(start, end).toHours();
+        }
 
         for (Lesson lesson : lessonsOfDay){
             for (int i = 0; i < groups.size(); i++){
