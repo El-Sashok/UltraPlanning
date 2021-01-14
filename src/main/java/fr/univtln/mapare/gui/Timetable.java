@@ -3,6 +3,9 @@ package fr.univtln.mapare.gui;
 import fr.univtln.mapare.controllers.Controllers;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.gui.addpopups.AddConstraintPopup;
+import fr.univtln.mapare.gui.addpopups.AddModulePopup;
+import fr.univtln.mapare.gui.addpopups.AddSessionPopup;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -501,8 +504,8 @@ public class Timetable extends JFrame {
 
     private Calendar calendar = Calendar.getInstance(Locale.FRANCE);
 
-    static Boolean resizeable = true;
-    static String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
+    public static Boolean resizeable = true;
+    public static String[] hourList = {"8h00", "8h30", "9h00", "9h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30",
             "13h00", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00",
             "18h30", "19h00"};
 
@@ -763,6 +766,7 @@ public class Timetable extends JFrame {
         setJMenuBar(menuBarre);
         JMenu edtMenu = new JMenu("Emploi du Temps");
         menuBarre.add(edtMenu);
+        JMenu addingMenu = new JMenu("Ajout");
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
             JMenuItem persView = new JMenuItem("Emploi du Temps personnel");
@@ -886,9 +890,10 @@ public class Timetable extends JFrame {
             });
         }
 
-        if (SUStatus == Session.Status.MANAGER) {
-            JMenu addingMenu = new JMenu("Ajout");
+        if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.ADMIN)
             menuBarre.add(addingMenu);
+
+        if (SUStatus == Session.Status.MANAGER) {
             JMenuItem addModule = new JMenuItem("Ajouter Module");
             addingMenu.add(addModule);
             addModule.addMouseListener(new MouseAdapter() {
@@ -917,6 +922,17 @@ public class Timetable extends JFrame {
                     super.mousePressed(e);
                     String msg = "La maintenance a été effectuée";
                     JOptionPane.showMessageDialog(null, msg, "Maintenance", JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
+            JMenuItem addSession = new JMenuItem("Ajouter un nouvel utilisateur");
+            addingMenu.add(addSession);
+            addSession.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddSessionPopup asp = new AddSessionPopup();
+                    asp.setVisible(true);
                 }
             });
         }

@@ -66,4 +66,10 @@ public abstract class SessionController {
         if (!hashPassword(password).equals(Session.getHashedPassword()))
             throw new IncorrectPasswordException(Session.getLogin());
     }
+
+    public static void createSession(String text, String text1, Session.Status value) throws SQLException, NoSuchAlgorithmException {
+        try (SessionDAO sDAO = new SessionDAO()) {
+            sDAO.persist(new Session((long) -1, text, hashPassword(text1), value));
+        }
+    }
 }

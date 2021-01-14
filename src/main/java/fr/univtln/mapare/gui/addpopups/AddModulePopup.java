@@ -1,6 +1,7 @@
-package fr.univtln.mapare.gui;
+package fr.univtln.mapare.gui.addpopups;
 
 import fr.univtln.mapare.controllers.ModuleController;
+import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -45,13 +46,18 @@ public class AddModulePopup extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
+                    if ("".equals(textField1.getText()))
+                        throw new EmptyFieldException();
                     ModuleController.createModule(textField1.getText(), Integer.parseInt(textField2.getText()));
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (NumberFormatException nbe) {
                     String message = "Veuillez entrer une durée valide";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException throwables) {
-                    String message = "Module déjà existant.";
+                    String message = "Module déjà existant";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (EmptyFieldException emptyFieldException) {
+                    String message = "Veuillez entrer un nom";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }

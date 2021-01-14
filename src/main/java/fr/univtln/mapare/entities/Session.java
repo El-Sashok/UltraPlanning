@@ -7,7 +7,7 @@ public class Session implements Entity{
     private String hashedPassword;
     private static Session instance = null;
 
-    private Session(Long id, String login, String hashedPassword, Status status) {
+    public Session(Long id, String login, String hashedPassword, Status status) {
         this.id = id;
         this.login = login;
         this.hashedPassword = hashedPassword;
