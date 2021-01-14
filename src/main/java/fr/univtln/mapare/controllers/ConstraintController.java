@@ -29,6 +29,8 @@ public abstract class ConstraintController {
     public static void removeConstraint(Constraint c) throws SQLException {
         try (ConstraintDAO cDAO = new ConstraintDAO()) {
             cDAO.remove(c.getId());
+            c.getTeacher().getConstraints().remove(c);
+            Constraint.popConstraintInList(c);
         }
     }
 }

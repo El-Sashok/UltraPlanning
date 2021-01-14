@@ -797,17 +797,12 @@ public class Timetable extends JFrame {
 
         menuBarre = new JMenuBar();
         setJMenuBar(menuBarre);
+        JMenu edtMenu = new JMenu("Emploi du Temps");
+        menuBarre.add(edtMenu);
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
-            JMenuItem persView = new JMenuItem("EDT personnel") {
-                @Override
-                public Dimension getMaximumSize() {
-                    Dimension dim = super.getMaximumSize();
-                    dim.width = super.getPreferredSize().width;
-                    return dim;
-                }
-            };
-            menuBarre.add(persView);
+            JMenuItem persView = new JMenuItem("Emploi du Temps personnel");
+            edtMenu.add(persView);
             persView.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -820,15 +815,8 @@ public class Timetable extends JFrame {
         }
 
 
-        JMenuItem roomView = new JMenuItem("EDT par salle") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(roomView);
+        JMenuItem roomView = new JMenuItem("Emploi du Temps par salle");
+        edtMenu.add(roomView);
         roomView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -838,15 +826,8 @@ public class Timetable extends JFrame {
             }
         });
 
-        JMenuItem groupView = new JMenuItem("EDT par groupe") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(groupView);
+        JMenuItem groupView = new JMenuItem("Emploi du Temps par groupe");
+        edtMenu.add(groupView);
         groupView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -918,14 +899,7 @@ public class Timetable extends JFrame {
             JMenu constraintMenu = new JMenu("Contraintes");
             menuBarre.add(constraintMenu);
 
-            JMenuItem addConstraint = new JMenuItem("Ajouter Contrainte") {
-                @Override
-                public Dimension getMaximumSize() {
-                    Dimension dim = super.getMaximumSize();
-                    dim.width = super.getPreferredSize().width;
-                    return dim;
-                }
-            };
+            JMenuItem addConstraint = new JMenuItem("Ajouter Contrainte");
             constraintMenu.add(addConstraint);
             addConstraint.addMouseListener(new MouseAdapter() {
                 @Override
@@ -936,14 +910,7 @@ public class Timetable extends JFrame {
                 }
             });
 
-            JMenuItem removeConstraint = new JMenuItem("Retirer Contrainte") {
-                @Override
-                public Dimension getMaximumSize() {
-                    Dimension dim = super.getMaximumSize();
-                    dim.width = super.getPreferredSize().width;
-                    return dim;
-                }
-            };
+            JMenuItem removeConstraint = new JMenuItem("Retirer Contrainte");
             constraintMenu.add(removeConstraint);
             removeConstraint.addMouseListener(new MouseAdapter() {
                 @Override

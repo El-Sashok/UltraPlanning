@@ -47,6 +47,23 @@ public class RemoveConstraintPopup extends JFrame {
 
         list1.setModel(listModel);
 
+        retirerButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if (list1.getSelectedValue() != null) {
+                    try {
+                        ConstraintController.removeConstraint(list1.getSelectedValue());
+                        list1.remove(list1.getSelectedIndex());
+                        thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+                    } catch (SQLException throwables) {
+                        String message = "Erreur lors de l'insertion dans la base de données";
+                        JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
         this.pack();
     }
 }

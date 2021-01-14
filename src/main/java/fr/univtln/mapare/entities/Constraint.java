@@ -70,7 +70,7 @@ public class Constraint implements Entity {
         return CONSTRAINTS;
     }
 
-    public void popConstraintInList(Constraint constraint) {
+    public static void popConstraintInList(Constraint constraint) {
         CONSTRAINTS.remove(constraint);
     }
 
