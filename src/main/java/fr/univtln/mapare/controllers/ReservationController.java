@@ -42,7 +42,7 @@ public abstract class ReservationController {
     }
 
     /**
-     * Permet de récupérer l'emploie du temps de la personne connectée
+     * Permet de récupérer l'emploi du temps de la personne connectée
      * @return Une Liste de réservations
      */
     public static List<Reservation> findPersonalReservations() {
@@ -94,10 +94,10 @@ public abstract class ReservationController {
      * @param memo Informations complémentaires
      * @param state État de la réservation
      * @param room Salle dans laquelle se déroule la réservation
-     * @param managers Liste des Enseignant en charge de la salle
+     * @param managers Liste des Enseignants en charge de la salle
      * @throws SQLException Exception SQL
      * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
-     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
         for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
@@ -201,11 +201,5 @@ public abstract class ReservationController {
                 reservationDAO.update(reservation);
             }
         }
-    }
-
-    public static void createReservation(Reservation res, List<Teacher> managers) throws RoomTimeBreakException,
-            SQLException, ManagerTimeBreakException {
-        createReservation(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(),
-                res.getRoom(), managers);
     }
 }

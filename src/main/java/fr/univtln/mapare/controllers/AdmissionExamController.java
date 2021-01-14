@@ -7,18 +7,21 @@ import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class AdmissionExamController {
 
     private AdmissionExamController() {}
 
-    public static void createAdmissionExam(Reservation newRes, AdmissionExamLabel label, List<Teacher> managers,
-                                           List<Student> students) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
+    public static void createAdmissionExam(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
+                                           Reservation.State state, Room room, AdmissionExamLabel examLabel,
+                                           List<Teacher> managers, List<Student> students) throws SQLException,
+            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && Controllers.checkTimeBreak(r, newRes)) {
-                if (newRes.getRoom().equals(r.getRoom()))
-                    throw new RoomTimeBreakException(newRes.getRoom());
+            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+                if (room.equals(r.getRoom()))
+                    throw new RoomTimeBreakException(room);
                 for (Teacher t : managers)
                     if (r.getManagers().contains(t))
                         throw new ManagerTimeBreakException(t);
@@ -40,7 +43,7 @@ public abstract class AdmissionExamController {
             }
         }
 
-        AdmissionExam aem = new AdmissionExam(newRes, label);
+        AdmissionExam aem = new AdmissionExam(-1, startDate, endDate, label, memo, state, room, examLabel);
         aem.setManagers(managers);
         aem.setStudents(students);
         try (AdmissionExamDAO aemDAO = new AdmissionExamDAO()) {
