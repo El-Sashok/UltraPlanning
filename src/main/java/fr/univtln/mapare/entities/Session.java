@@ -22,27 +22,25 @@ public class Session implements Entity{
         instance = null;
     }
 
-    public static Status getStatus() { return instance.status; }
+    public  Status getStatus() { return this.status; }
 
-    public static void setStatus(Status status){
-        instance.status = status;
-    }
+    public  void setStatus(Status status){ this.status = status; }
 
-    public static String getLogin() { return instance.login; }
+    public String getLogin() { return this.login; }
 
-    public static void setLogin(String login) { instance.login = login; }
+    public void setLogin(String login) { this.login = login; }
 
-    public static String getHashedPassword() { return instance.hashedPassword; }
+    public String getHashedPassword() { return this.hashedPassword; }
 
-    public static void setHashedPassword(String hashedPassword) { instance.hashedPassword = hashedPassword; }
+    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
 
     public static Session getInstance(){ return instance; }
 
     @Override
-    public long getId() { return instance.id; }
+    public long getId() { return this.id; }
 
     @Override
-    public void setId(long id) { instance.id = id; }
+    public void setId(long id) { this.id = id; }
 
 
     public enum Status {

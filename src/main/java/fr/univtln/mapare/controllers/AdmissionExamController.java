@@ -2,6 +2,7 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.AdmissionExamDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
@@ -35,13 +36,37 @@ public abstract class AdmissionExamController {
     public static void createAdmissionExam(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                            Reservation.State state, Room room, AdmissionExamLabel examLabel,
                                            List<Teacher> managers, List<Student> students) throws SQLException,
-            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
+            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        checkCollision(startDate, endDate, room, managers, students);
+
+        AdmissionExam aem = new AdmissionExam(-1, startDate, endDate, label, memo, state, room, examLabel);
+        aem.setManagers(managers);
+        aem.setStudents(students);
+        try (AdmissionExamDAO aemDAO = new AdmissionExamDAO()) {
+            aemDAO.persist(aem);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param managers Professeur en charge de la classe
+     * @param students Liste des étudiants inscrit au concours
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     */
+    private static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Teacher> managers, List<Student> students) throws ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        ControllerTools.checkStartAfterEnd(startDate, endDate);
+
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))
                     throw new RoomTimeBreakException(room);
                 for (Teacher t : managers)
@@ -64,13 +89,6 @@ public abstract class AdmissionExamController {
                     }
                 }
             }
-        }
-
-        AdmissionExam aem = new AdmissionExam(-1, startDate, endDate, label, memo, state, room, examLabel);
-        aem.setManagers(managers);
-        aem.setStudents(students);
-        try (AdmissionExamDAO aemDAO = new AdmissionExamDAO()) {
-            aemDAO.persist(aem);
         }
     }
 

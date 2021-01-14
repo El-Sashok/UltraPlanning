@@ -5,6 +5,7 @@ import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.BadPracticesException;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
@@ -28,7 +29,7 @@ public abstract class LessonController {
      * @param state État de la reservation
      * @param room Salle dans laquelle se déroule le cours
      * @param type Type de cours
-     * @param modules Module enseigné
+     * @param modules Modules enseignés
      * @param groups Groupe qui participe au cours
      * @param managers Professeur en charge de la classe
      * @throws SQLException Exception SQL
@@ -36,12 +37,42 @@ public abstract class LessonController {
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
      * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cet horaire
      * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cet horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
      */
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
                                     List<Group> groups, List<Teacher> managers) throws SQLException,
             ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException,
-            BadPracticesException {
+            BadPracticesException, IncorrectEndHourException {
+        checkCollision(startDate, endDate, room, modules, groups, managers);
+
+        Lesson lesson = new Lesson(-1, startDate, endDate, label, memo, state, room, type);
+        for (Module m : modules) lesson.addModule(m);
+        for (Group g : groups) lesson.addGroup(g);
+        for (Teacher t : managers) lesson.addTeacher(t);
+        try (LessonDAO lessonDAO = new LessonDAO()) {
+            lessonDAO.persist(lesson);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param modules Modules enseignés
+     * @param groups Groupe qui participe au cours
+     * @param managers Professeur en charge de la classe
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws BadPracticesException La nouvelle reservation ne respecte pas une règle de bienséance
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cette horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
+     */
+    private static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Module> modules, List<Group> groups, List<Teacher> managers) throws ManagerTimeBreakException, BadPracticesException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        ControllerTools.checkStartAfterEnd(startDate, endDate);
+
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
@@ -72,14 +103,6 @@ public abstract class LessonController {
                                 throw new StudentTimeBreakException(s);
                 }
             }
-        }
-
-        Lesson lesson = new Lesson(-1, startDate, endDate, label, memo, state, room, type);
-        for (Module m : modules) lesson.addModule(m);
-        for (Group g : groups) lesson.addGroup(g);
-        for (Teacher t : managers) lesson.addTeacher(t);
-        try (LessonDAO lessonDAO = new LessonDAO()) {
-            lessonDAO.persist(lesson);
         }
     }
 
@@ -136,12 +159,12 @@ public abstract class LessonController {
      * @param groups Liste des groupes qui participent au cours
      * @param managers Liste des enseignants en charge de la salle
      * @param modules Liste des modules associés au cours
-     * @return Vrais (True) si il n'y à pas de problème de bienséance
      * @throws BadPracticesException Exception si une règle de bienséance n'est pas respectée.
      */
-    public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
-                                             List<Teacher> managers, List<Module> modules) throws BadPracticesException {
+    public static void checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
+                                          List<Teacher> managers, List<Module> modules) throws BadPracticesException {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
+
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
 
@@ -215,6 +238,5 @@ public abstract class LessonController {
                 }
             }
         }
-        return true;
     }
 }

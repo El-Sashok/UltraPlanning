@@ -2,6 +2,7 @@ package fr.univtln.mapare.gui.addpopups;
 
 import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.Session;
+import fr.univtln.mapare.exceptions.UserAlreadyCreatedException;
 import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
 
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class AddSessionPopup extends JFrame{
             }
         });
 
-        String [] sessionTypes = {"Etudiant", "Enseignant", "Gérant", "Admin", "Invité"};
+        String [] sessionTypes = {"Étudiant", "Enseignant", "Gérant", "Admin", "Invité"};
 
         for (String s : sessionTypes)
             comboBox1.addItem(s);
@@ -61,7 +62,10 @@ public class AddSessionPopup extends JFrame{
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                     throwables.printStackTrace();
                 } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                    String message = "Erreur de hâchage de mot de passe";
+                    String message = "Erreur de hachage de mot de passe";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (UserAlreadyCreatedException userAlreadyCreatedException) {
+                    String message = userAlreadyCreatedException.getMessage();
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }

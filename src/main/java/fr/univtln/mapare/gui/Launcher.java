@@ -1,6 +1,6 @@
 package fr.univtln.mapare.gui;
 
-import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.ControllerTools;
 import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.exceptions.IncorrectPasswordException;
@@ -30,7 +30,7 @@ public class Launcher extends JFrame {
         try {
             SessionController.login(emailTextField.getText(), String.valueOf(passwordField.getPassword()));
 
-            Timetable tt = new Timetable(Session.getStatus());
+            Timetable tt = new Timetable(Session.getInstance().getStatus());
             tt.setVisible(true);
 
             thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
@@ -92,7 +92,7 @@ public class Launcher extends JFrame {
     }
 
     public static void main(String[] args) throws SQLException {
-        Controllers.loadDB();
+        ControllerTools.loadDB();
         Launcher l = new Launcher();
         l.setVisible(true);
     }

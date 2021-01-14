@@ -3,11 +3,13 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.SessionDAO;
 import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.exceptions.IncorrectPasswordException;
+import fr.univtln.mapare.exceptions.UserAlreadyCreatedException;
 import fr.univtln.mapare.exceptions.UserNotFoundException;
 
 import java.math.BigInteger;
 import java.security.*;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,20 +58,31 @@ public abstract class SessionController {
     }
 
     public static void changePassword(String newPassword) throws NoSuchAlgorithmException, SQLException {
-        Session.setHashedPassword(hashPassword(newPassword));
+        Session.getInstance().setHashedPassword(hashPassword(newPassword));
         try (SessionDAO sDAO = new SessionDAO()) {
             sDAO.update(Session.getInstance());
         }
     }
 
     public static void checkPassword(String password) throws NoSuchAlgorithmException {
-        if (!hashPassword(password).equals(Session.getHashedPassword()))
-            throw new IncorrectPasswordException(Session.getLogin());
+        if (!hashPassword(password).equals(Session.getInstance().getHashedPassword()))
+            throw new IncorrectPasswordException(Session.getInstance().getLogin());
     }
 
-    public static void createSession(String text, String text1, Session.Status value) throws SQLException, NoSuchAlgorithmException {
+    public static void createSession(String login, String typedPassword, Session.Status value) throws SQLException, NoSuchAlgorithmException, UserAlreadyCreatedException {
         try (SessionDAO sDAO = new SessionDAO()) {
-            sDAO.persist(new Session((long) -1, text, hashPassword(text1), value));
+            List<Session> sessions = sDAO.findAll();
+
+            for (Session s : sessions){
+                if (login.equals(s.getLogin())){
+                    throw new UserAlreadyCreatedException(login);
+                }
+            }
+
+            Session session = new Session((long) -1, login, hashPassword(typedPassword), value);
+            System.out.println(session.getLogin() + " " + session.getHashedPassword() + " " + session.getStatus().toString());
+
+            sDAO.persist(session);
         }
     }
 }

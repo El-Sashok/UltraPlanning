@@ -2,6 +2,7 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
@@ -36,7 +37,7 @@ public abstract class ReservationController {
         List<Room> rooms = new ArrayList<>(Room.getRoomList());
         for (Reservation r : Reservation.getReservationList())
             if (r.getState() == Reservation.State.NP)
-                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate))
+                if (ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate))
                     rooms.removeIf(room -> room.getId() == r.getRoom().getId());
         return rooms;
     }
@@ -48,12 +49,12 @@ public abstract class ReservationController {
     public static List<Reservation> findPersonalReservations() {
         List<Reservation> reservations = new ArrayList<>();
         for (Reservation r : Reservation.getReservationList()){
-            if (Session.getStatus() == Session.Status.STUDENT) {
+            if (Session.getInstance().getStatus() == Session.Status.STUDENT) {
                 if (r instanceof Lesson){
                     group:
                     for (Group g : ((Lesson) r).getGroups()){
                         for (Student s : g.getStudents()){
-                            if (s.getEmail().equals(Session.getLogin())) {
+                            if (s.getEmail().equals(Session.getInstance().getLogin())) {
                                 reservations.add(r);
                                 break group;
                             }
@@ -61,22 +62,22 @@ public abstract class ReservationController {
                     }
                 }
                 else if (r instanceof Defence) {
-                    if (((Defence) r).getStudent().getEmail().equals(Session.getLogin())){
+                    if (((Defence) r).getStudent().getEmail().equals(Session.getInstance().getLogin())){
                         reservations.add(r);
                     }
                 }
                 else if (r instanceof AdmissionExam){
                     for (Student s : ((AdmissionExam) r).getStudents()){
-                        if (s.getEmail().equals(Session.getLogin())){
+                        if (s.getEmail().equals(Session.getInstance().getLogin())){
                             reservations.add(r);
                             break;
                         }
                     }
                 }
             }
-            else if (Session.getStatus() == Session.Status.TEACHER) {
+            else if (Session.getInstance().getStatus() == Session.Status.TEACHER) {
                 for (Teacher t : r.getManagers()){
-                    if (t.getEmail().equals(Session.getLogin())){
+                    if (t.getEmail().equals(Session.getInstance().getLogin())){
                         reservations.add(r);
                         break;
                     }
@@ -98,26 +99,43 @@ public abstract class ReservationController {
      * @throws SQLException Exception SQL
      * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
      */
-    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
+    public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException, IncorrectEndHourException {
+        checkCollision(startDate, endDate, room, managers);
+
+        Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
+        reservation.setManagers(managers);
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservationDAO.persist(reservation);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param managers Professeur en charge de la classe
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
+     */
+    static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Teacher> managers) throws ManagerTimeBreakException, RoomTimeBreakException, IncorrectEndHourException {
+        ControllerTools.checkStartAfterEnd(startDate, endDate);
+
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))
                     throw new RoomTimeBreakException(room);
                 for (Teacher t : managers)
                     if (r.getManagers().contains(t))
                         throw new ManagerTimeBreakException(t);
             }
-        }
-
-        Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
-        reservation.setManagers(managers);
-        try (ReservationDAO reservationDAO = new ReservationDAO()) {
-            reservationDAO.persist(reservation);
         }
     }
 

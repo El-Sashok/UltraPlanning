@@ -2,6 +2,7 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ExamBoardDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 
@@ -15,19 +16,8 @@ public abstract class ExamBoardController {
 
     public static void createExamBoard(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                        Reservation.State state, Room room, Yeargroup yg, List<Teacher> managers)
-            throws SQLException, RoomTimeBreakException, ManagerTimeBreakException {
-        for (Teacher t: managers)
-            for (Constraint c : t.getConstraints())
-                ConstraintController.checkConflicts(startDate, endDate, c);
-
-        for (Reservation r : Reservation.getReservationList())
-            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
-                if (room.equals(r.getRoom()))
-                    throw new RoomTimeBreakException(room);
-                for (Teacher t : managers)
-                    if (r.getManagers().contains(t))
-                        throw new ManagerTimeBreakException(t);
-            }
+            throws SQLException, RoomTimeBreakException, ManagerTimeBreakException, IncorrectEndHourException {
+        ReservationController.checkCollision(startDate, endDate, room, managers);
 
         ExamBoard examBoard = new ExamBoard(-1, startDate, endDate, label, memo, state, room, yg);
         examBoard.setManagers(managers);

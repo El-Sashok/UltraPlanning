@@ -18,11 +18,10 @@ public class SessionDAO extends AbstractDAO<Session> {
 
     @Override
     protected Session fromResultSet(ResultSet resultSet) throws SQLException {
-        /*return new Session(resultSet.getLong("ID"),
+        return new Session(resultSet.getLong("ID"),
                 resultSet.getString("LOGIN"),
                 resultSet.getString("PASSWORD"),
-                Session.Status.valueOf(resultSet.getString("STATUS")));*/
-        throw new UnsupportedOperationException();
+                Session.Status.valueOf(resultSet.getString("STATUS")));
     }
 
     @Override
@@ -30,7 +29,7 @@ public class SessionDAO extends AbstractDAO<Session> {
 
     @Override
     public Session persist(Session session) throws SQLException {
-        populate(persistPS);
+        populate(persistPS, session);
         return super.persist();
     }
 
@@ -39,15 +38,15 @@ public class SessionDAO extends AbstractDAO<Session> {
 
     @Override
     public void update(Session session) throws SQLException {
-        populate(updatePS);
+        populate(updatePS, session);
         updatePS.setLong(4, Session.getInstance().getId());
         super.update();
     }
 
-    private void populate(PreparedStatement popPS) throws SQLException {
-        popPS.setString(1, Session.getLogin());
-        popPS.setString(2, Session.getHashedPassword());
-        popPS.setString(3, Session.getStatus().toString());
+    private void populate(PreparedStatement popPS, Session session) throws SQLException {
+        popPS.setString(1, session.getLogin());
+        popPS.setString(2, session.getHashedPassword());
+        popPS.setString(3, session.getStatus().toString());
     }
 
     public Map<String, Optional<String>> getUserInfo(String userLogin) throws SQLException {
