@@ -123,7 +123,7 @@ public abstract class ReservationController {
     /**
      * Permet de changer l'état d'une réservation
      * @param reservation La réservation
-     * @param state Etat de la réservation
+     * @param state État de la réservation
      * @throws SQLException Exception SQL
      * @throws NotChangedException state n'a pas été changé
      */
@@ -143,7 +143,7 @@ public abstract class ReservationController {
      * @throws NotChangedException state n'a pas été changé
      * @throws ManagerTimeBreakException Un des enseignants dans managers n'est pas disponible
      */
-    public static void changeManagersReservation(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException, ManagerTimeBreakException {
+    public static void changeManagers(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException, ManagerTimeBreakException {
         if (managers.size() == 0) //if managers is empty
             throw new EmptyAttributeException("changeManagersReservation", reservation);
         if (reservation.getManagers().containsAll(managers)) //if it's the same list
@@ -152,21 +152,35 @@ public abstract class ReservationController {
         for (Teacher m : managers) //TODO check horaire prof
             reservation.addTeacher(m);
         update(reservation);
-
     }
 
     /**
      * Permet de changer le mémo d'une réservation
      * @param reservation La réservation
-     * @param memo Texte complémentaire sur la réservation
+     * @param memo Informations complémentaires
      * @throws SQLException Exception SQL
      * @throws NotChangedException memo n'a pas été changé
      */
-    public static void changeMemoReservation(Reservation reservation, String memo) throws SQLException, NotChangedException {
+    public static void changeMemo(Reservation reservation, String memo) throws SQLException, NotChangedException {
         if (reservation.getMemo().equals(memo))
             throw new NotChangedException(reservation);
 
         reservation.setMemo(memo);
+        update(reservation);
+    }
+
+    /**
+     * Permet de changer la salle d'une réservation
+     * @param reservation La réservation
+     * @param room Salle dans laquelle se déroule la réservation
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException room n'a pas été changé
+     */
+    public static void changeRoom(Reservation reservation, Room room) throws SQLException, NotChangedException {
+        if (reservation.getRoom().equals(room))
+            throw new NotChangedException(reservation);
+
+        reservation.setRoom(room);
         update(reservation);
     }
 
