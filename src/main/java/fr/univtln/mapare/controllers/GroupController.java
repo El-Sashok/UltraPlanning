@@ -43,7 +43,7 @@ public abstract class GroupController {
      * @param label Le nom du groupe
      * @throws SQLException Exception SQL
      */
-    public static void createGroup(Yeargroup yeargroup, String label) throws SQLException {
+    public static void createGroup(Yeargroup yeargroup, String label) throws SQLException, EmptyAttributeException, NotChangedException {
         Group group = new Group(-1, label);
         try (GroupDAO groupDAO = new GroupDAO()) {
             Group newGroup = groupDAO.persist(group);
