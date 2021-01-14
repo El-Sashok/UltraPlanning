@@ -104,16 +104,13 @@ public abstract class ReservationController {
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
 
-        for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
-            if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
-                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) { // vérifie les collision de réservation
-                    for (Teacher dbTeacher : r.getManagers())
-                        for (Teacher LocalTeacher : managers)
-                            if (dbTeacher.getId() == LocalTeacher.getId()) // vérifie si un enseignant est déjà occupé pendant cette horaire
-                                throw new ManagerTimeBreakException(LocalTeacher);
-                    if (r.getRoom().getId() == room.getId()) // vérifie si la salle n'est pas déjà occupée
-                        throw new RoomTimeBreakException(room);
-                }
+        for (Reservation r : Reservation.getReservationList()) {
+            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+                if (room.equals(r.getRoom()))
+                    throw new RoomTimeBreakException(room);
+                for (Teacher t : managers)
+                    if (r.getManagers().contains(t))
+                        throw new ManagerTimeBreakException(t);
             }
         }
 
@@ -152,12 +149,14 @@ public abstract class ReservationController {
             throw new EmptyAttributeException("changeManagersReservation", reservation);
         if (reservation.getManagers().containsAll(managers)) //if it's the same list
             throw new NotChangedException(reservation);
+        for (Reservation r : Reservation.getReservationList())
+            for (Teacher t : managers)
+                if (r.getManagers().contains(t))
+                    throw new ManagerTimeBreakException(t);
+        for (Teacher t : managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(reservation.getStartDate(), reservation.getEndDate(), c);
 
-        for (Teacher t : managers) // TODO check constraints
-            if (reservation.getManagers().contains(t))
-                throw new ManagerTimeBreakException(t);
-            else
-                reservation.addTeacher(t);
         update(reservation);
     }
 
