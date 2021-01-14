@@ -46,5 +46,7 @@ public class RemoveConstraintPopup extends JFrame {
         }
 
         list1.setModel(listModel);
+
+        this.pack();
     }
 }

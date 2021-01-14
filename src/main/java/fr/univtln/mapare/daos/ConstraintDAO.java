@@ -26,13 +26,14 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
                 return c;
         }
         Teacher teacher = null;
-        try (TeacherDAO tDAO = new TeacherDAO()) {
+
+        /*  This code block leads to an infinite loop
+            try (TeacherDAO tDAO = new TeacherDAO()) {
             teacher = tDAO.find(resultSet.getLong("TEACHER")).get();
-        }
+        }*/
         return new Constraint(resultSet.getLong("id"),
                 resultSet.getDate("DAY").toLocalDate(), resultSet.getTime("START").toLocalTime(),
-                resultSet.getTime("END").toLocalTime(),
-        teacher);
+                resultSet.getTime("END").toLocalTime());
     }
 
 
@@ -42,15 +43,14 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
         findConstraintsByTeacher.setLong(1, teacherID);
         ResultSet findConstraintsRS = findConstraintsByTeacher.executeQuery();
         if (findConstraintsRS.next()) constraints.add(fromResultSet(findConstraintsRS));
+
         return constraints;
     }
 
     @Override
     public Constraint persist(Constraint constraint) throws SQLException {
         long id = -1;
-        System.out.println("before");
         populate(persistPS, constraint);
-        System.out.println("after");
         return super.persist();
     }
 

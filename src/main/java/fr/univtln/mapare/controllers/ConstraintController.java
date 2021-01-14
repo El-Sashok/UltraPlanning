@@ -15,7 +15,8 @@ public abstract class ConstraintController {
 
     public static void createConstraint(LocalDate day, LocalTime start, LocalTime end, Teacher t) throws SQLException {
         try (ConstraintDAO cDAO = new ConstraintDAO()) {
-            cDAO.persist(new Constraint(-1, day, start, end, t));
+            Constraint newc = cDAO.persist(new Constraint(-1, day, start, end, t));
+            newc.setTeacher(t);
         }
     }
 
@@ -30,10 +31,4 @@ public abstract class ConstraintController {
             cDAO.remove(c.getId());
         }
     }
-
-    /*public static void loadConstraints() throws SQLException {
-        try (ConstraintDAO cDAO = new ConstraintDAO()) {
-            cDAO.findAll();
-        }
-    }*/
 }

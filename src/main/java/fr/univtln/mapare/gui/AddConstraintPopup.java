@@ -68,7 +68,7 @@ public class AddConstraintPopup extends JFrame {
                 LocalTime end = LocalTime.of(((endindex + 1) / 2) + 8,
                         endindex % 2 == 0 ? 30 : 0);
                 try {
-                    if (startindex > endindex - 1)
+                    if (startindex > endindex)
                         throw new IncorrectEndHourException();
                     ConstraintController.createConstraint(day, start, end, TeacherController.findTeacher());
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));

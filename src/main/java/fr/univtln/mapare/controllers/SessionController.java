@@ -66,10 +66,4 @@ public abstract class SessionController {
         if (!hashPassword(password).equals(Session.getHashedPassword()))
             throw new IncorrectPasswordException(Session.getLogin());
     }
-
-    //TODO Supprimer ceci
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        System.out.println(hashPassword("test"));
-        System.out.println(Session.getStatus());
-    }
 }
