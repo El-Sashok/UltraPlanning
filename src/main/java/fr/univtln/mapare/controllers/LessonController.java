@@ -3,11 +3,15 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.exceptions.BadPracticesException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class LessonController {
 
@@ -87,5 +91,56 @@ public abstract class LessonController {
         try (LessonDAO lessonDAO = new LessonDAO()) {
             lessonDAO.persist(lesson);
         }
+    }
+
+    public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups, List<Teacher> managers, Module module) throws BadPracticesException {
+        Calendar calendar = Calendar.getInstance(Locale.FRANCE);
+        calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
+
+        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
+        List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
+
+        //
+        // Tentative de tester si les groupes ont le même module pendent une semaine
+        //
+//        isSameModuleForWeek:
+//        for (int i = 0; i < lessonsOfWeek.size(); i++){
+//            for (int j = 0; j < groups.size(); j++) {
+//                if (lessonsOfWeek.get(j).getGroups().contains(groups.get(j))) {
+//                    for (Module m : lessonsOfWeek.get(i).getModules()){
+//                        if (m.getId() != module.getId()){
+//                            break isSameModuleForWeek;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (i == lessonsOfWeek.size() - 1){
+//                throw new Exception("meme module pendent 1 semaine");
+//            }
+//        }
+
+        int[] nbHoursG = new int[groups.size()];
+        int[] nbHoursM = new int[managers.size()];
+
+        for (Lesson lesson : lessonsOfDay){
+            for (int i = 0; i < groups.size(); i++){
+                if (lesson.getGroups().contains(groups.get(i))){
+                    nbHoursG[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
+                    if (nbHoursG[i] > 9){
+                        throw new BadPracticesException(groups.get(i));
+                    }
+                }
+            }
+            for (int i = 0; i < managers.size(); i++){
+                if (lesson.getManagers().contains(managers.get(i))){
+                    nbHoursM[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
+                    if (nbHoursM[i] > 9){
+                        throw new BadPracticesException(managers.get(i));
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

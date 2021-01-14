@@ -3,6 +3,7 @@ package fr.univtln.mapare.gui;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -122,6 +123,11 @@ public class TimeslotPopup extends JFrame{
                             String message = "Erreur au moment de la mise à jour de la base de données.";
                             JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                         }
+                        catch (NotChangedException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment du changement de statut de la réservation, statut non modifié.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                     else {
                         try {
@@ -130,6 +136,11 @@ public class TimeslotPopup extends JFrame{
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                             String message = "Erreur au moment de la mise à jour de la base de données.";
+                            JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                        }
+                        catch (NotChangedException throwables) {
+                            throwables.printStackTrace();
+                            String message = "Erreur au moment du changement de statut de la réservation, statut non modifié.";
                             JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                         }
                     }

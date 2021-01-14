@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Classe DAO d'une contrainte d' emploie du temps d'un enseignant
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 @Log
 public class ConstraintDAO extends AbstractDAO<Constraint> {
     private final PreparedStatement findConstraintsByTeacher;
@@ -36,7 +41,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
                 resultSet.getTime("END").toLocalTime());
     }
 
-
+    /**
+     * Permet de trouver une liste de contrainte associé à un enseignant
+     * @param teacherID Identifiant de l'enseignant auquel on cherche les contraintes
+     * @return Une Liste de contraintes
+     * @throws SQLException Exception SQL
+     */
     public List<Constraint> findByTeacher(long teacherID) throws SQLException {
         List<Constraint> constraints = new ArrayList<>();
 
@@ -61,6 +71,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
         super.update();
     }
 
+    /**
+     * Permet de peupler les Prepared Statements pour les contraintes
+     * @param popPS La Prepared Statements à peupler
+     * @param constraint La contrainte associé
+     * @throws SQLException Exception SQL
+     */
     private void populate(PreparedStatement popPS, Constraint constraint) throws SQLException {
         popPS.setLong(1, constraint.getTeacher().getId());
         popPS.setTime(2, Time.valueOf(constraint.getStart()));

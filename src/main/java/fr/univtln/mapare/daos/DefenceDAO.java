@@ -8,6 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Classe DAO d'une soutenance
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class DefenceDAO extends AbstractDAO<Defence> {
     public DefenceDAO() throws SQLException {
         super("INSERT INTO DEFENCE(ID, STUDENT) VALUES (?,?)",

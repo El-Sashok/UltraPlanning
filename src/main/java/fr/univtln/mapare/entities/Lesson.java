@@ -87,4 +87,34 @@ public class Lesson extends Reservation {
     public enum Type {
         TD, CM, TP, CC, CT
     }
+
+    public static List<Lesson> getLessonsForWeek(int weekOfYear){
+        List<Lesson> reservationForWeek = new ArrayList<>();
+        for (Reservation r : Reservation.getReservationList()){
+            if (r instanceof Lesson) {
+                LocalDateTime date = r.getStartDate();
+                Calendar calendar = Calendar.getInstance(Locale.FRANCE);
+                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+                if (weekOfYear == calendar.get(Calendar.WEEK_OF_YEAR)){
+                    reservationForWeek.add((Lesson) r);
+                }
+            }
+        }
+        return reservationForWeek;
+    }
+
+    public static List<Lesson> getLessonsForDay(int dayOfYear){
+        List<Lesson> reservationForWeek = new ArrayList<>();
+        for (Reservation r : Reservation.getReservationList()){
+            if (r instanceof Lesson) {
+                LocalDateTime date = r.getStartDate();
+                Calendar calendar = Calendar.getInstance(Locale.FRANCE);
+                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+                if (dayOfYear == calendar.get(Calendar.DAY_OF_YEAR)){
+                    reservationForWeek.add((Lesson) r);
+                }
+            }
+        }
+        return reservationForWeek;
+    }
 }

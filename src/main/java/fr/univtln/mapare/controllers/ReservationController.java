@@ -180,9 +180,12 @@ public abstract class ReservationController {
      * @throws SQLException Exception SQL
      * @throws NotChangedException room n'a pas été changé
      */
-    public static void changeRoom(Reservation reservation, Room room) throws SQLException, NotChangedException {
+    public static void changeRoom(Reservation reservation, Room room) throws SQLException, NotChangedException, RoomTimeBreakException {
         if (reservation.getRoom().equals(room))
             throw new NotChangedException(reservation);
+        for (Reservation r : Reservation.getReservationList())
+            if (r.getRoom().equals(room))
+                throw new RoomTimeBreakException(room);
 
         reservation.setRoom(room);
         update(reservation);
