@@ -82,4 +82,21 @@ public abstract class RoomController {
             roomDAO.update(room);
         }
     }
+
+    /**
+     * Permet de changer le label d'une salle
+     * @param room La salle
+     * @param label "Type"/nom donné à la salle (salle informatique, etc...)
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException Aucune modification apportée
+     */
+    public static void changeLabel(Room room, String label) throws SQLException, NotChangedException {
+        if (room.getLabel().equals(label))
+            throw new NotChangedException(room);
+
+        room.setLabel(label);
+        try (RoomDAO roomDAO = new RoomDAO()) {
+            roomDAO.update(room);
+        }
+    }
 }
