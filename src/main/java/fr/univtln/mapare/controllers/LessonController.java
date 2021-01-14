@@ -9,9 +9,8 @@ import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
+import java.time.LocalTime;
+import java.util.*;
 
 public abstract class LessonController {
 
@@ -103,6 +102,7 @@ public abstract class LessonController {
      * Permet de vérifier qu'un cours que l'on s'apprête à créer respecte les règles de bienséance :
      * - Pas plus de 9h de cours par jours
      * - Pas toujours le même module durant plus d'une semaine
+     * - Pas terminer tout les jours à 18h ou plus
      * @param start Date (avec heure) à laquelle commence le cours
      * @param end Date (avec heure) à laquelle se termine le cours
      * @param groups Liste des groupes qui participent au cours
@@ -120,15 +120,37 @@ public abstract class LessonController {
         List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
 
         // Teste si les groupes ont le même module pendent une semaine
+        Map<Integer, List<Lesson>> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR) - 1);
+        boolean[][] breakFlagG = new boolean[groups.size()][modules.size()];
+        int[] checkAlwaysAfterSix = new int[groups.size()];
+        for (int g = 0; g < groups.size(); g++){
+            for (int m = 0; m < modules.size(); m++){
+                for (int i = 0 ; i < 6 ; i++){
+                    for (Lesson l : lessonsOfWeek.get(i)){
+                        if (l.getGroups().contains(groups.get(g)) && !l.getModules().contains(modules.get(m))) {
+                            breakFlagG[g][m] = true;
+                        }
+                        if (m == 0 && l.getEndDate().isAfter(LocalDateTime.of(l.getEndDate().toLocalDate(), LocalTime.of(17,59)))){
+                            checkAlwaysAfterSix[g]++;
+                        }
+                    }
+                }
+            }
+        }
 
-//        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
-//        for (Group g : groups){
-//            for (Lesson l : lessonsOfWeek){
-//                if (l.getGroups().contains(g)){
-//
-//                }
-//            }
-//        }
+
+        for (int g = 0; g < groups.size(); g++){
+            if (checkAlwaysAfterSix[g] > 4){
+                throw new BadPracticesException("AFTER_SIX", groups.get(g));
+            }
+            for (int m = 0; m < modules.size(); m++){
+                if (!breakFlagG[g][m]){
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY)
+                        throw new BadPracticesException(groups.get(g), modules.get(m));
+                }
+            }
+        }
+
 
         long[] nbHoursG = new long[groups.size()];
         long[] nbHoursM = new long[managers.size()];
@@ -136,14 +158,14 @@ public abstract class LessonController {
         for (int i = 0; i < nbHoursG.length; i++){
             nbHoursG[i] = Duration.between(start, end).toHours();
             if (nbHoursG[i] > 9) {
-                throw new BadPracticesException(groups.get(i));
+                throw new BadPracticesException("TO_MANY_HOURS", groups.get(i));
             }
         }
 
         for (int i = 0; i < nbHoursM.length; i++){
             nbHoursG[i] = Duration.between(start, end).toHours();
             if (nbHoursG[i] > 9) {
-                throw new BadPracticesException(groups.get(i));
+                throw new BadPracticesException("TO_MANY_HOURS", groups.get(i));
             }
         }
 
@@ -152,7 +174,7 @@ public abstract class LessonController {
                 if (lesson.getGroups().contains(groups.get(i))) {
                     nbHoursG[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
                     if (nbHoursG[i] > 9) {
-                        throw new BadPracticesException(groups.get(i));
+                        throw new BadPracticesException("TO_MANY_HOURS", groups.get(i));
                     }
                 }
             }

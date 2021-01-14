@@ -88,19 +88,23 @@ public class Lesson extends Reservation {
         TD, CM, TP, CC, CT
     }
 
-    public static List<Lesson> getLessonsForWeek(int weekOfYear){
-        List<Lesson> reservationForWeek = new ArrayList<>();
+    public static Map<Integer, List<Lesson>> getLessonsForWeek(int weekOfYear){
+        Map<Integer, List<Lesson>> reservationsForWeek = new HashMap<>();
+        for (int i = 0 ; i < 6 ; i++){
+            reservationsForWeek.put(i, new ArrayList<>());
+        }
+
         for (Reservation r : Reservation.getReservationList()){
             if (r instanceof Lesson) {
                 LocalDateTime date = r.getStartDate();
                 Calendar calendar = Calendar.getInstance(Locale.FRANCE);
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (weekOfYear == calendar.get(Calendar.WEEK_OF_YEAR)){
-                    reservationForWeek.add((Lesson) r);
+                    reservationsForWeek.get(calendar.get(Calendar.DAY_OF_WEEK)-1).add((Lesson) r);
                 }
             }
         }
-        return reservationForWeek;
+        return reservationsForWeek;
     }
 
     public static List<Lesson> getLessonsForDay(int dayOfYear){
@@ -117,4 +121,6 @@ public class Lesson extends Reservation {
         }
         return reservationForWeek;
     }
+
+
 }
