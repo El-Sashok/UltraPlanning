@@ -4,6 +4,7 @@ import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.BadPracticesException;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.*;
 
 import java.sql.SQLException;
@@ -34,12 +35,13 @@ public abstract class LessonController {
      * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
      * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cette horaire
      * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
      */
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
                                     List<Group> groups, List<Teacher> managers) throws SQLException,
             ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException,
-            BadPracticesException {
+            BadPracticesException, IncorrectEndHourException {
         checkCollision(startDate, endDate, room, modules, groups, managers);
 
         Lesson lesson = new Lesson(-1, startDate, endDate, label, memo, state, room, type);
@@ -64,8 +66,11 @@ public abstract class LessonController {
      * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
      * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cette horaire
      * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
      */
-    private static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Module> modules, List<Group> groups, List<Teacher> managers) throws ManagerTimeBreakException, BadPracticesException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
+    private static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Module> modules, List<Group> groups, List<Teacher> managers) throws ManagerTimeBreakException, BadPracticesException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        ControllerTools.checkStartAfterEnd(startDate, endDate);
+
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
@@ -74,7 +79,7 @@ public abstract class LessonController {
 
         for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
             if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
-                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){ // vérifie les collision de réservation
+                if (ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){ // vérifie les collision de réservation
                     for (Teacher dbTeacher : r.getManagers()){
                         for (Teacher LocalTeacher : managers){
                             if (dbTeacher.getId() == LocalTeacher.getId()) { // vérifie si un enseignant est déjà occupé pendant cette horaire

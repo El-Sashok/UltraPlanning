@@ -1,17 +1,9 @@
 package fr.univtln.mapare;
 
 import fr.univtln.mapare.controllers.*;
-import fr.univtln.mapare.daos.DefenceDAO;
-import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.gui.Launcher;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 
 public class App 
@@ -52,7 +44,7 @@ public class App
     }*/
 
     public static void main(String[] args) throws SQLException {
-        Controllers.loadDB();
+        ControllerTools.loadDB();
         Launcher launcher = new Launcher();
         launcher.setVisible(true);
     }

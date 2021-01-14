@@ -1,6 +1,6 @@
 package fr.univtln.mapare.gui;
 
-import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.ControllerTools;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.gui.addpopups.AddConstraintPopup;
@@ -968,7 +968,7 @@ public class Timetable extends JFrame {
     }
 
     public static void main(String[] args) throws SQLException {
-        Controllers.loadDB();
+        ControllerTools.loadDB();
         Timetable m = new Timetable(Session.Status.MANAGER);
         m.setVisible(true);
     }

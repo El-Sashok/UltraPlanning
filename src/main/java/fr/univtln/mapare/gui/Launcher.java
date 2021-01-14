@@ -1,6 +1,6 @@
 package fr.univtln.mapare.gui;
 
-import fr.univtln.mapare.controllers.Controllers;
+import fr.univtln.mapare.controllers.ControllerTools;
 import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.exceptions.IncorrectPasswordException;
@@ -92,7 +92,7 @@ public class Launcher extends JFrame {
     }
 
     public static void main(String[] args) throws SQLException {
-        Controllers.loadDB();
+        ControllerTools.loadDB();
         Launcher l = new Launcher();
         l.setVisible(true);
     }

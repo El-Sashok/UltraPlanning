@@ -2,6 +2,9 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.DefenceDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.BadPracticesException;
+import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
@@ -23,16 +26,44 @@ public abstract class DefenceController {
      * @param room  Salle dans laquelle se déroule la soutenance
      * @param student Étudiant qui présente la soutenance
      * @throws SQLException Exception SQL
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
      */
     public static void createDefence(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                      Reservation.State state, Room room, Student student, List<Teacher> managers)
-            throws SQLException, RoomTimeBreakException, ManagerTimeBreakException, StudentTimeBreakException {
+            throws SQLException, RoomTimeBreakException, ManagerTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        checkCollisions(startDate, endDate, room, student, managers);
+
+        Defence defence = new Defence(-1, startDate, endDate, label, memo, state, room, student);
+        defence.setManagers(managers);
+        try(DefenceDAO defenceDAO = new DefenceDAO()) {
+            defenceDAO.persist(defence);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param student L'étudiant inscrit à la soutenance
+     * @param managers Professeur en charge de la classe
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
+     */
+    private static void checkCollisions(LocalDateTime startDate, LocalDateTime endDate, Room room, Student student, List<Teacher> managers) throws ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException, IncorrectEndHourException {
+        ControllerTools.checkStartAfterEnd(startDate, endDate);
+
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))
                     throw new RoomTimeBreakException(room);
                 for (Teacher t : managers)
@@ -50,12 +81,6 @@ public abstract class DefenceController {
                         throw new StudentTimeBreakException(student);
                 }
             }
-        }
-
-        Defence defence = new Defence(-1, startDate, endDate, label, memo, state, room, student);
-        defence.setManagers(managers);
-        try(DefenceDAO defenceDAO = new DefenceDAO()) {
-            defenceDAO.persist(defence);
         }
     }
 }
