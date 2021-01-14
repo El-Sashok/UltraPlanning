@@ -35,8 +35,9 @@ public abstract class AbstractDAO<E extends Entity> implements DAO<E> {
         E entity = null;
         findPS.setLong(1, id);
         ResultSet rs = findPS.executeQuery();
-        while (rs.next())
+        while (rs.next()) {
             entity = fromResultSet(rs);
+        }
         return Optional.ofNullable(entity);
     }
 

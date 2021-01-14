@@ -68,8 +68,6 @@ public class Teacher extends Person {
         return this;
     }
 
-
-
     public enum Role {
         LECTURER, PROFESSOR, ADJUNCT_PROF
     }

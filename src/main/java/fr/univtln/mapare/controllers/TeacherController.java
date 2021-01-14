@@ -1,6 +1,8 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.TeacherDAO;
+import fr.univtln.mapare.entities.Constraint;
+import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
@@ -20,6 +22,9 @@ public abstract class TeacherController {
         try (TeacherDAO teacherDAO = new TeacherDAO()) {
             teacherDAO.findAll();
         }
+        for (Teacher t : Teacher.getTeacherList())
+            for (Constraint c : t.getConstraints())
+                c.setTeacher(t);
     }
 
     /**
@@ -48,7 +53,6 @@ public abstract class TeacherController {
         Teacher teacher = new Teacher(-1, lastName, firstName, birthdate, email, laboratory, role);
         try (TeacherDAO teacherDAO = new TeacherDAO()) {
             Teacher t = teacherDAO.persist(teacher);
-            System.out.println(t);
         }
     }
 
@@ -109,4 +113,13 @@ public abstract class TeacherController {
         }
     }
 
+    public static Teacher findTeacher() {
+        Teacher ret = null;
+
+        for (Teacher t : Teacher.getTeacherList())
+            if (t.getEmail() == Session.getLogin())
+                return t;
+
+        return ret;
+    }
 }

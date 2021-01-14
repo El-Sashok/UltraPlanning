@@ -53,7 +53,6 @@ public class AddModulePopup extends JFrame {
                 } catch (SQLException throwables) {
                     String message = "Module déjà existant.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                    throwables.printStackTrace();
                 }
             }
         });
