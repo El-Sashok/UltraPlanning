@@ -120,6 +120,13 @@ public abstract class ReservationController {
         }
     }
 
+    /**
+     * Permet de changer l'état d'une réservation
+     * @param reservation La réservation
+     * @param state Etat de la réservation
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException state n'a pas été changé
+     */
     public static void changeStatusReservation(Reservation reservation, Reservation.State state) throws SQLException, NotChangedException {
         if (reservation.getState() == state) //If state is not modified, throw an exception
             throw new NotChangedException(reservation);
@@ -128,7 +135,15 @@ public abstract class ReservationController {
         update(reservation);
     }
 
-    public static void changeManagersReservation(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException{
+    /**
+     * Permet de changer les enseignants d'une réservation
+     * @param reservation La réservation
+     * @param managers Liste d'enseignants encadrant la réservation
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException state n'a pas été changé
+     * @throws ManagerTimeBreakException Un des enseignants dans managers n'est pas disponible
+     */
+    public static void changeManagersReservation(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException, ManagerTimeBreakException {
         if (managers.size() == 0) //if managers is empty
             throw new EmptyAttributeException("changeManagersReservation", reservation);
         if (reservation.getManagers().containsAll(managers)) //if it's the same list
@@ -140,7 +155,14 @@ public abstract class ReservationController {
 
     }
 
-    public static void changeMemoReservation(Reservation reservation, String memo) throws SQLException, NotChangedException{
+    /**
+     * Permet de changer le mémo d'une réservation
+     * @param reservation La réservation
+     * @param memo Texte complémentaire sur la réservation
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException memo n'a pas été changé
+     */
+    public static void changeMemoReservation(Reservation reservation, String memo) throws SQLException, NotChangedException {
         if (reservation.getMemo().equals(memo))
             throw new NotChangedException(reservation);
 
@@ -163,6 +185,7 @@ public abstract class ReservationController {
             }
         }
     }
+
     public static void createReservation(Reservation res, List<Teacher> managers) throws RoomTimeBreakException,
             SQLException, ManagerTimeBreakException {
         createReservation(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(),

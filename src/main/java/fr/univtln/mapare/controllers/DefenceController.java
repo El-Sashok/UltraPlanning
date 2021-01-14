@@ -14,7 +14,7 @@ public abstract class DefenceController {
 
     private DefenceController() {}
     /**
-     * Permet de créer une réservation de soutenance si il n'y a aucune collisions avec une autre reservation puis la sauvegarde dans la base de donnée
+     * Permet de créer une réservation de soutenance si il n'y a aucune collision avec une autre reservation puis la sauvegarde dans la base de donnée
      * @param startDate Début de la soutenance
      * @param endDate Fin de la soutenance
      * @param label Intitulé de la soutenance
