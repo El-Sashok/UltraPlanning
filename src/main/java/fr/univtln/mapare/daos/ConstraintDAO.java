@@ -1,7 +1,6 @@
 package fr.univtln.mapare.daos;
 
 import fr.univtln.mapare.entities.Constraint;
-import lombok.extern.java.Log;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +9,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log
+/**
+ * Classe DAO d'une contrainte d' emploie du temps d'un enseignant
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class ConstraintDAO extends AbstractDAO<Constraint> {
     private final PreparedStatement findConstraintsByTeacher;
 
@@ -32,7 +35,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
         resultSet.getLong("TEACHER"));
     }
 
-
+    /**
+     * Permet de trouver une liste de contrainte associé à un enseignant
+     * @param teacherID Identifiant de l'enseignant auquel on cherche les contraintes
+     * @return Une Liste de contraintes
+     * @throws SQLException Exception SQL
+     */
     public List<Constraint> findByTeacher(long teacherID) throws SQLException {
         List<Constraint> constraints = new ArrayList<>();
 
@@ -56,6 +64,12 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
         super.update();
     }
 
+    /**
+     * Permet de peupler les Prepared Statements pour les contraintes
+     * @param popPS La Prepared Statements à peupler
+     * @param constraint La contrainte associé
+     * @throws SQLException Exception SQL
+     */
     private void populate(PreparedStatement popPS, Constraint constraint) throws SQLException {
         popPS.setLong(1, constraint.getTeacherID());
         popPS.setTimestamp(2, Timestamp.valueOf(constraint.getStartDate()));

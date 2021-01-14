@@ -9,7 +9,7 @@ import java.util.Optional;
 
 /**
  * This interface defines the generic method for DAO Objects.
- *
+ * @author Emmanuel BRUNO
  * @param <E> is the type of entities managed by the DAO
  */
 public interface DAO<E extends Entity> extends AutoCloseable {
