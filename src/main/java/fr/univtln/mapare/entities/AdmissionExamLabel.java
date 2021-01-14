@@ -56,7 +56,7 @@ public class AdmissionExamLabel implements Entity {
     /**
      * Supprime un intitulé de la liste de tout les intitulés de concours
      */
-    public void popAdmissionExamLabelInList(AdmissionExamLabel admissionExamLabel) {
+    public static void popAdmissionExamLabelInList(AdmissionExamLabel admissionExamLabel) {
         ADMISSIONEXAMLABELS.remove(admissionExamLabel);
     }
 
