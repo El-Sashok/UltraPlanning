@@ -2,6 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Module implements Entity {
     private long id;
@@ -55,6 +56,19 @@ public class Module implements Entity {
     @Override
     public String toString() {
         return label;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return id == module.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public String print() {

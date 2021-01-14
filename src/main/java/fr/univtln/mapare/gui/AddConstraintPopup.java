@@ -2,6 +2,7 @@ package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.ConstraintController;
 import fr.univtln.mapare.controllers.TeacherController;
+import fr.univtln.mapare.entities.Constraint;
 import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
@@ -36,9 +37,7 @@ public class AddConstraintPopup extends JFrame {
         setLocationRelativeTo(null);
         setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
-        String[] joursDeLaSemaine = {"Lundi", "Mardi", "Mecredi", "Jeudi", "Vendredi", "Samedi"};
-
-        for (String s : joursDeLaSemaine)
+        for (String s : Constraint.JOURSDELASEMAINE)
             comboBox1.addItem(s);
 
         for (int i = 0; i < Timetable.hourList.length - 1; i++)
@@ -77,6 +76,9 @@ public class AddConstraintPopup extends JFrame {
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException throwables) {
                     String message = "Erreur lors de l'insertion dans la base de données";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalStateException e1) {
+                    String message = "Contrainte déjà existante";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }

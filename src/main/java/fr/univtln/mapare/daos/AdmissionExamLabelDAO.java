@@ -6,8 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Classe DAO d'un Intitulé de concours
+ * @author Equipe MAPARE
+ * @version 1.0
+ */
 public class AdmissionExamLabelDAO extends AbstractDAO<AdmissionExamLabel> {
 
+    /**
+     * Constructeur d'une DAO d'intitulé de Concours
+     * @throws SQLException Exception SQL
+     */
     public AdmissionExamLabelDAO() throws SQLException {
         super("INSERT INTO ADMISSIONEXAM_LABEL(LABEL) VALUES(?)",
             "UPDATE ADMISSIONEXAM_LABEL SET LABEL=? WHERE ID=?");
@@ -36,6 +45,12 @@ public class AdmissionExamLabelDAO extends AbstractDAO<AdmissionExamLabel> {
         super.update();
     }
 
+    /**
+     * Permet de peupler les Prepared Statements pour AdmissionExamLabel
+     * @param popPS La Prepared Statements à peupler
+     * @param admissionExamLabel l'Intitulé du concours
+     * @throws SQLException Exception SQL
+     */
     private void populate(PreparedStatement popPS, AdmissionExamLabel admissionExamLabel) throws SQLException {
         popPS.setString(1, admissionExamLabel.getLabel());
     }

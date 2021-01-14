@@ -2,7 +2,9 @@ package fr.univtln.mapare.entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class Reservation implements Entity {
     private long id;
@@ -138,4 +140,5 @@ public class Reservation implements Entity {
     public boolean isNP() {
         return state == State.NP;
     }
+
 }

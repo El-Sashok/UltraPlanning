@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Classe entité d'une contrainte d' emploi du temps
@@ -17,6 +18,8 @@ public class Constraint implements Entity {
     private LocalTime end;
     private Teacher teacher; //needed for dao
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
+
+    public static final String[] JOURSDELASEMAINE = {"Lundi", "Mardi", "Mecredi", "Jeudi", "Vendredi", "Samedi"};
 
     //Constructors
 
@@ -109,7 +112,23 @@ public class Constraint implements Entity {
     //Methods
     @Override
     public String toString() {
-        return day.getDayOfWeek() + " de " + start + " à " + end;
+        return JOURSDELASEMAINE[day.getDayOfWeek().getValue() - 1] + " de " + start + " à " + end;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Constraint)) return false;
+        Constraint that = (Constraint) o;
+        return day.equals(that.day) &&
+                start.equals(that.start) &&
+                end.equals(that.end) &&
+                Objects.equals(teacher, that.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, start, end, teacher);
     }
 
     /**
