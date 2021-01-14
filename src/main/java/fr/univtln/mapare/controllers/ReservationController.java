@@ -27,7 +27,7 @@ public abstract class ReservationController {
     }
 
     /**
-     * Permet de rechercher toutes les salles libres pendent un horaire donné
+     * Permet de rechercher toutes les salles libres pendant un horaire donné
      * @param startDate Début de l'horaire souhaité
      * @param endDate Fin de l'horaire souhaité
      * @return Une liste de salles
@@ -96,7 +96,7 @@ public abstract class ReservationController {
      * @param room Salle dans laquelle se déroule la réservation
      * @param managers Liste des Enseignants en charge de la salle
      * @throws SQLException Exception SQL
-     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
@@ -149,8 +149,11 @@ public abstract class ReservationController {
         if (reservation.getManagers().containsAll(managers)) //if it's the same list
             throw new NotChangedException(reservation);
 
-        for (Teacher m : managers) //TODO check horaire prof
-            reservation.addTeacher(m);
+        for (Teacher t : managers) // TODO check constraints
+            if (reservation.getManagers().contains(t))
+                throw new ManagerTimeBreakException(t);
+            else
+                reservation.addTeacher(t);
         update(reservation);
     }
 
@@ -175,6 +178,7 @@ public abstract class ReservationController {
      * @param room Salle dans laquelle se déroule la réservation
      * @throws SQLException Exception SQL
      * @throws NotChangedException room n'a pas été changé
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void changeRoom(Reservation reservation, Room room) throws SQLException, NotChangedException, RoomTimeBreakException {
         if (reservation.getRoom().equals(room))
