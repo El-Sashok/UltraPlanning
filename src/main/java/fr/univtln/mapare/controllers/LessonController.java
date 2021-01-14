@@ -97,12 +97,13 @@ public abstract class LessonController {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
-        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
+
         List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
 
         //
         // Tentative de tester si les groupes ont le même module pendent une semaine
         //
+//        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
 //        isSameModuleForWeek:
 //        for (int i = 0; i < lessonsOfWeek.size(); i++){
 //            for (int j = 0; j < groups.size(); j++) {
@@ -124,7 +125,7 @@ public abstract class LessonController {
         int[] nbHoursM = new int[managers.size()];
 
         for (Lesson lesson : lessonsOfDay){
-            for (int i = 0; i < groups.size(); i++){
+            for (int i = 0; i < groups.size(); i++) {
                 if (lesson.getGroups().contains(groups.get(i))){
                     nbHoursG[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
                     if (nbHoursG[i] > 9){
