@@ -99,32 +99,34 @@ public abstract class LessonController {
         }
     }
 
+    /**
+     * Permet de vérifier qu'un cours que l'on s'apprête à créer respecte les règles de bienséance :
+     * - Pas plus de 9h de cours par jours
+     * - Pas toujours le même module durant plus d'une semaine
+     * @param start Date (avec heure) à laquelle commence le cours
+     * @param end Date (avec heure) à laquelle se termine le cours
+     * @param groups Liste des groupes qui participent au cours
+     * @param managers Liste des enseignants en charge de la salle
+     * @param modules Liste des modules associé au cours
+     * @return Vrais (True) si il n'y à pas de problèmes de bienséance
+     * @throws BadPracticesException Exception si une règle de bienséance n'est pas respectée.
+     */
     public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
-                                             List<Teacher> managers, List<Module> module) throws BadPracticesException {
+                                             List<Teacher> managers, List<Module> modules) throws BadPracticesException {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
 
         List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
 
-        //
-        // Tentative de tester si les groupes ont le même module pendent une semaine
-        //
+        // Teste si les groupes ont le même module pendent une semaine
+
 //        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
-//        isSameModuleForWeek:
-//        for (int i = 0; i < lessonsOfWeek.size(); i++){
-//            for (int j = 0; j < groups.size(); j++) {
-//                if (lessonsOfWeek.get(j).getGroups().contains(groups.get(j))) {
-//                    for (Module m : lessonsOfWeek.get(i).getModules()){
-//                        if (m.getId() != module.getId()){
-//                            break isSameModuleForWeek;
-//                        }
-//                    }
-//                }
-//            }
+//        for (Group g : groups){
+//            for (Lesson l : lessonsOfWeek){
+//                if (l.getGroups().contains(g)){
 //
-//            if (i == lessonsOfWeek.size() - 1){
-//                throw new Exception("meme module pendent 1 semaine");
+//                }
 //            }
 //        }
 
@@ -133,25 +135,31 @@ public abstract class LessonController {
 
         for (int i = 0; i < nbHoursG.length; i++){
             nbHoursG[i] = Duration.between(start, end).toHours();
+            if (nbHoursG[i] > 9) {
+                throw new BadPracticesException(groups.get(i));
+            }
         }
 
         for (int i = 0; i < nbHoursM.length; i++){
             nbHoursG[i] = Duration.between(start, end).toHours();
+            if (nbHoursG[i] > 9) {
+                throw new BadPracticesException(groups.get(i));
+            }
         }
 
         for (Lesson lesson : lessonsOfDay){
             for (int i = 0; i < groups.size(); i++) {
-                if (lesson.getGroups().contains(groups.get(i))){
+                if (lesson.getGroups().contains(groups.get(i))) {
                     nbHoursG[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
-                    if (nbHoursG[i] > 9){
+                    if (nbHoursG[i] > 9) {
                         throw new BadPracticesException(groups.get(i));
                     }
                 }
             }
-            for (int i = 0; i < managers.size(); i++){
-                if (lesson.getManagers().contains(managers.get(i))){
+            for (int i = 0; i < managers.size(); i++) {
+                if (lesson.getManagers().contains(managers.get(i))) {
                     nbHoursM[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
-                    if (nbHoursM[i] > 9){
+                    if (nbHoursM[i] > 9) {
                         throw new BadPracticesException(managers.get(i));
                     }
                 }
