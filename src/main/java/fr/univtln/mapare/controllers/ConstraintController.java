@@ -30,6 +30,6 @@ public abstract class ConstraintController {
     }
 
     public static void checkConflicts(Reservation r, Constraint c) {
-        
+
     }
 }
