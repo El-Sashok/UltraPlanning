@@ -100,6 +100,25 @@ public abstract class ReservationController {
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
+        checkCollision(startDate, endDate, room, managers);
+
+        Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
+        reservation.setManagers(managers);
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservationDAO.persist(reservation);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param managers Professeur en charge de la classe
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     */
+    static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Teacher> managers) throws ManagerTimeBreakException, RoomTimeBreakException {
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
@@ -112,12 +131,6 @@ public abstract class ReservationController {
                     if (r.getManagers().contains(t))
                         throw new ManagerTimeBreakException(t);
             }
-        }
-
-        Reservation reservation = new Reservation(-1, startDate, endDate, label, memo, state, room);
-        reservation.setManagers(managers);
-        try (ReservationDAO reservationDAO = new ReservationDAO()) {
-            reservationDAO.persist(reservation);
         }
     }
 

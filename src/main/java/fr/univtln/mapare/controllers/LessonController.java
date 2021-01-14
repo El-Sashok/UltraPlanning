@@ -17,7 +17,8 @@ public abstract class LessonController {
     private LessonController() {}
 
     /**
-     * Permet de créer une reservation de cours si il n'y a aucune collisions avec une autre reservation puis la sauvegarde dans la base de donnée
+     * Permet de créer une reservation de cours si il n'y a aucune collisions avec une autre reservation puis,
+     * la sauvegarde dans la base de donnée
      * @param startDate Début du cours
      * @param endDate Fin du cours
      * @param label Intitulé du cours
@@ -25,7 +26,7 @@ public abstract class LessonController {
      * @param state État de la reservation
      * @param room Salle dans laquelle se déroule le cours
      * @param type Type de cours
-     * @param modules Module enseigné
+     * @param modules Modules enseignés
      * @param groups Groupe qui participe au cours
      * @param managers Professeur en charge de la classe
      * @throws SQLException Exception SQL
@@ -39,6 +40,32 @@ public abstract class LessonController {
                                     List<Group> groups, List<Teacher> managers) throws SQLException,
             ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException,
             BadPracticesException {
+        checkCollision(startDate, endDate, room, modules, groups, managers);
+
+        Lesson lesson = new Lesson(-1, startDate, endDate, label, memo, state, room, type);
+        for (Module m : modules) lesson.addModule(m);
+        for (Group g : groups) lesson.addGroup(g);
+        for (Teacher t : managers) lesson.addTeacher(t);
+        try (LessonDAO lessonDAO = new LessonDAO()) {
+            lessonDAO.persist(lesson);
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param room Salle dans laquelle se déroule le cours
+     * @param modules Modules enseignés
+     * @param groups Groupe qui participe au cours
+     * @param managers Professeur en charge de la classe
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+     * @throws BadPracticesException La nouvelle reservation ne respecte pas une règle de bienséance
+     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
+     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cette horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     */
+    private static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Module> modules, List<Group> groups, List<Teacher> managers) throws ManagerTimeBreakException, BadPracticesException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
         for (Teacher t: managers)
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(startDate, endDate, c);
@@ -88,14 +115,6 @@ public abstract class LessonController {
                 }
             }
         }
-
-        Lesson lesson = new Lesson(-1, startDate, endDate, label, memo, state, room, type);
-        for (Module m : modules) lesson.addModule(m);
-        for (Group g : groups) lesson.addGroup(g);
-        for (Teacher t : managers) lesson.addTeacher(t);
-        try (LessonDAO lessonDAO = new LessonDAO()) {
-            lessonDAO.persist(lesson);
-        }
     }
 
     /**
@@ -108,12 +127,12 @@ public abstract class LessonController {
      * @param groups Liste des groupes qui participent au cours
      * @param managers Liste des enseignants en charge de la salle
      * @param modules Liste des modules associé au cours
-     * @return Vrais (True) si il n'y à pas de problèmes de bienséance
      * @throws BadPracticesException Exception si une règle de bienséance n'est pas respectée.
      */
-    public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
-                                             List<Teacher> managers, List<Module> modules) throws BadPracticesException {
+    public static void checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
+                                          List<Teacher> managers, List<Module> modules) throws BadPracticesException {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
+
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
 
@@ -187,6 +206,5 @@ public abstract class LessonController {
                 }
             }
         }
-        return true;
     }
 }
