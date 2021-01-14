@@ -93,13 +93,6 @@ public abstract class LessonController {
         }
     }
 
-    public static void createLesson(Reservation res, Lesson.Type type, List<Module> modules, List<Group> groups,
-                                    List<Teacher> managers) throws GroupTimeBreakException, SQLException,
-            ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
-        createLesson(res.getStartDate(), res.getEndDate(), res.getLabel(), res.getMemo(), res.getState(), res.getRoom(),
-                type, modules, groups, managers);
-    }
-
     public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups, List<Teacher> managers, Module module) throws BadPracticesException {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());

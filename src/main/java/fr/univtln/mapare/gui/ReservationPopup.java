@@ -72,7 +72,6 @@ public class ReservationPopup extends JFrame {
 
     public ReservationPopup(Timetable rootwindow) {
         setTitle("Réservation de salle");
-        setSize(450, 450);
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -82,7 +81,6 @@ public class ReservationPopup extends JFrame {
         if (rootwindow.SUStatus == Session.Status.TEACHER) {
             tabbedPane1.setSelectedIndex(4);
             tabbedPane1.setVisible(false);
-            System.out.println("haha");
         }
 
         List<Module> courseList = new ArrayList<>();
@@ -190,40 +188,38 @@ public class ReservationPopup extends JFrame {
                     LocalDateTime dateDeb = date.atTime((heureDebut / 2) + 8, heureDebut % 2 == 1 ? 30 : 0);
                     LocalDateTime dateFin = date.atTime((heureFin / 2) + 8, heureFin % 2 == 1 ? 30 : 0);
 
-                    Reservation baseR = new Reservation(-1, dateDeb, dateFin, "", textArea1.getText(),
-                            Reservation.State.NP, (Room) comboBox3.getSelectedItem());
-
                     switch (tabbedPane1.getSelectedIndex()) {
                         case 0: // cours
-                            LessonController.createLesson(baseR, Lesson.Type.values()[comboBox7.getSelectedIndex()],
+                            LessonController.createLesson(dateDeb, dateFin, "", textArea1.getText(),
+                                    Reservation.State.NP, (Room) comboBox3.getSelectedItem(), Lesson.Type.values()[comboBox7.getSelectedIndex()],
                                     courseList, groupList, teacherList);
                             break;
                         case 1: // concours
-                            AdmissionExamController.createAdmissionExam(baseR,
+                            AdmissionExamController.createAdmissionExam(dateDeb, dateFin, "", textArea1.getText(),
+                                    Reservation.State.NP, (Room) comboBox3.getSelectedItem(),
                                     (AdmissionExamLabel) comboBox4.getSelectedItem(), teacherList, studentList);
                             break;
                         case 2: // jury
-                            ExamBoardController.createExamBoard(baseR, (Yeargroup) comboBox5.getSelectedItem(), teacherList);
+                            ExamBoardController.createExamBoard(dateDeb, dateFin, "", textArea1.getText(),
+                                    Reservation.State.NP, (Room) comboBox3.getSelectedItem(), (Yeargroup) comboBox5.getSelectedItem(), teacherList);
                             break;
                         case 3: // soutenance
-                            DefenceController.createDefence(baseR, (Student) comboBox6.getSelectedItem(), teacherList);
+                            DefenceController.createDefence(dateDeb, dateFin, "", textArea1.getText(),
+                                    Reservation.State.NP, (Room) comboBox3.getSelectedItem(), (Student) comboBox6.getSelectedItem(), teacherList);
                             break;
                         case 4: // autre
-                            baseR.setLabel(textField1.getText());
-                            ReservationController.createReservation(baseR, teacherList);
+                            ReservationController.createReservation(dateDeb, dateFin, "", textArea1.getText(),
+                                    Reservation.State.NP, (Room) comboBox3.getSelectedItem(), teacherList);
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + tabbedPane1.getSelectedIndex());
                     }
 
-                    if (rootwindow.SUStatus == Session.Status.TEACHER) {
-                        for (Teacher t : Teacher.getTeacherList())
-                            if (t.getEmail().equals(Session.getLogin())) {
-                                if (teacherList.contains(t))
-                                    rootwindow.reloadPersonalReservations();
-                                break;
-                            }
-                    }
+                    // We reload the reservations if one was just added to the teacher currently adding one
+                    if (rootwindow.SUStatus == Session.Status.TEACHER &&
+                            teacherList.contains(TeacherController.findTeacher()))
+                        rootwindow.reloadPersonalReservations();
+
                     rootwindow.refresh();
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (NoDateSelectedException a) {
@@ -255,5 +251,6 @@ public class ReservationPopup extends JFrame {
 
             }
         });
+        this.pack();
     }
 }

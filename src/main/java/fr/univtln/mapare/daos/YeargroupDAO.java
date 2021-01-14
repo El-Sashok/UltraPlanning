@@ -16,14 +16,14 @@ import java.util.Optional;
 public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     private final PreparedStatement findGroupsPS;
     private final PreparedStatement persistGroupPS;
-    private final PreparedStatement updateGroupPS;
+    private final PreparedStatement removeGroupPS;
 
     public YeargroupDAO() throws SQLException {
         super("INSERT INTO YEARGROUP(LABEL) VALUES (?)",
                 "UPDATE YEARGROUP SET LABEL=? WHERE ID=?");
         this.findGroupsPS = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
         this.persistGroupPS = connection.prepareStatement("INSERT INTO YEARGROUP_GROUPS(YEARGROUP, CLASS_GROUP) VALUES(?,?)");
-        this.updateGroupPS = connection.prepareStatement("UPDATE YEARGROUP_GROUPS SET YEARGROUP=?, CLASS_GROUP=? WHERE ID=?");
+        this.removeGroupPS = connection.prepareStatement("DELETE FROM YEARGROUP_GROUPS WHERE ID=?");
     }
 
     @Override
@@ -121,10 +121,14 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
         persistGroupPS.executeUpdate();
     }
 
-    private void updateGroup(Yeargroup yeargroup, Group group, Long yeargroupGroupID) throws SQLException {
-        populateGroup(updateGroupPS, yeargroup, group);
-        updateGroupPS.setLong(3, yeargroupGroupID);
-        updateGroupPS.executeUpdate();
+    public void updateGroups(Yeargroup yeargroup) throws SQLException {
+        findGroupsPS.setLong(1, yeargroup.getId());
+        ResultSet findGroupsRS = findGroupsPS.executeQuery();
+        while (findGroupsRS.next()) { // Remove former groups
+            removeGroupPS.setLong(1, findGroupsRS.getLong("ID"));
+            removeGroupPS.executeUpdate();
+        }
+        persistGroups(yeargroup); // Add new groups
     }
 
     private void populateGroup(PreparedStatement popYeargroupPS, Yeargroup yeargroup, Group group) throws SQLException {

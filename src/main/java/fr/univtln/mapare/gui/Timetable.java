@@ -797,17 +797,12 @@ public class Timetable extends JFrame {
 
         menuBarre = new JMenuBar();
         setJMenuBar(menuBarre);
+        JMenu edtMenu = new JMenu("Emploi du Temps");
+        menuBarre.add(edtMenu);
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
-            JMenuItem persView = new JMenuItem("EDT personnel") {
-                @Override
-                public Dimension getMaximumSize() {
-                    Dimension dim = super.getMaximumSize();
-                    dim.width = super.getPreferredSize().width;
-                    return dim;
-                }
-            };
-            menuBarre.add(persView);
+            JMenuItem persView = new JMenuItem("Emploi du Temps personnel");
+            edtMenu.add(persView);
             persView.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -820,15 +815,8 @@ public class Timetable extends JFrame {
         }
 
 
-        JMenuItem roomView = new JMenuItem("EDT par salle") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(roomView);
+        JMenuItem roomView = new JMenuItem("Emploi du Temps par salle");
+        edtMenu.add(roomView);
         roomView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -838,15 +826,8 @@ public class Timetable extends JFrame {
             }
         });
 
-        JMenuItem groupView = new JMenuItem("EDT par groupe") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(groupView);
+        JMenuItem groupView = new JMenuItem("Emploi du Temps par groupe");
+        edtMenu.add(groupView);
         groupView.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -856,26 +837,46 @@ public class Timetable extends JFrame {
             }
         });
 
-        JMenuItem findRoom = new JMenuItem("Trouver Salle") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(findRoom);
-        findRoom.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                FreeRoomFinder frf = new FreeRoomFinder(thisframe);
-                frf.setVisible(true);
-            }
-        });
+        if (SUStatus != Session.Status.INVITE) {
+            JMenuItem findRoom = new JMenuItem("Trouver Salle") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(findRoom);
+            findRoom.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    FreeRoomFinder frf = new FreeRoomFinder(thisframe);
+                    frf.setVisible(true);
+                }
+            });
+
+            JMenuItem changePassword = new JMenuItem("Changer Mot de Passe") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(changePassword);
+            changePassword.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    PasswordChangePopup pcp = new PasswordChangePopup();
+                    pcp.setVisible(true);
+                }
+            });
+        }
 
         if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
-            JMenuItem addReservation = new JMenuItem("Ajouter Reservation"){
+            JMenuItem addReservation = new JMenuItem("Ajouter Reservation") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -890,6 +891,33 @@ public class Timetable extends JFrame {
                     super.mousePressed(e);
                     ReservationPopup rp = new ReservationPopup(thisframe);
                     rp.setVisible(true);
+                }
+            });
+        }
+
+        if (SUStatus == Session.Status.TEACHER) {
+            JMenu constraintMenu = new JMenu("Contraintes");
+            menuBarre.add(constraintMenu);
+
+            JMenuItem addConstraint = new JMenuItem("Ajouter Contrainte");
+            constraintMenu.add(addConstraint);
+            addConstraint.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddConstraintPopup acp = new AddConstraintPopup();
+                    acp.setVisible(true);
+                }
+            });
+
+            JMenuItem removeConstraint = new JMenuItem("Retirer Contrainte");
+            constraintMenu.add(removeConstraint);
+            removeConstraint.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    RemoveConstraintPopup rcp = new RemoveConstraintPopup();
+                    rcp.setVisible(true);
                 }
             });
         }

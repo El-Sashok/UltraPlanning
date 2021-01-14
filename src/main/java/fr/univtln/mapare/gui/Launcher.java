@@ -49,7 +49,7 @@ public class Launcher extends JFrame {
 
     public Launcher(){
         setTitle("Login");
-        setSize(300, 160);
+        //setSize(300, 160);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(rootPanel);
@@ -88,6 +88,7 @@ public class Launcher extends JFrame {
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+        this.pack();
     }
 
     public static void main(String[] args) throws SQLException {

@@ -55,9 +55,15 @@ public abstract class SessionController {
         }
     }
 
-    //TODO Supprimer ceci
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        System.out.println(hashPassword("test"));
-        System.out.println(Session.getStatus());
+    public static void changePassword(String newPassword) throws NoSuchAlgorithmException, SQLException {
+        Session.setHashedPassword(hashPassword(newPassword));
+        try (SessionDAO sDAO = new SessionDAO()) {
+            sDAO.update(Session.getInstance());
+        }
+    }
+
+    public static void checkPassword(String password) throws NoSuchAlgorithmException {
+        if (!hashPassword(password).equals(Session.getHashedPassword()))
+            throw new IncorrectPasswordException(Session.getLogin());
     }
 }
