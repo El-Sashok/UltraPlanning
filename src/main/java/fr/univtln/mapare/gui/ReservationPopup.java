@@ -4,6 +4,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import fr.univtln.mapare.controllers.*;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.exceptions.BadPracticesException;
 import fr.univtln.mapare.exceptions.EmptySelectionListException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.NoDateSelectedException;
@@ -229,8 +230,8 @@ public class ReservationPopup extends JFrame {
                     String message = "Veuillez choisir une heure de fin supérieure à l'heure de début de plus d'une" +
                             " heure.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (EmptySelectionListException emptySelectionListException) {
-                    String message = emptySelectionListException.getMessage();
+                } catch (EmptySelectionListException | BadPracticesException exception) {
+                    String message = exception.getMessage();
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException throwables) {
                     String message = "Reservation incorrecte";
