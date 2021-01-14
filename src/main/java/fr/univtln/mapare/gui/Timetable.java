@@ -725,42 +725,6 @@ public class Timetable extends JFrame {
         setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         init();
-        if (SUStatus == Session.Status.MANAGER)
-            managerInit();
-        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
-            @Override
-            public Dimension getMaximumSize() {
-                Dimension dim = super.getMaximumSize();
-                dim.width = super.getPreferredSize().width;
-                return dim;
-            }
-        };
-        menuBarre.add(deconnexion);
-        deconnexion.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                Launcher launcher = new Launcher();
-                launcher.setVisible(true);
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-            }
-        });
-    }
-
-    public void managerInit() {
-        JMenu addingMenu = new JMenu("Ajout");
-        menuBarre.add(addingMenu);
-        JMenuItem addModule = new JMenuItem("Ajouter Module");
-        addingMenu.add(addModule);
-        addModule.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                AddModulePopup amp = new AddModulePopup();
-                amp.setVisible(true);
-            }
-        });
     }
 
     public void init() {
@@ -921,6 +885,61 @@ public class Timetable extends JFrame {
                 }
             });
         }
+
+        if (SUStatus == Session.Status.MANAGER) {
+            JMenu addingMenu = new JMenu("Ajout");
+            menuBarre.add(addingMenu);
+            JMenuItem addModule = new JMenuItem("Ajouter Module");
+            addingMenu.add(addModule);
+            addModule.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddModulePopup amp = new AddModulePopup();
+                    amp.setVisible(true);
+                }
+            });
+        }
+
+        if (SUStatus == Session.Status.ADMIN) {
+            JMenuItem maintenance = new JMenuItem("Faire la maintenance"){
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(maintenance);
+            maintenance.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    String msg = "La maintenance a été effectuée";
+                    JOptionPane.showMessageDialog(null, msg, "Maintenance", JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+        }
+
+        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension dim = super.getMaximumSize();
+                dim.width = super.getPreferredSize().width;
+                return dim;
+            }
+        };
+        menuBarre.add(deconnexion);
+        deconnexion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Launcher launcher = new Launcher();
+                launcher.setVisible(true);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
+            }
+        });
     }
 
     public void refresh() {
