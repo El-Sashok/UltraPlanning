@@ -18,6 +18,10 @@ public abstract class AdmissionExamController {
                                            Reservation.State state, Room room, AdmissionExamLabel examLabel,
                                            List<Teacher> managers, List<Student> students) throws SQLException,
             ManagerTimeBreakException, RoomTimeBreakException, StudentTimeBreakException {
+        for (Teacher t: managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(startDate, endDate, c);
+
         for (Reservation r : Reservation.getReservationList()) {
             if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))

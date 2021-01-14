@@ -16,6 +16,10 @@ public abstract class ExamBoardController {
     public static void createExamBoard(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                        Reservation.State state, Room room, Yeargroup yg, List<Teacher> managers)
             throws SQLException, RoomTimeBreakException, ManagerTimeBreakException {
+        for (Teacher t: managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(startDate, endDate, c);
+
         for (Reservation r : Reservation.getReservationList())
             if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))

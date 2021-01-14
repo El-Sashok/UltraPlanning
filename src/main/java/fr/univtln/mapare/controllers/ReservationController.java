@@ -100,6 +100,10 @@ public abstract class ReservationController {
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
+        for (Teacher t: managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(startDate, endDate, c);
+
         for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
             if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
                 if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) { // vérifie les collision de réservation
