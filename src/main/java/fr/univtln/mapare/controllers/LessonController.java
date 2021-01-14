@@ -38,7 +38,13 @@ public abstract class LessonController {
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
                                     List<Group> groups, List<Teacher> managers) throws SQLException,
-            ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException {
+            ManagerTimeBreakException, RoomTimeBreakException, GroupTimeBreakException, StudentTimeBreakException,
+            BadPracticesException {
+        for (Teacher t: managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(startDate, endDate, c);
+
+        checkGoodPractices(startDate, endDate, groups, managers, modules);
 
         for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
             if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
@@ -93,16 +99,18 @@ public abstract class LessonController {
         }
     }
 
-    public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups, List<Teacher> managers, Module module) throws BadPracticesException {
+    public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,
+                                             List<Teacher> managers, List<Module> module) throws BadPracticesException {
         Calendar calendar = Calendar.getInstance(Locale.FRANCE);
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
-        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
+
         List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
 
         //
         // Tentative de tester si les groupes ont le même module pendent une semaine
         //
+//        List<Lesson> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR));
 //        isSameModuleForWeek:
 //        for (int i = 0; i < lessonsOfWeek.size(); i++){
 //            for (int j = 0; j < groups.size(); j++) {
@@ -132,7 +140,7 @@ public abstract class LessonController {
         }
 
         for (Lesson lesson : lessonsOfDay){
-            for (int i = 0; i < groups.size(); i++){
+            for (int i = 0; i < groups.size(); i++) {
                 if (lesson.getGroups().contains(groups.get(i))){
                     nbHoursG[i] += Duration.between(lesson.getStartDate(), lesson.getEndDate()).toHours();
                     if (nbHoursG[i] > 9){
