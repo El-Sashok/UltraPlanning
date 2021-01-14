@@ -20,6 +20,7 @@ import java.util.Optional;
 public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
     private final PreparedStatement findStudentsPS;
     private final PreparedStatement persistStudentPS;
+    private final PreparedStatement removeStudentPS;
 
     /**
      * Constructeur d'une DAO de concours
@@ -30,10 +31,11 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
                 "UPDATE ADMISSIONEXAM SET ID=?, LABEL=? WHERE ID=?");
         findStudentsPS = connection.prepareStatement("SELECT * FROM ADMISSIONEXAM_STUDENTS WHERE ADMISSIONEXAM=?");
         persistStudentPS = connection.prepareStatement("INSERT INTO ADMISSIONEXAM_STUDENTS(ADMISSIONEXAM, STUDENT) VALUES (?,?)");
+        removeStudentPS = connection.prepareStatement("DELETE FROM ADMISSIONEXAM_STUDENTS WHERE ID=?");
     }
 
     /**
-     * /!\ Mettode non implémenté /!\
+     * /!\ Méthode non implémentée /!\
      * @param resultSet .
      * @return null
      * @throws SQLException Exception SQL
@@ -45,7 +47,7 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
 
     /**
      * Permet de créer une entité concours à partir d'un resultset
-     * @param resultSet ResultSet qui contient les information pour créer l'entité
+     * @param resultSet ResultSet qui contient les informations pour créer l'entité
      * @param admissionExamLabel Intitulé du concours
      * @param students Liste d'étudiants qui participent au concours
      * @return une entité concours
@@ -115,7 +117,7 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
     /**
      * Permet de peupler les Prepared Statements pour AdmissionExam
      * @param popPS La Prepared Statements à peupler
-     * @param admissionExam L'entité concours qui détiens les informations
+     * @param admissionExam L'entité concours qui détient les informations
      * @throws SQLException Exception SQL
      */
     private void populate(PreparedStatement popPS, AdmissionExam admissionExam) throws SQLException {
@@ -133,6 +135,16 @@ public class AdmissionExamDAO extends AbstractDAO<AdmissionExam> {
             populateStudent(persistStudentPS, admissionExam, s);
             persistStudentPS.executeUpdate();
         }
+    }
+
+    public void updateStudents(AdmissionExam admissionExam) throws SQLException {
+        findStudentsPS.setLong(1, admissionExam.getId());
+        ResultSet findStudentsRS = findStudentsPS.executeQuery();
+        while (findStudentsRS.next()) {
+            removeStudentPS.setLong(1, findStudentsRS.getLong("ID"));
+            removeStudentPS.executeUpdate();
+        }
+        persistStudents(admissionExam);
     }
 
     /**

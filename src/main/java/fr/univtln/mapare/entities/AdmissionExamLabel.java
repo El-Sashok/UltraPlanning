@@ -2,6 +2,7 @@ package fr.univtln.mapare.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Classe entité d'un intitulé de concours
@@ -87,4 +88,16 @@ public class AdmissionExamLabel implements Entity {
                 ", id=" + id + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdmissionExamLabel that = (AdmissionExamLabel) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

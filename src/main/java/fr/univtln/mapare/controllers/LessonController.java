@@ -1,10 +1,13 @@
 package fr.univtln.mapare.controllers;
 
+import fr.univtln.mapare.daos.AdmissionExamDAO;
 import fr.univtln.mapare.daos.LessonDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.BadPracticesException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.*;
+import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;
 import java.time.Duration;
@@ -17,11 +20,11 @@ public abstract class LessonController {
     private LessonController() {}
 
     /**
-     * Permet de créer une reservation de cours si il n'y a aucune collisions avec une autre reservation puis la sauvegarde dans la base de donnée
+     * Permet de créer une reservation de cours si il n'y a aucune collision avec une autre reservation puis la sauvegarde dans la base de données
      * @param startDate Début du cours
      * @param endDate Fin du cours
      * @param label Intitulé du cours
-     * @param memo Information complémentaire
+     * @param memo Informations complémentaires
      * @param state État de la reservation
      * @param room Salle dans laquelle se déroule le cours
      * @param type Type de cours
@@ -29,10 +32,10 @@ public abstract class LessonController {
      * @param groups Groupe qui participe au cours
      * @param managers Professeur en charge de la classe
      * @throws SQLException Exception SQL
-     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
-     * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
-     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cette horaire
-     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
+     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cet horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cet horaire
      */
     public static void createLesson(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                     Reservation.State state, Room room, Lesson.Type type, List<Module> modules,
@@ -45,46 +48,28 @@ public abstract class LessonController {
 
         checkGoodPractices(startDate, endDate, groups, managers, modules);
 
-        for (Reservation r : Reservation.getReservationList()){ // récupère la liste de toutes les reservations
-            if (r.getState() == Reservation.State.NP) { // vérifie si la reservation n'as pas été déplacé ou annulé
-                if (Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)){ // vérifie les collision de réservation
-                    for (Teacher dbTeacher : r.getManagers()){
-                        for (Teacher LocalTeacher : managers){
-                            if (dbTeacher.getId() == LocalTeacher.getId()) { // vérifie si un enseignant est déjà occupé pendant cette horaire
-                                throw new ManagerTimeBreakException(LocalTeacher);
-                            }
-                        }
-                    }
-                    if (r.getRoom().getId() == room.getId()) { // vérifie si la salle n'est pas déjà occupée
-                        throw new RoomTimeBreakException(room);
-                    }
-                    else if (r instanceof Lesson){
-                        for (Group dbGroup : ((Lesson) r).getGroups()){
-                            for (Group LocalGroup : groups){
-                                if (dbGroup.getId() == LocalGroup.getId()) { // vérifie si un groupe est déjà occupé pendant cette horaire
-                                    throw new GroupTimeBreakException(LocalGroup);
-                                }
-                            }
-                        }
-                    }
-                    else if (r instanceof Defence){
-                        for (Group g : groups){
-                            for (Student s : g.getStudents()){
-                                if (s.getId() == ((Defence) r).getStudent().getId()) { // vérifie si un étudiant est déjà occupé pendant cette horaire
-                                    throw new StudentTimeBreakException(s);
-                                }
-                            }
-                        }
-                    }
-                    else if (r instanceof AdmissionExam){
-                        for (Group g : groups){
-                            for (Student s : g.getStudents()){
-                                if (((AdmissionExam) r).getStudents().contains(s)) {
-                                    throw new StudentTimeBreakException(s);
-                                }
-                            }
-                        }
-                    }
+        for (Reservation r : Reservation.getReservationList()) {
+            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
+                if (room.equals(r.getRoom()))
+                    throw new RoomTimeBreakException(room);
+                for (Teacher t : managers)
+                    if (r.getManagers().contains(t))
+                        throw new ManagerTimeBreakException(t);
+                if (r instanceof Lesson) {
+                    for (Group dbGroup : ((Lesson) r).getGroups())
+                        for (Group LocalGroup : groups)
+                            if (dbGroup.getId() == LocalGroup.getId())
+                                throw new GroupTimeBreakException(LocalGroup);
+                } else if (r instanceof Defence) {
+                    for (Group g : groups)
+                        for (Student s : g.getStudents())
+                            if (s.getId() == ((Defence) r).getStudent().getId())
+                                throw new StudentTimeBreakException(s);
+                } else if (r instanceof AdmissionExam) {
+                    for (Group g : groups)
+                        for (Student s : g.getStudents())
+                            if (((AdmissionExam) r).getStudents().contains(s))
+                                throw new StudentTimeBreakException(s);
                 }
             }
         }
@@ -99,16 +84,59 @@ public abstract class LessonController {
     }
 
     /**
+     * Permet de changer les groupes participant au cours
+     * @param lesson Le cours
+     * @param groups Nouvelle liste de groupes pour le cours
+     * @throws SQLException Exception SQL
+     * @throws EmptyAttributeException groups ne contient pas de groupe
+     * @throws NotChangedException Aucune modification apportée
+     * @throws StudentTimeBreakException Un des étudiants d'un groupe dans groups n'est pas disponible
+     */
+    public static void changeGroups(Lesson lesson, List<Group> groups) throws SQLException, EmptyAttributeException, NotChangedException, StudentTimeBreakException, GroupTimeBreakException {
+        if (groups.size() == 0)
+            throw new EmptyAttributeException("changeGroups", lesson);
+        if (groups.size() == lesson.getGroups().size())
+            if (lesson.getGroups().containsAll(groups))
+                throw new NotChangedException(lesson);
+
+        for (Reservation r : Reservation.getReservationList()) {
+            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), lesson.getStartDate(), lesson.getEndDate())) {
+                if (r instanceof Lesson) {
+                    for (Group dbGroup : ((Lesson) r).getGroups())
+                        for (Group LocalGroup : groups)
+                            if (dbGroup.getId() == LocalGroup.getId())
+                                throw new GroupTimeBreakException(LocalGroup);
+                } else if (r instanceof Defence) {
+                    for (Group g : groups)
+                        for (Student s : g.getStudents())
+                            if (s.getId() == ((Defence) r).getStudent().getId())
+                                throw new StudentTimeBreakException(s);
+                } else if (r instanceof AdmissionExam) {
+                    for (Group g : groups)
+                        for (Student s : g.getStudents())
+                            if (((AdmissionExam) r).getStudents().contains(s))
+                                throw new StudentTimeBreakException(s);
+                }
+            }
+        }
+
+        lesson.setGroups(groups);
+        try (LessonDAO lessonDAO = new LessonDAO()) {
+            lessonDAO.updateGroups(lesson);
+        }
+    }
+
+    /**
      * Permet de vérifier qu'un cours que l'on s'apprête à créer respecte les règles de bienséance :
-     * - Pas plus de 9h de cours par jours
+     * - Pas plus de 9h de cours par jour
      * - Pas toujours le même module durant plus d'une semaine
-     * - Pas terminer tout les jours à 18h ou plus
+     * - Pas terminer tous les jours à 18h ou plus
      * @param start Date (avec heure) à laquelle commence le cours
      * @param end Date (avec heure) à laquelle se termine le cours
      * @param groups Liste des groupes qui participent au cours
      * @param managers Liste des enseignants en charge de la salle
-     * @param modules Liste des modules associé au cours
-     * @return Vrais (True) si il n'y à pas de problèmes de bienséance
+     * @param modules Liste des modules associés au cours
+     * @return Vrais (True) si il n'y à pas de problème de bienséance
      * @throws BadPracticesException Exception si une règle de bienséance n'est pas respectée.
      */
     public static boolean checkGoodPractices(LocalDateTime start, LocalDateTime end, List<Group> groups,

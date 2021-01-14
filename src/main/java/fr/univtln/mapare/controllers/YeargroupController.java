@@ -50,7 +50,7 @@ public abstract class YeargroupController {
     /**
      * Permet de changer les groupes de la promotion
      * @param yeargroup La promotion
-     * @param groups La nouvelle liste de groupes de la promotion
+     * @param groups Nouvelle liste de groupes de la promotion
      * @throws SQLException Exception SQL
      * @throws EmptyAttributeException groups ne contient pas de groupe
      * @throws NotChangedException Aucune modification apportée

@@ -17,7 +17,7 @@ public abstract class ReservationController {
     private ReservationController() {}
 
     /**
-     * Fonction d'initialisation : Elle permet de charger tout les réservations
+     * Fonction d'initialisation : Elle permet de charger toutes les réservations
      * @throws SQLException Exception SQL
      */
     public static void loadReservations() throws SQLException {
@@ -94,10 +94,10 @@ public abstract class ReservationController {
      * @param memo Informations complémentaires
      * @param state État de la réservation
      * @param room Salle dans laquelle se déroule la réservation
-     * @param managers Liste des Enseignants en charge de la salle
+     * @param managers Liste des enseignants en charge de la réservation
      * @throws SQLException Exception SQL
      * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
-     * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
      */
     public static void createReservation(LocalDateTime startDate, LocalDateTime endDate, String label, String memo, Reservation.State state, Room room, List<Teacher> managers) throws SQLException, ManagerTimeBreakException, RoomTimeBreakException {
         for (Teacher t: managers)
@@ -139,16 +139,18 @@ public abstract class ReservationController {
     /**
      * Permet de changer les enseignants d'une réservation
      * @param reservation La réservation
-     * @param managers Liste d'enseignants encadrant la réservation
+     * @param managers Nouvelle liste d'enseignants encadrant la réservation
      * @throws SQLException Exception SQL
-     * @throws NotChangedException state n'a pas été changé
+     * @throws EmptyAttributeException managers ne contient pas de manager
+     * @throws NotChangedException Aucune modification apportée
      * @throws ManagerTimeBreakException Un des enseignants dans managers n'est pas disponible
      */
     public static void changeManagers(Reservation reservation, List<Teacher> managers) throws SQLException, EmptyAttributeException, NotChangedException, ManagerTimeBreakException {
         if (managers.size() == 0) //if managers is empty
             throw new EmptyAttributeException("changeManagersReservation", reservation);
-        if (reservation.getManagers().containsAll(managers)) //if it's the same list
-            throw new NotChangedException(reservation);
+        if (managers.size() == reservation.getManagers().size())
+            if (reservation.getManagers().containsAll(managers)) //if it's the same list
+                throw new NotChangedException(reservation);
         for (Reservation r : Reservation.getReservationList())
             for (Teacher t : managers)
                 if (r.getManagers().contains(t))
@@ -157,7 +159,10 @@ public abstract class ReservationController {
             for (Constraint c : t.getConstraints())
                 ConstraintController.checkConflicts(reservation.getStartDate(), reservation.getEndDate(), c);
 
-        update(reservation);
+        reservation.setManagers(managers);
+        try (ReservationDAO reservationDAO = new ReservationDAO()) {
+            reservationDAO.updateManagers(reservation);
+        }
     }
 
     /**

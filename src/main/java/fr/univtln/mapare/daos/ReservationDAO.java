@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ReservationDAO extends AbstractDAO<Reservation> {
     private final PreparedStatement findManagersPS;
     private final PreparedStatement persistManagerPS;
-    private final PreparedStatement updateManagerPS;
+    private final PreparedStatement removeManagerPS;
 
     public ReservationDAO() throws SQLException {
         super("INSERT INTO RESERVATION(START, END, LABEL, MEMO, TYPE, ROOM, STATE) VALUES (?,?,?,?,?,?,?)",
@@ -24,7 +24,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
 
         findManagersPS = connection.prepareStatement("SELECT * FROM MANAGERS WHERE RESERVATION=?");
         persistManagerPS = connection.prepareStatement("INSERT INTO MANAGERS(RESERVATION, MANAGER) VALUES (?,?)");
-        updateManagerPS = connection.prepareStatement("UPDATE MANAGERS SET RESERVATION=?, MANAGER=? WHERE ID=?");
+        removeManagerPS = connection.prepareStatement("DELETE FROM MANAGERS WHERE ID=?");
     }
 
     @Override
@@ -150,6 +150,7 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         populate(updatePS, reservation, type);
         updatePS.setLong(8, reservation.getId());
         super.update();
+        updateManagers(reservation);
     }
 
     private void populate(PreparedStatement popPS, Reservation reservation) throws SQLException {
@@ -176,8 +177,14 @@ public class ReservationDAO extends AbstractDAO<Reservation> {
         persistManagerPS.executeUpdate();
     }
 
-    public void updateManager(Reservation reservation, Teacher manager) {
-        // Not implemented yet
+    public void updateManagers(Reservation reservation) throws SQLException {
+        findManagersPS.setLong(1, reservation.getId());
+        ResultSet findManagersRS = findManagersPS.executeQuery();
+        while (findManagersRS.next()) {
+            removeManagerPS.setLong(1, findManagersRS.getLong("ID"));
+            removeManagerPS.executeUpdate();
+        }
+        persistManagers(reservation);
     }
 
     private void populateManager(PreparedStatement popManagerPS, Reservation reservation, Teacher manager) throws SQLException {

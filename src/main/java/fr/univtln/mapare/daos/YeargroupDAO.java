@@ -21,9 +21,9 @@ public class YeargroupDAO extends AbstractDAO<Yeargroup> {
     public YeargroupDAO() throws SQLException {
         super("INSERT INTO YEARGROUP(LABEL) VALUES (?)",
                 "UPDATE YEARGROUP SET LABEL=? WHERE ID=?");
-        this.findGroupsPS = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
-        this.persistGroupPS = connection.prepareStatement("INSERT INTO YEARGROUP_GROUPS(YEARGROUP, CLASS_GROUP) VALUES(?,?)");
-        this.removeGroupPS = connection.prepareStatement("DELETE FROM YEARGROUP_GROUPS WHERE ID=?");
+        findGroupsPS = connection.prepareStatement("SELECT * FROM YEARGROUP_GROUPS WHERE YEARGROUP=?");
+        persistGroupPS = connection.prepareStatement("INSERT INTO YEARGROUP_GROUPS(YEARGROUP, CLASS_GROUP) VALUES(?,?)");
+        removeGroupPS = connection.prepareStatement("DELETE FROM YEARGROUP_GROUPS WHERE ID=?");
     }
 
     @Override

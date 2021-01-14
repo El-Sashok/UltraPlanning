@@ -5,6 +5,8 @@ import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
+import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -18,11 +20,15 @@ public abstract class DefenceController {
      * @param startDate Début de la soutenance
      * @param endDate Fin de la soutenance
      * @param label Intitulé de la soutenance
-     * @param memo Texte complémentaire
-     * @param state Étant de la réservation
+     * @param memo Informations complémentaires
+     * @param state État de la réservation
      * @param room  Salle dans laquelle se déroule la soutenance
+     * @param managers Liste des enseignants en charge de la réservation
      * @param student Étudiant qui présente la soutenance
      * @throws SQLException Exception SQL
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cet horaire
      */
     public static void createDefence(LocalDateTime startDate, LocalDateTime endDate, String label, String memo,
                                      Reservation.State state, Room room, Student student, List<Teacher> managers)
@@ -58,4 +64,42 @@ public abstract class DefenceController {
             defenceDAO.persist(defence);
         }
     }
+
+    /**
+     * Permet de changer l'étudiant présentant la soutenance
+     * @param defence La soutenance
+     * @param student Nouvel étudiant présentant la soutenance
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException Aucune modification apportée
+     * @throws StudentTimeBreakException L'étudiant student n'est pas disponible
+     */
+    public static void changeStudent(Defence defence, Student student) throws SQLException, NotChangedException, StudentTimeBreakException {
+        if (defence.getStudent().equals(student))
+            throw new NotChangedException(defence);
+
+        for (Reservation r : Reservation.getReservationList()) {
+            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), defence.getStartDate(), defence.getEndDate())) {
+                if (r instanceof Defence) {
+                    if (student.equals(((Defence) r).getStudent()))
+                        throw new StudentTimeBreakException(((Defence) r).getStudent());
+                }
+                else if (r instanceof Lesson)
+                    for (Group g : ((Lesson) r).getGroups()) {
+                        if (g.getStudents().contains(student))
+                            throw new StudentTimeBreakException(student);
+                    }
+                else if (r instanceof AdmissionExam) {
+                    if (((AdmissionExam) r).getStudents().contains(student))
+                        throw new StudentTimeBreakException(student);
+                }
+            }
+        }
+
+        defence.setStudent(student);
+        try (DefenceDAO defenceDAO = new DefenceDAO()) {
+            defenceDAO.update(defence);
+        }
+    }
+
+
 }
