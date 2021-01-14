@@ -117,7 +117,7 @@ public abstract class TeacherController {
         Teacher ret = null;
 
         for (Teacher t : Teacher.getTeacherList())
-            if (t.getEmail() == Session.getLogin())
+            if (t.getEmail() == Session.getInstance().getLogin())
                 return t;
 
         return ret;

@@ -30,7 +30,7 @@ public class Launcher extends JFrame {
         try {
             SessionController.login(emailTextField.getText(), String.valueOf(passwordField.getPassword()));
 
-            Timetable tt = new Timetable(Session.getStatus());
+            Timetable tt = new Timetable(Session.getInstance().getStatus());
             tt.setVisible(true);
 
             thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));

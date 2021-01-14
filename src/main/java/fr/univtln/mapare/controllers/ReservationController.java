@@ -48,12 +48,12 @@ public abstract class ReservationController {
     public static List<Reservation> findPersonalReservations() {
         List<Reservation> reservations = new ArrayList<>();
         for (Reservation r : Reservation.getReservationList()){
-            if (Session.getStatus() == Session.Status.STUDENT) {
+            if (Session.getInstance().getStatus() == Session.Status.STUDENT) {
                 if (r instanceof Lesson){
                     group:
                     for (Group g : ((Lesson) r).getGroups()){
                         for (Student s : g.getStudents()){
-                            if (s.getEmail().equals(Session.getLogin())) {
+                            if (s.getEmail().equals(Session.getInstance().getLogin())) {
                                 reservations.add(r);
                                 break group;
                             }
@@ -61,22 +61,22 @@ public abstract class ReservationController {
                     }
                 }
                 else if (r instanceof Defence) {
-                    if (((Defence) r).getStudent().getEmail().equals(Session.getLogin())){
+                    if (((Defence) r).getStudent().getEmail().equals(Session.getInstance().getLogin())){
                         reservations.add(r);
                     }
                 }
                 else if (r instanceof AdmissionExam){
                     for (Student s : ((AdmissionExam) r).getStudents()){
-                        if (s.getEmail().equals(Session.getLogin())){
+                        if (s.getEmail().equals(Session.getInstance().getLogin())){
                             reservations.add(r);
                             break;
                         }
                     }
                 }
             }
-            else if (Session.getStatus() == Session.Status.TEACHER) {
+            else if (Session.getInstance().getStatus() == Session.Status.TEACHER) {
                 for (Teacher t : r.getManagers()){
-                    if (t.getEmail().equals(Session.getLogin())){
+                    if (t.getEmail().equals(Session.getInstance().getLogin())){
                         reservations.add(r);
                         break;
                     }
