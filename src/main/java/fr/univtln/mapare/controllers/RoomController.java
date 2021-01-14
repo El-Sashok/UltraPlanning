@@ -2,6 +2,8 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.RoomDAO;
 import fr.univtln.mapare.entities.Room;
+import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;
 
@@ -44,6 +46,40 @@ public abstract class RoomController {
         Room room = new Room(-1, building, number, capacity, label, info);
         try (RoomDAO roomDAO = new RoomDAO()) {
             roomDAO.persist(room);
+        }
+    }
+
+    /**
+     * Permet de changer la capacité d'une salle
+     * @param room La salle
+     * @param capacity Le nombre de places disponibles dans la salle
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException Aucune modification apportée
+     */
+    public static void changeCapacity(Room room, int capacity) throws SQLException, NotChangedException {
+        if (room.getCapacity() == capacity)
+            throw new NotChangedException(room);
+
+        room.setCapacity(capacity);
+        try (RoomDAO roomDAO = new RoomDAO()) {
+            roomDAO.update(room);
+        }
+    }
+
+    /**
+     * Permet de changer les infos d'une salle (matériel, etc...)
+     * @param room La salle
+     * @param info Informations sur la salle
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException Aucune modification apportée
+     */
+    public static void changeInfo(Room room, String info) throws SQLException, NotChangedException {
+        if (room.getInfo().equals(info))
+            throw new NotChangedException(room);
+
+        room.setInfo(info);
+        try (RoomDAO roomDAO = new RoomDAO()) {
+            roomDAO.update(room);
         }
     }
 }
