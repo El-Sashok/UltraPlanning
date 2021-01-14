@@ -3,6 +3,7 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.AdmissionExamDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
@@ -48,7 +49,7 @@ public abstract class AdmissionExamController {
     }
 
     /**
-     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * Permet de vérifier qu'il n'y ait pas de collision avec une autre réservation
      * @param startDate Début du cours
      * @param endDate Fin du cours
      * @param room Salle dans laquelle se déroule le cours
@@ -72,23 +73,32 @@ public abstract class AdmissionExamController {
                 for (Teacher t : managers)
                     if (r.getManagers().contains(t))
                         throw new ManagerTimeBreakException(t);
-                if (r instanceof Defence )
-                    if (students.contains(((Defence) r).getStudent()))
-                        throw new StudentTimeBreakException(((Defence) r).getStudent());
-                if (r instanceof Lesson)
-                    for (Student s : students) {
-                        for (Group g : ((Lesson) r).getGroups()) {
-                            if (g.getStudents().contains(s))
-                                throw new StudentTimeBreakException(s);
-                        }
-                    }
-                else if (r instanceof AdmissionExam) {
-                    for (Student s : students) {
-                        if (((AdmissionExam) r).getStudents().contains(s))
-                            throw new StudentTimeBreakException(s);
-                    }
-                }
+                checkCollisionStudents(r, students);
             }
+        }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y ait pas de collision avec une autre réservation concernant les étudiants
+     * @param r La réservation
+     * @param students Liste des étudiants inscrits au concours
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cette horaire
+     */
+    private static void checkCollisionStudents(Reservation r, List<Student> students) throws StudentTimeBreakException {
+        if (r instanceof Defence ) {
+            if (students.contains(((Defence) r).getStudent()))
+                throw new StudentTimeBreakException(((Defence) r).getStudent());
+        }
+        else if (r instanceof Lesson) {
+            for (Student s : students)
+                for (Group g : ((Lesson) r).getGroups())
+                    if (g.getStudents().contains(s))
+                        throw new StudentTimeBreakException(s);
+        }
+        else if (r instanceof AdmissionExam) {
+            for (Student s : students)
+                if (((AdmissionExam) r).getStudents().contains(s))
+                    throw new StudentTimeBreakException(s);
         }
     }
 
@@ -97,7 +107,7 @@ public abstract class AdmissionExamController {
      * @param admissionExam Le concours
      * @param examLabel Intitulé du concours
      * @throws SQLException Exception SQL
-     * @throws NotChangedException examLabel n'a pas été changé
+     * @throws NotChangedException Aucune modification apportée
      */
     public static void changeExamLabel(AdmissionExam admissionExam, AdmissionExamLabel examLabel) throws SQLException, NotChangedException {
         if (admissionExam.getAdmissionExamLabel().equals(examLabel))
@@ -125,24 +135,11 @@ public abstract class AdmissionExamController {
             if (admissionExam.getStudents().containsAll(students))
                 throw new NotChangedException(admissionExam);
 
-        for (Reservation r : Reservation.getReservationList())
-            if (r.isNP() && Controllers.checkTimeBreak(r.getStartDate(), r.getEndDate(), admissionExam.getStartDate(), admissionExam.getEndDate())) {
-                if (r instanceof Defence) {
-                    if (students.contains(((Defence) r).getStudent()))
-                        throw new StudentTimeBreakException(((Defence) r).getStudent());
-                }
-                else if (r instanceof AdmissionExam) {
-                    for (Student s : students)
-                        if (((AdmissionExam) r).getStudents().contains(s))
-                            throw new StudentTimeBreakException(s);
-                }
-                else if (r instanceof Lesson) {
-                    for (Student s : students)
-                        for (Group g : ((Lesson) r).getGroups())
-                            if (g.getStudents().contains(s))
-                                throw new StudentTimeBreakException(s);
-                }
+        for (Reservation r : Reservation.getReservationList()) {
+            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), admissionExam.getStartDate(), admissionExam.getEndDate())) {
+                checkCollisionStudents(r, students);
             }
+        }
 
         admissionExam.setStudents(students);
         try (AdmissionExamDAO admissionExamDAO = new AdmissionExamDAO()) {

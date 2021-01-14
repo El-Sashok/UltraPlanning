@@ -15,21 +15,21 @@ import java.util.Optional;
 public class LessonDAO extends AbstractDAO<Lesson> {
     private final PreparedStatement findGroupsPS;
     private final PreparedStatement persistGroupPS ;
-    private final PreparedStatement updateGroupPS;
+    private final PreparedStatement removeGroupPS;
     private final PreparedStatement findModulesPS;
     private final PreparedStatement persistModulePS;
-    private final PreparedStatement updateModulePS;
+    private final PreparedStatement removeModulePS;
 
     public LessonDAO() throws SQLException {
         super("INSERT INTO LESSON(ID, TYPE) VALUES (?,?)",
                 "UPDATE LESSON SET ID=?, TYPE=? WHERE ID=?");
         findGroupsPS = connection.prepareStatement("SELECT * FROM LESSON_GROUPS WHERE LESSON=?");
         persistGroupPS = connection.prepareStatement("INSERT INTO LESSON_GROUPS(LESSON, CLASS_GROUP) VALUES (?,?)");
-        updateGroupPS = connection.prepareStatement("UPDATE LESSON_GROUPS SET LESSON=?, CLASS_GROUP=? WHERE ID=?");
+        removeGroupPS = connection.prepareStatement("DELETE FROM LESSON_GROUPS WHERE ID=?");
 
         findModulesPS = connection.prepareStatement("SELECT * FROM LESSON_MODULES WHERE LESSON=?");
         persistModulePS = connection.prepareStatement("INSERT INTO LESSON_MODULES(LESSON, MODULE) VALUES (?,?)");
-        updateModulePS = connection.prepareStatement("UPDATE LESSON_MODULES SET LESSON=?, MODULE=? WHERE ID=?");
+        removeModulePS = connection.prepareStatement("DELETE FROM LESSON_MODULES WHERE ID=?");
     }
 
     @Override
@@ -114,10 +114,14 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         }
     }
 
-    private void updateGroup(Lesson lesson, Group group, Long lessonGroupID) throws SQLException {
-        populateGroup(updateGroupPS, lesson, group);
-        updateGroupPS.setLong(3, lessonGroupID);
-        updateGroupPS.executeUpdate();
+    public void updateGroups(Lesson lesson) throws SQLException {
+        findGroupsPS.setLong(1, lesson.getId());
+        ResultSet findGroupsRS = findGroupsPS.executeQuery();
+        while (findGroupsRS.next()) {
+            removeGroupPS.setLong(1, findGroupsRS.getLong("ID"));
+            removeGroupPS.executeUpdate();
+        }
+        persistGroups(lesson);
     }
 
     private void populateGroup(PreparedStatement popGroupPS, Lesson lesson, Group group) throws SQLException {
@@ -132,8 +136,14 @@ public class LessonDAO extends AbstractDAO<Lesson> {
         }
     }
 
-    private void updateModule(Lesson lesson) throws SQLException {
-        // Not implemented yet
+    public void updateModules(Lesson lesson) throws SQLException {
+        findModulesPS.setLong(1, lesson.getId());
+        ResultSet findModulesRS = findModulesPS.executeQuery();
+        while (findModulesRS.next()) {
+            removeModulePS.setLong(1, findModulesRS.getLong("ID"));
+            removeModulePS.executeUpdate();
+        }
+        persistModules(lesson);
     }
 
     private void populateModule(PreparedStatement popGroupPS, Lesson lesson, Module module) throws SQLException {

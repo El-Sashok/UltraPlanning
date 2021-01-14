@@ -112,11 +112,11 @@ public abstract class ReservationController {
     }
 
     /**
-     * Permet de vérifier qu'il n'y à pas de collision avec une autre réservation
+     * Permet de vérifier qu'il n'y ait pas de collision avec une autre réservation
      * @param startDate Début du cours
      * @param endDate Fin du cours
      * @param room Salle dans laquelle se déroule le cours
-     * @param managers Professeur en charge de la classe
+     * @param managers Professeur en charge de la réservation
      * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
      * @throws RoomTimeBreakException La salle est déjà occupé pendant cette horaire
      * @throws IncorrectEndHourException La date de début se situe apres la date de fin
@@ -124,19 +124,40 @@ public abstract class ReservationController {
     static void checkCollision(LocalDateTime startDate, LocalDateTime endDate, Room room, List<Teacher> managers) throws ManagerTimeBreakException, RoomTimeBreakException, IncorrectEndHourException {
         ControllerTools.checkStartAfterEnd(startDate, endDate);
 
-        for (Teacher t: managers)
-            for (Constraint c : t.getConstraints())
-                ConstraintController.checkConflicts(startDate, endDate, c);
+        checkCollisionConstraints(startDate, endDate, managers);
 
         for (Reservation r : Reservation.getReservationList()) {
             if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), startDate, endDate)) {
                 if (room.equals(r.getRoom()))
                     throw new RoomTimeBreakException(room);
-                for (Teacher t : managers)
-                    if (r.getManagers().contains(t))
-                        throw new ManagerTimeBreakException(t);
+                checkCollisionTeachers(r, managers);
             }
         }
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y ait pas de collision avec les contraintes d'emploi du temps des enseignants
+     * @param startDate Début du cours
+     * @param endDate Fin du cours
+     * @param managers Professeurs en charge de la réservation
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+    */
+    private static void checkCollisionConstraints(LocalDateTime startDate, LocalDateTime endDate, List<Teacher> managers) throws ManagerTimeBreakException {
+        for (Teacher t : managers)
+            for (Constraint c : t.getConstraints())
+                ConstraintController.checkConflicts(startDate, endDate, c);
+    }
+
+    /**
+     * Permet de vérifier qu'il n'y ait pas de collision avec avec une autre réservation concernant les enseignants
+     * @param r La réservation
+     * @param managers Professeurs en charge de la réservation
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cette horaire
+    */
+    private static void checkCollisionTeachers(Reservation r, List<Teacher> managers) throws ManagerTimeBreakException {
+        for (Teacher t : managers)
+            if (r.getManagers().contains(t))
+                throw new ManagerTimeBreakException(t);
     }
 
     /**
@@ -144,7 +165,7 @@ public abstract class ReservationController {
      * @param reservation La réservation
      * @param state État de la réservation
      * @throws SQLException Exception SQL
-     * @throws NotChangedException state n'a pas été changé
+     * @throws NotChangedException Aucune modification apportée
      */
     public static void changeStatusReservation(Reservation reservation, Reservation.State state) throws SQLException, NotChangedException {
         if (reservation.getState() == state) //If state is not modified, throw an exception
@@ -170,12 +191,9 @@ public abstract class ReservationController {
             if (reservation.getManagers().containsAll(managers)) //if it's the same list
                 throw new NotChangedException(reservation);
         for (Reservation r : Reservation.getReservationList())
-            for (Teacher t : managers)
-                if (r.getManagers().contains(t))
-                    throw new ManagerTimeBreakException(t);
-        for (Teacher t : managers)
-            for (Constraint c : t.getConstraints())
-                ConstraintController.checkConflicts(reservation.getStartDate(), reservation.getEndDate(), c);
+            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), reservation.getStartDate(), reservation.getEndDate()))
+                checkCollisionTeachers(r, managers);
+        checkCollisionConstraints(reservation.getStartDate(), reservation.getEndDate(), managers);
 
         reservation.setManagers(managers);
         try (ReservationDAO reservationDAO = new ReservationDAO()) {
@@ -188,7 +206,7 @@ public abstract class ReservationController {
      * @param reservation La réservation
      * @param memo Informations complémentaires
      * @throws SQLException Exception SQL
-     * @throws NotChangedException memo n'a pas été changé
+     * @throws NotChangedException Aucune modification apportée
      */
     public static void changeMemo(Reservation reservation, String memo) throws SQLException, NotChangedException {
         if (reservation.getMemo().equals(memo))
@@ -203,7 +221,7 @@ public abstract class ReservationController {
      * @param reservation La réservation
      * @param room Salle dans laquelle se déroule la réservation
      * @throws SQLException Exception SQL
-     * @throws NotChangedException room n'a pas été changé
+     * @throws NotChangedException Aucune modification apportée
      * @throws RoomTimeBreakException La salle est déjà occupée pendant cette horaire
      */
     public static void changeRoom(Reservation reservation, Room room) throws SQLException, NotChangedException, RoomTimeBreakException {
