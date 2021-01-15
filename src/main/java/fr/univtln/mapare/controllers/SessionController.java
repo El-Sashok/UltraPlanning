@@ -57,6 +57,12 @@ public abstract class SessionController {
         }
     }
 
+    /**
+     * Permet de changer le mot de passe de l'utilisateur courant
+     * @param newPassword Nouveau mot de passe de l'utilisateur
+     * @throws NoSuchAlgorithmException
+     * @throws SQLException
+     */
     public static void changePassword(String newPassword) throws NoSuchAlgorithmException, SQLException {
         Session.getInstance().setHashedPassword(hashPassword(newPassword));
         try (SessionDAO sDAO = new SessionDAO()) {
@@ -64,11 +70,25 @@ public abstract class SessionController {
         }
     }
 
+    /**
+     * Permet de vérifier si le mot de passe de l'utilisateur courrant correspond à mot de passe rentré
+     * @param password Mot de passe de l'utilisateur
+     * @throws NoSuchAlgorithmException
+     */
     public static void checkPassword(String password) throws NoSuchAlgorithmException {
         if (!hashPassword(password).equals(Session.getInstance().getHashedPassword()))
             throw new IncorrectPasswordException(Session.getInstance().getLogin());
     }
 
+    /**
+     * Permet de créer un utilisateur
+     * @param login Adresse e-mail de connexion
+     * @param typedPassword Mot de passe de l'utilisateur
+     * @param value Le type d'utilisateur
+     * @throws SQLException
+     * @throws NoSuchAlgorithmException
+     * @throws UserAlreadyCreatedException
+     */
     public static void createSession(String login, String typedPassword, Session.Status value) throws SQLException, NoSuchAlgorithmException, UserAlreadyCreatedException {
         try (SessionDAO sDAO = new SessionDAO()) {
             List<Session> sessions = sDAO.findAll();

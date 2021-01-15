@@ -2,7 +2,6 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.RoomDAO;
 import fr.univtln.mapare.entities.Room;
-import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;

@@ -136,7 +136,7 @@ public abstract class LessonController {
         checkGoodPractices(lesson.getStartDate(), lesson.getEndDate(), groups, lesson.getManagers(), lesson.getModules());
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (!r.equals(lesson) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), lesson.getStartDate(), lesson.getEndDate())) {
+            if (!r.equals(lesson) && r.isNP() && ControllerTools.checkTimeBreak(r, lesson)) {
                 checkCollisionGroups(r, groups);
             }
         }

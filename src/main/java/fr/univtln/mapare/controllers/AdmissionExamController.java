@@ -3,7 +3,6 @@ package fr.univtln.mapare.controllers;
 import fr.univtln.mapare.daos.AdmissionExamDAO;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
-import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
@@ -136,7 +135,7 @@ public abstract class AdmissionExamController {
                 throw new NotChangedException(admissionExam);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (!r.equals(admissionExam) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), admissionExam.getStartDate(), admissionExam.getEndDate())) {
+            if (!r.equals(admissionExam) && r.isNP() && ControllerTools.checkTimeBreak(r, admissionExam)) {
                 checkCollisionStudents(r, students);
             }
         }

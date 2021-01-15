@@ -1,9 +1,7 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.AdmissionExamLabelDAO;
-import fr.univtln.mapare.daos.ModuleDAO;
 import fr.univtln.mapare.entities.AdmissionExamLabel;
-import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
@@ -59,7 +57,7 @@ public abstract class AdmissionExamLabelController {
             throw new EmptyAttributeException("changeLabel", admissionExamLabel);
         if (admissionExamLabel.getLabel().equals(label))
             throw new NotChangedException(admissionExamLabel);
-        
+
         admissionExamLabel.setLabel(label);
         try (AdmissionExamLabelDAO admissionExamLabelDAO = new AdmissionExamLabelDAO()) {
             admissionExamLabelDAO.update(admissionExamLabel);

@@ -2,13 +2,10 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.DefenceDAO;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.exceptions.BadPracticesException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
-import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
-import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;
@@ -100,7 +97,7 @@ public abstract class DefenceController {
             throw new NotChangedException(defence);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (!r.equals(defence) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), defence.getStartDate(), defence.getEndDate())) {
+            if (!r.equals(defence) && r.isNP() && ControllerTools.checkTimeBreak(r, defence)) {
                 if (r instanceof Defence) {
                     if (student.equals(((Defence) r).getStudent()))
                         throw new StudentTimeBreakException(((Defence) r).getStudent());

@@ -37,7 +37,7 @@ public abstract class ModuleController {
     /**
      * Permet de créer un module
      * @param label Nom du module
-     * @param nbHour Nombre d'heures du module
+     * @param nbHour Nombre d'heure du module
      * @throws SQLException Exception SQL
      */
     public static void createModule(String label, int nbHour) throws SQLException {
@@ -68,7 +68,7 @@ public abstract class ModuleController {
     }
 
     /**
-     * Permet de changer le nombre d'heures d'un module
+     * Permet de changer le nombre d'heure d'un module
      * @param module Le module
      * @param nbHour Le nombre d'heures du module
      * @throws SQLException Exception SQL

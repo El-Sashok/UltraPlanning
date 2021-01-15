@@ -5,7 +5,6 @@ import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
-import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import java.sql.SQLException;
