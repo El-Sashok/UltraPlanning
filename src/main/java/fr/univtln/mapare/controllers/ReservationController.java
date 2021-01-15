@@ -91,6 +91,36 @@ public abstract class ReservationController {
     }
 
     /**
+     * Permet de récupérer l'emploi du temps d'une salle
+     * @param room La salle recherchée
+     * @return Une Liste de réservations
+     */
+    public static List<Reservation> findByRoom(Room room) {
+        List<Reservation> reservations = new ArrayList<>();
+        for (Reservation r : Reservation.getReservationList())
+            if (r.getRoom().equals(room))
+                reservations.add(r);
+
+        return reservations;
+    }
+
+    /**
+     * Permet de récupérer l'emploi du temps d'un groupe
+     * @param group Le groupe recherché
+     * @return Une Liste de réservations
+     */
+    public static List<Reservation> findByGroup(Group group) {
+        List<Reservation> reservations = new ArrayList<>();
+
+        for (Reservation r : Reservation.getReservationList())
+            if (r instanceof Lesson)
+                if (((Lesson) r).getGroups().contains(group))
+                    reservations.add(r);
+
+        return reservations;
+    }
+
+    /**
      * Permet de créer une réservation simple
      * @param startDate Début de la réservation
      * @param endDate Fin de la réservation
