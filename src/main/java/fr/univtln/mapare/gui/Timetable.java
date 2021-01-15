@@ -804,7 +804,7 @@ public class Timetable extends JFrame {
         });
 
         if (SUStatus != Session.Status.INVITE) {
-            JMenuItem findRoom = new JMenuItem("Trouver Salle") {
+            JMenu findRoom = new JMenu("Trouver Salle") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -822,7 +822,7 @@ public class Timetable extends JFrame {
                 }
             });
 
-            JMenuItem changePassword = new JMenuItem("Changer Mot de Passe") {
+            JMenu changePassword = new JMenu("Changer Mot de Passe") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -842,7 +842,7 @@ public class Timetable extends JFrame {
         }
 
         if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
-            JMenuItem addReservation = new JMenuItem("Ajouter Reservation") {
+            JMenu addReservation = new JMenu("Ajouter Reservation") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -947,7 +947,7 @@ public class Timetable extends JFrame {
                 }
             });
 
-            JMenuItem modGroup = new JMenuItem("Modifier Groupe") {
+            JMenu modGroup = new JMenu("Modifier Groupe") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -966,7 +966,7 @@ public class Timetable extends JFrame {
         }
 
         if (SUStatus == Session.Status.ADMIN) {
-            JMenuItem maintenance = new JMenuItem("Faire la maintenance"){
+            JMenu maintenance = new JMenu("Faire la maintenance"){
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();
@@ -1007,7 +1007,7 @@ public class Timetable extends JFrame {
             });
         }
 
-        JMenuItem deconnexion = new JMenuItem("Deconnexion") {
+        JMenu deconnexion = new JMenu("Deconnexion") {
             @Override
             public Dimension getMaximumSize() {
                 Dimension dim = super.getMaximumSize();
