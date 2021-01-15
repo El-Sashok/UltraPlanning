@@ -1,6 +1,7 @@
 package fr.univtln.mapare.gui.addpopups;
 
-import fr.univtln.mapare.controllers.StudentController;
+import fr.univtln.mapare.controllers.TeacherController;
+import fr.univtln.mapare.entities.Teacher;
 import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
 
 import javax.swing.*;
@@ -9,13 +10,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
-public class AddStudentPopup extends  JFrame {
+public class AddTeacherPopup extends JFrame{
     private JPanel panel1;
     private JButton okButton;
     private JButton annulerButton;
@@ -24,11 +23,13 @@ public class AddStudentPopup extends  JFrame {
     private JTextField textField3;
     private JTextField textField4;
     private JTextField textField5;
+    private JComboBox<String> comboBox1;
     private JTextField textField6;
+    private JTextField textField7;
 
     private JFrame thisframe = this;
 
-    public AddStudentPopup() {
+    public AddTeacherPopup() {
         setTitle("Ajouter un nouveau module");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,6 +44,10 @@ public class AddStudentPopup extends  JFrame {
             }
         });
 
+        String[] statusTab = {"Maître de Conférences", "Professeur", "Vacataire"};
+        for (String s : statusTab)
+            comboBox1.addItem(s);
+
         okButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -53,11 +58,12 @@ public class AddStudentPopup extends  JFrame {
                             "".equals(textField5.getText()) || "".equals(textField6.getText()))
                         throw new EmptyFieldException();
 
-                    StudentController.createStudent(textField1.getText(), textField2.getText(),
+                    TeacherController.createTeacher(textField1.getText(), textField2.getText(),
                             new Date(Integer.parseInt(textField5.getText()) - 1900,
-                            Integer.parseInt(textField4.getText()) - 1,
+                                    Integer.parseInt(textField4.getText()) - 1,
                                     Integer.parseInt(textField3.getText())),
-                            textField6.getText());
+                            textField6.getText(), textField7.getText(),
+                            Teacher.Role.values()[comboBox1.getSelectedIndex()]);
 
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (EmptyFieldException emptyFieldException) {

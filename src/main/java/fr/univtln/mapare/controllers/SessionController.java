@@ -39,6 +39,7 @@ public abstract class SessionController {
      */
     public static void login(String login, String typedPassword) throws SQLException, NoSuchAlgorithmException {
         Map<String, Optional<String>> dbInfo;
+        login = login.toLowerCase();
         try (SessionDAO sessionDAO = new SessionDAO()) {
             dbInfo = sessionDAO.getUserInfo(login);
 
@@ -95,11 +96,11 @@ public abstract class SessionController {
             List<Session> sessions = sDAO.findAll();
 
             for (Session s : sessions){
-                if (login.equals(s.getLogin())){
+                if (login.equalsIgnoreCase(s.getLogin())){
                     throw new UserAlreadyCreatedException(login);
                 }
             }
-            Session session = new Session((long) -1, login, hashPassword(typedPassword), value);
+            Session session = new Session((long) -1, login.toLowerCase(), hashPassword(typedPassword), value);
 
             sDAO.persist(session);
         }
