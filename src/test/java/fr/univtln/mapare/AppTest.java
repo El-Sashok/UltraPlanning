@@ -62,8 +62,8 @@ public class AppTest
             new AdmissionExamLabel(-1, "TOEIC"));
     @Test
     public void testCreationCronstraint() {
-        assertEquals(c1.getStart(), LocalDateTime.now());
-        assertEquals(c1.getEnd(), LocalDateTime.now());
+        assertEquals(c1.getStartHour(), LocalDateTime.now());
+        assertEquals(c1.getEndHour(), LocalDateTime.now());
     }
     @Test
     public void testCreationTeacher() {

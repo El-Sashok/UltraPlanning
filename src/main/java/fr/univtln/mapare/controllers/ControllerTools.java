@@ -17,6 +17,7 @@ public abstract class ControllerTools {
         GroupController.loadGroups();
         ModuleController.loadModules();
         RoomController.loadRooms();
+        // Il se peut que certains étudiants ne soient pas dans un groupe donc on les charge aussi
         StudentController.loadStudents();
         TeacherController.loadTeachers();
         ReservationController.loadReservations();

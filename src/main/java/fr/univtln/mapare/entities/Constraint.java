@@ -13,9 +13,9 @@ import java.util.Objects;
  */
 public class Constraint implements Entity {
     private long id;
-    private LocalDate day;
-    private LocalTime start;
-    private LocalTime end;
+    private LocalDate dayOfTheWeek;
+    private LocalTime startHour;
+    private LocalTime endHour;
     private Teacher teacher; //needed for dao
     private static final List<Constraint> CONSTRAINTS = new ArrayList<>();
 
@@ -26,15 +26,15 @@ public class Constraint implements Entity {
     /**
      * Constructeur d'une contrainte d' emploi du temps
      * @param id Identifiant d'une contrainte d' emploi du temps
-     * @param day
-     * @param start Début d'une contrainte d' emploi du temps
-     * @param end Fin d'une contrainte d' emploi du temps
+     * @param dayOfTheWeek Jour de la semaine concerné par la contrainte (on prend une date mais seul le jour compte)
+     * @param startHour Début d'une contrainte d' emploi du temps
+     * @param endHour Fin d'une contrainte d' emploi du temps
      */
-    public Constraint(long id, LocalDate day, LocalTime start, LocalTime end) {
+    public Constraint(long id, LocalDate dayOfTheWeek, LocalTime startHour, LocalTime endHour) {
         this.id = id;
-        this.day = day;
-        this.start = start;
-        this.end = end;
+        this.dayOfTheWeek = dayOfTheWeek;
+        this.startHour = startHour;
+        this.endHour = endHour;
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
     }
@@ -43,16 +43,16 @@ public class Constraint implements Entity {
     /**
      * Constructeur d'une contrainte d' emploi du temps avec un Teacher
      * @param id Identifiant d'une contrainte d' emploi du temps
-     * @param day
-     * @param start Début d'une contrainte d' emploi du temps
-     * @param end Fin d'une contrainte d' emploi du temps
+     * @param dayOfTheWeek Jour de la semaine concerné par la contrainte (on prend une date mais seul le jour compte)
+     * @param startHour Début d'une contrainte d' emploi du temps
+     * @param endHour Fin d'une contrainte d' emploi du temps
      * @param teacher Identifiant d'un Enseignant
      */
-    public Constraint(long id, LocalDate day, LocalTime start, LocalTime end, Teacher teacher) {
+    public Constraint(long id, LocalDate dayOfTheWeek, LocalTime startHour, LocalTime endHour, Teacher teacher) {
         this.id = id;
-        this.day = day;
-        this.start = start;
-        this.end = end;
+        this.dayOfTheWeek = dayOfTheWeek;
+        this.startHour = startHour;
+        this.endHour = endHour;
         this.teacher = teacher;
         if (id != -1) // To differentiate the ones which are yet in database
             CONSTRAINTS.add(this);
@@ -77,28 +77,28 @@ public class Constraint implements Entity {
         CONSTRAINTS.remove(constraint);
     }
 
-    public LocalDate getDay() {
-        return day;
+    public LocalDate getDayOfTheWeek() {
+        return dayOfTheWeek;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
+    public void setDayOfTheWeek(LocalDate dayOfTheWeek) {
+        this.dayOfTheWeek = dayOfTheWeek;
     }
 
-    public LocalTime getStart() {
-        return start;
+    public LocalTime getStartHour() {
+        return startHour;
     }
 
-    public void setStart(LocalTime start) {
-        this.start = start;
+    public void setStartHour(LocalTime startHour) {
+        this.startHour = startHour;
     }
 
-    public LocalTime getEnd() {
-        return end;
+    public LocalTime getEndHour() {
+        return endHour;
     }
 
-    public void setEnd(LocalTime end) {
-        this.end = end;
+    public void setEndHour(LocalTime endHour) {
+        this.endHour = endHour;
     }
 
     public Teacher getTeacher() {
@@ -112,7 +112,7 @@ public class Constraint implements Entity {
     //Methods
     @Override
     public String toString() {
-        return JOURSDELASEMAINE[day.getDayOfWeek().getValue() - 1] + " de " + start + " à " + end;
+        return JOURSDELASEMAINE[dayOfTheWeek.getDayOfWeek().getValue() - 1] + " de " + startHour + " à " + endHour;
     }
 
     @Override
@@ -120,15 +120,15 @@ public class Constraint implements Entity {
         if (this == o) return true;
         if (!(o instanceof Constraint)) return false;
         Constraint that = (Constraint) o;
-        return day.equals(that.day) &&
-                start.equals(that.start) &&
-                end.equals(that.end) &&
+        return dayOfTheWeek.equals(that.dayOfTheWeek) &&
+                startHour.equals(that.startHour) &&
+                endHour.equals(that.endHour) &&
                 Objects.equals(teacher, that.teacher);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(day, start, end, teacher);
+        return Objects.hash(dayOfTheWeek, startHour, endHour, teacher);
     }
 
     /**
@@ -138,8 +138,8 @@ public class Constraint implements Entity {
     @Deprecated
     public String print() {
         return "Constraint{" +
-                "startDate=" + start +
-                ", endDate=" + end +
+                "startDate=" + startHour +
+                ", endDate=" + endHour +
                 '}';
     }
 }

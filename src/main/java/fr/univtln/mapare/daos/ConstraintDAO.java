@@ -7,7 +7,6 @@ import lombok.extern.java.Log;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Classe DAO d'une contrainte d' emploie du temps d'un enseignant
@@ -79,9 +78,9 @@ public class ConstraintDAO extends AbstractDAO<Constraint> {
      */
     private void populate(PreparedStatement popPS, Constraint constraint) throws SQLException {
         popPS.setLong(1, constraint.getTeacher().getId());
-        popPS.setTime(2, Time.valueOf(constraint.getStart()));
-        popPS.setTime(3, Time.valueOf(constraint.getEnd()));
-        popPS.setDate(4, Date.valueOf(constraint.getDay()));
+        popPS.setTime(2, Time.valueOf(constraint.getStartHour()));
+        popPS.setTime(3, Time.valueOf(constraint.getEndHour()));
+        popPS.setDate(4, Date.valueOf(constraint.getDayOfTheWeek()));
     }
 
     @Override

@@ -56,13 +56,13 @@ public abstract class ConstraintController {
      */
     public static void checkConflicts(LocalDateTime startDate, LocalDateTime endDate, Constraint c)
             throws ManagerTimeBreakException {
-        if (c.getDay().getDayOfWeek().equals(startDate.getDayOfWeek()) &&
-                (c.getStart().equals(startDate.toLocalTime()) ||
-                        (c.getStart().isBefore(startDate.toLocalTime()) &&
-                                c.getEnd().isAfter(startDate.toLocalTime())) ||
-                        (c.getStart().isBefore(endDate.toLocalTime()) &&
-                                c.getEnd().isAfter(endDate.toLocalTime())) ||
-                        c.getEnd().equals(endDate.toLocalTime())))
+        if (c.getDayOfTheWeek().getDayOfWeek().equals(startDate.getDayOfWeek()) &&
+                (c.getStartHour().equals(startDate.toLocalTime()) ||
+                        (c.getStartHour().isBefore(startDate.toLocalTime()) &&
+                                c.getEndHour().isAfter(startDate.toLocalTime())) ||
+                        (c.getStartHour().isBefore(endDate.toLocalTime()) &&
+                                c.getEndHour().isAfter(endDate.toLocalTime())) ||
+                        c.getEndHour().equals(endDate.toLocalTime())))
             throw new ManagerTimeBreakException(c.getTeacher());
     }
 }

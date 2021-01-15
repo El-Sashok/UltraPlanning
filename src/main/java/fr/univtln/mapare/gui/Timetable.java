@@ -924,6 +924,17 @@ public class Timetable extends JFrame {
                     agp.setVisible(true);
                 }
             });
+
+            JMenuItem addStudent = new JMenuItem("Ajouter un Etudiant");
+            addingMenu.add(addStudent);
+            addStudent.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddStudentPopup asp = new AddStudentPopup();
+                    asp.setVisible(true);
+                }
+            });
         }
 
         if (SUStatus == Session.Status.ADMIN) {
