@@ -2,7 +2,10 @@ package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ReservationDAO;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.BadPracticesException;
 import fr.univtln.mapare.exceptions.IncorrectEndHourException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
+import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
@@ -235,6 +238,41 @@ public abstract class ReservationController {
         update(reservation);
     }
 
+    /**
+     * Permert de déplacer à un nouveau créneau la réservation
+     * @param reservation La réservation à déplacer
+     * @param startDate La nouvelle date de début
+     * @param endDate La nouvelle date de fin
+     * @param room La nouvelle salle
+     * @throws SQLException Exception SQL
+     * @throws NotChangedException Aucune modification apportée
+     * @throws IncorrectEndHourException La date de début se situe apres la date de fin
+     * @throws RoomTimeBreakException La salle est déjà occupée pendant cet horaire
+     * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
+     * @throws BadPracticesException La nouvelle reservation ne respecte pas une règle de bienséance
+     * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cet horaire
+     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cet horaire
+     */
+    public static void moveReservation(Reservation reservation, LocalDateTime startDate, LocalDateTime endDate, Room room) throws SQLException, NotChangedException, IncorrectEndHourException, RoomTimeBreakException, ManagerTimeBreakException, BadPracticesException, StudentTimeBreakException, GroupTimeBreakException {
+        if (Reservation.class.equals(reservation.getClass())) {
+            createReservation(startDate, endDate, reservation.getLabel(), reservation.getMemo(), reservation.getState(), room, reservation.getManagers());
+        } else if (Lesson.class.equals(reservation.getClass())) {
+            LessonController.createLesson(startDate, endDate, reservation.getLabel(), reservation.getMemo(), reservation.getState(), room, ((Lesson) reservation).getType(), ((Lesson) reservation).getModules(), ((Lesson) reservation).getGroups() ,reservation.getManagers());
+        } else if (AdmissionExam.class.equals(reservation.getClass())) {
+            AdmissionExamController.createAdmissionExam(startDate, endDate, reservation.getLabel(), reservation.getMemo(), reservation.getState(), room, ((AdmissionExam) reservation).getAdmissionExamLabel(), reservation.getManagers() ,((AdmissionExam) reservation).getStudents());
+        } else if (Defence.class.equals(reservation.getClass())) {
+            DefenceController.createDefence(startDate, endDate, reservation.getLabel(), reservation.getMemo(), reservation.getState(), room, ((Defence) reservation).getStudent(), reservation.getManagers());
+        } else if (ExamBoard.class.equals(reservation.getClass())) {
+            ExamBoardController.createExamBoard(startDate, endDate, reservation.getLabel(), reservation.getMemo(), reservation.getState(), room, ((ExamBoard) reservation).getYeargroup(), reservation.getManagers());
+        }
+        changeStatusReservation(reservation, Reservation.State.POSTPONED);
+    }
+
+    /**
+     * Permet de pouvoir update en BDD en fonction du type de r"sa
+     * @param reservation La réservationà mettre à jour
+     * @throws SQLException
+     */
     private static void update(Reservation reservation) throws SQLException{
         try (ReservationDAO reservationDAO = new ReservationDAO()) { //Need to check the class to put the good type in DB
             if (Lesson.class.equals(reservation.getClass())) {
