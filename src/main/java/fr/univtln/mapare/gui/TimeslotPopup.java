@@ -105,7 +105,7 @@ public class TimeslotPopup extends JFrame{
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
-                    MoveLessonPopup mlp = new MoveLessonPopup();
+                    MoveLessonPopup mlp = new MoveLessonPopup(rootwindow, res);
                     mlp.setVisible(true);
                 }
             });
