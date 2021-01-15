@@ -20,6 +20,22 @@ public abstract class LessonController {
     private LessonController() {}
 
     /**
+     * Permet de récupérer l'emploi du temps d'un groupe
+     * @param group Le groupe recherché
+     * @return Une Liste de réservations
+     */
+    public static List<Lesson> findByGroup(Group group) {
+        List<Lesson> lessons = new ArrayList<>();
+
+        for (Reservation r : Reservation.getReservationList())
+            if (r instanceof Lesson)
+                if (((Lesson) r).getGroups().contains(group))
+                    lessons.add((Lesson) r);
+
+        return lessons;
+    }
+
+    /**
      * Permet de créer une reservation de cours si il n'y a aucune collision avec une autre reservation puis la sauvegarde dans la base de données
      * @param startDate Début du cours
      * @param endDate Fin du cours

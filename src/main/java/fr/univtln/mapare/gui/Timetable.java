@@ -1,6 +1,7 @@
 package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.ControllerTools;
+import fr.univtln.mapare.controllers.LessonController;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.gui.addpopups.*;
@@ -530,8 +531,7 @@ public class Timetable extends JFrame {
 
     Session.Status SUStatus;
 
-    private List<Reservation> allreservations;
-    private List<Reservation> privatereservations = null;
+     private List<Reservation> privatereservations = null;
 
     private Group currgroup = null;
     private Room curroom = null;
@@ -541,14 +541,10 @@ public class Timetable extends JFrame {
         curroom = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
-        for (Reservation r : allreservations) {
-            if (r instanceof Lesson) {
-                LocalDateTime date = r.getStartDate();
-                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-                if (((Lesson) r).getGroups().contains(group)) {
-                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
-                }
-            }
+        for (Lesson l: LessonController.findByGroup(group)) {
+            LocalDateTime date = l.getStartDate();
+            calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+            boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(l);
         }
         buttonFunc(lastButton);
     }
@@ -558,14 +554,10 @@ public class Timetable extends JFrame {
         currgroup = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
-        for (Reservation r : allreservations) {
-            if (true) {
-                LocalDateTime date = r.getStartDate();
-                calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-                if (r.getRoom().equals(room)) {
-                    boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
-                }
-            }
+        for (Reservation r: ReservationController.findByRoom(room)) {
+            LocalDateTime date = r.getStartDate();
+            calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+            boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(r);
         }
         buttonFunc(lastButton);
     }
@@ -724,7 +716,6 @@ public class Timetable extends JFrame {
         add(rootPanel);
         setLocationRelativeTo(null);
         SUStatus = status;
-        allreservations = Reservation.getReservationList();
         setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
 
         init();
