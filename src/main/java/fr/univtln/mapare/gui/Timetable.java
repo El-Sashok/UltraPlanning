@@ -946,6 +946,23 @@ public class Timetable extends JFrame {
                     atp.setVisible(true);
                 }
             });
+
+            JMenuItem modGroup = new JMenuItem("Modifier Groupe") {
+                @Override
+                public Dimension getMaximumSize() {
+                    Dimension dim = super.getMaximumSize();
+                    dim.width = super.getPreferredSize().width;
+                    return dim;
+                }
+            };
+            menuBarre.add(modGroup);
+            modGroup.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    new ModifyGroupPopup().setVisible(true);
+                }
+            });
         }
 
         if (SUStatus == Session.Status.ADMIN) {
