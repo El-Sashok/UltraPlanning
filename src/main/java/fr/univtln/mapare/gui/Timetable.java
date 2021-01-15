@@ -3,10 +3,7 @@ package fr.univtln.mapare.gui;
 import fr.univtln.mapare.controllers.ControllerTools;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
-import fr.univtln.mapare.gui.addpopups.AddConstraintPopup;
-import fr.univtln.mapare.gui.addpopups.AddModulePopup;
-import fr.univtln.mapare.gui.addpopups.AddSessionPopup;
-import fr.univtln.mapare.gui.addpopups.AddYeargroupPopup;
+import fr.univtln.mapare.gui.addpopups.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -908,7 +905,7 @@ public class Timetable extends JFrame {
 
             JMenuItem addYeargroup = new JMenuItem("Ajouter Promotion");
             addingMenu.add(addYeargroup);
-            addModule.addMouseListener(new MouseAdapter() {
+            addYeargroup.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
@@ -945,6 +942,17 @@ public class Timetable extends JFrame {
                     super.mousePressed(e);
                     AddSessionPopup asp = new AddSessionPopup();
                     asp.setVisible(true);
+                }
+            });
+
+            JMenuItem addRoom = new JMenuItem("Ajouter une Salle");
+            addingMenu.add(addRoom);
+            addRoom.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddRoomPopup arp = new AddRoomPopup();
+                    arp.setVisible(true);
                 }
             });
         }

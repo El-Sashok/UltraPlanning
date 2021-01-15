@@ -1,6 +1,6 @@
 package fr.univtln.mapare.gui.addpopups;
 
-import fr.univtln.mapare.controllers.YeargroupController;
+import fr.univtln.mapare.controllers.RoomController;
 import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
 
 import javax.swing.*;
@@ -11,15 +11,19 @@ import java.sql.SQLException;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
-public class AddYeargroupPopup extends JFrame {
+public class AddRoomPopup extends JFrame{
     private JPanel panel1;
+    private JTextArea textArea1;
     private JButton okButton;
     private JButton annulerButton;
     private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
 
     private JFrame thisframe = this;
 
-    public AddYeargroupPopup() {
+    public AddRoomPopup() {
         setTitle("Ajouter un nouveau module");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,14 +43,24 @@ public class AddYeargroupPopup extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
-                    if ("".equals(textField1.getText()))
+                    if ("".equals(textField1) || "".equals(textField2) || "".equals(textField3) ||
+                            "".equals(textField4))
                         throw new EmptyFieldException();
-                    YeargroupController.createYeargroup(textField1.getText());
+
+                    RoomController.createRoom(textField1.getText(), Integer.parseInt(textField2.getText()),
+                            Integer.parseInt(textField3.getText()), textField4.getText(), textArea1.getText());
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
-                } catch (EmptyFieldException | SQLException emptyFieldException) {
-                    String message = "Veuillez entrer un nom";
+                } catch (EmptyFieldException emptyFieldException) {
+                    String message = "Veuillez remplir tous les champs";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (SQLException throwables) {
+                    String message = "Erreur lors de l'insertion dans la base de données";
+                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException nfe) {
+                    String message = "Veuillez entre un nombre entier";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
         });
 
