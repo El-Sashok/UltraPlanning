@@ -100,7 +100,7 @@ public abstract class DefenceController {
             throw new NotChangedException(defence);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), defence.getStartDate(), defence.getEndDate())) {
+            if (!r.equals(defence) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), defence.getStartDate(), defence.getEndDate())) {
                 if (r instanceof Defence) {
                     if (student.equals(((Defence) r).getStudent()))
                         throw new StudentTimeBreakException(((Defence) r).getStudent());

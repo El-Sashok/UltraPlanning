@@ -105,9 +105,8 @@ public abstract class LessonController {
                         throw new GroupTimeBreakException(LocalGroup);
         } else if (r instanceof Defence) {
             for (Group g : groups)
-                for (Student s : g.getStudents())
-                    if (s.getId() == ((Defence) r).getStudent().getId())
-                        throw new StudentTimeBreakException(s);
+                if (g.getStudents().contains(((Defence) r).getStudent()))
+                    throw new StudentTimeBreakException(((Defence) r).getStudent());
         } else if (r instanceof AdmissionExam) {
             for (Group g : groups)
                 for (Student s : g.getStudents())
@@ -137,7 +136,7 @@ public abstract class LessonController {
         checkGoodPractices(lesson.getStartDate(), lesson.getEndDate(), groups, lesson.getManagers(), lesson.getModules());
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), lesson.getStartDate(), lesson.getEndDate())) {
+            if (!r.equals(lesson) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), lesson.getStartDate(), lesson.getEndDate())) {
                 checkCollisionGroups(r, groups);
             }
         }

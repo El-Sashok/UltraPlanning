@@ -136,7 +136,7 @@ public abstract class AdmissionExamController {
                 throw new NotChangedException(admissionExam);
 
         for (Reservation r : Reservation.getReservationList()) {
-            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), admissionExam.getStartDate(), admissionExam.getEndDate())) {
+            if (!r.equals(admissionExam) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), admissionExam.getStartDate(), admissionExam.getEndDate())) {
                 checkCollisionStudents(r, students);
             }
         }

@@ -191,7 +191,7 @@ public abstract class ReservationController {
             if (reservation.getManagers().containsAll(managers)) //if it's the same list
                 throw new NotChangedException(reservation);
         for (Reservation r : Reservation.getReservationList())
-            if (r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), reservation.getStartDate(), reservation.getEndDate()))
+            if (!r.equals(reservation) && r.isNP() && ControllerTools.checkTimeBreak(r.getStartDate(), r.getEndDate(), reservation.getStartDate(), reservation.getEndDate()))
                 checkCollisionTeachers(r, managers);
         checkCollisionConstraints(reservation.getStartDate(), reservation.getEndDate(), managers);
 
