@@ -251,7 +251,7 @@ public abstract class ReservationController {
      * @throws ManagerTimeBreakException Un enseignant est déjà occupé pendant cet horaire
      * @throws BadPracticesException La nouvelle reservation ne respecte pas une règle de bienséance
      * @throws StudentTimeBreakException Un étudiant est déjà occupé pendant cet horaire
-     * @throws GroupTimeBreakException Le groupe est déjà occupé pendant cet horaire
+     * @throws GroupTimeBreakException Un groupe est déjà occupé pendant cet horaire
      */
     public static void moveReservation(Reservation reservation, LocalDateTime startDate, LocalDateTime endDate, Room room) throws SQLException, NotChangedException, IncorrectEndHourException, RoomTimeBreakException, ManagerTimeBreakException, BadPracticesException, StudentTimeBreakException, GroupTimeBreakException {
         if (Reservation.class.equals(reservation.getClass())) {
@@ -269,9 +269,9 @@ public abstract class ReservationController {
     }
 
     /**
-     * Permet de pouvoir update en BDD en fonction du type de r"sa
+     * Permet de pouvoir update en BDD en fonction du type de résa
      * @param reservation La réservationà mettre à jour
-     * @throws SQLException
+     * @throws SQLException Exception SQL
      */
     private static void update(Reservation reservation) throws SQLException{
         try (ReservationDAO reservationDAO = new ReservationDAO()) { //Need to check the class to put the good type in DB
