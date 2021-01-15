@@ -89,7 +89,8 @@ public abstract class SessionController {
      * @throws NoSuchAlgorithmException
      * @throws UserAlreadyCreatedException
      */
-    public static void createSession(String login, String typedPassword, Session.Status value) throws SQLException, NoSuchAlgorithmException, UserAlreadyCreatedException {
+    public static void createSession(String login, String typedPassword, Session.Status value) throws SQLException,
+            NoSuchAlgorithmException, UserAlreadyCreatedException {
         try (SessionDAO sDAO = new SessionDAO()) {
             List<Session> sessions = sDAO.findAll();
 
@@ -98,9 +99,7 @@ public abstract class SessionController {
                     throw new UserAlreadyCreatedException(login);
                 }
             }
-
             Session session = new Session((long) -1, login, hashPassword(typedPassword), value);
-            System.out.println(session.getLogin() + " " + session.getHashedPassword() + " " + session.getStatus().toString());
 
             sDAO.persist(session);
         }

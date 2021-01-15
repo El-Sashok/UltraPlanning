@@ -22,9 +22,9 @@ public class Session implements Entity{
         instance = null;
     }
 
-    public  Status getStatus() { return this.status; }
+    public Status getStatus() { return this.status; }
 
-    public  void setStatus(Status status){ this.status = status; }
+    public void setStatus(Status status){ this.status = status; }
 
     public String getLogin() { return this.login; }
 

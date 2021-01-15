@@ -6,6 +6,7 @@ import fr.univtln.mapare.entities.*;
 import fr.univtln.mapare.gui.addpopups.AddConstraintPopup;
 import fr.univtln.mapare.gui.addpopups.AddModulePopup;
 import fr.univtln.mapare.gui.addpopups.AddSessionPopup;
+import fr.univtln.mapare.gui.addpopups.AddYeargroupPopup;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -902,6 +903,17 @@ public class Timetable extends JFrame {
                     super.mousePressed(e);
                     AddModulePopup amp = new AddModulePopup();
                     amp.setVisible(true);
+                }
+            });
+
+            JMenuItem addYeargroup = new JMenuItem("Ajouter Promotion");
+            addingMenu.add(addYeargroup);
+            addModule.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddYeargroupPopup ayp = new AddYeargroupPopup();
+                    ayp.setVisible(true);
                 }
             });
         }
