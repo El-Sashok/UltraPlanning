@@ -1,6 +1,9 @@
 package fr.univtln.mapare.gui.addpopups;
 
-import fr.univtln.mapare.controllers.RoomController;
+import fr.univtln.mapare.controllers.GroupController;
+import fr.univtln.mapare.entities.Yeargroup;
+import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
 
 import javax.swing.*;
@@ -11,19 +14,16 @@ import java.sql.SQLException;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
-public class AddRoomPopup extends JFrame{
+public class AddGroupPopup extends JFrame {
     private JPanel panel1;
-    private JTextArea textArea1;
     private JButton okButton;
     private JButton annulerButton;
     private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JComboBox<Yeargroup> comboBox1;
 
     private JFrame thisframe = this;
 
-    public AddRoomPopup() {
+    public AddGroupPopup() {
         setTitle("Ajouter un nouveau module");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,29 +38,27 @@ public class AddRoomPopup extends JFrame{
             }
         });
 
+        for (Yeargroup y : Yeargroup.getYeargroupList())
+            comboBox1.addItem(y);
+
         okButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 try {
-                    if ("".equals(textField1.getText()) || "".equals(textField2.getText()) ||
-                            "".equals(textField3.getText()) || "".equals(textField4.getText()))
+                    if ("".equals(textField1.getText()))
                         throw new EmptyFieldException();
 
-                    RoomController.createRoom(textField1.getText(), Integer.parseInt(textField2.getText()),
-                            Integer.parseInt(textField3.getText()), textField4.getText(), textArea1.getText());
+                    GroupController.createGroup((Yeargroup) comboBox1.getSelectedItem(), textField1.getText());
+
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (EmptyFieldException emptyFieldException) {
                     String message = "Veuillez remplir tous les champs";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (SQLException throwables) {
+                } catch (SQLException | EmptyAttributeException | NotChangedException throwables) {
                     String message = "Erreur lors de l'insertion dans la base de données";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (NumberFormatException nfe) {
-                    String message = "Veuillez entre un nombre entier";
-                    JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
-
             }
         });
 

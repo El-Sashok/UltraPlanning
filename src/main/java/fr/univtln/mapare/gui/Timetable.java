@@ -913,6 +913,17 @@ public class Timetable extends JFrame {
                     ayp.setVisible(true);
                 }
             });
+
+            JMenuItem addGroup = new JMenuItem("Ajouter un Groupe à une Promotion");
+            addingMenu.add(addGroup);
+            addGroup.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    AddGroupPopup agp = new AddGroupPopup();
+                    agp.setVisible(true);
+                }
+            });
         }
 
         if (SUStatus == Session.Status.ADMIN) {
