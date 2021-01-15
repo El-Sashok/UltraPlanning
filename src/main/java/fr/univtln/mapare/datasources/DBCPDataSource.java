@@ -11,7 +11,8 @@ public class DBCPDataSource {
 
     static {
         //ds.setUrl("jdbc:h2:tcp://siannos.fr:9092/~/h2/database");
-        ds.setUrl("jdbc:h2:D:/Coding/UltraPlanning/database");
+        //ds.setUrl("jdbc:h2:D:/Coding/UltraPlanning/database");
+        ds.setUrl("jdbc:h2:" + System.getProperty("user.dir") + "/database");
         ds.setUsername("root");
         ds.setPassword("toor");
 

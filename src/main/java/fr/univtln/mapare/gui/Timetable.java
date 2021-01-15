@@ -679,6 +679,8 @@ public class Timetable extends JFrame {
 
             if (maillon.getState() == Reservation.State.CANCELLED)
                 displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Annulé</font></b><br>" + displayText2;
+            else if (maillon.getState() == Reservation.State.POSTPONED)
+                displayText2 = "<html><body><b><font color=\"#ff0000\" size=\"2\">Reporté</font></b><br>" + displayText2;
             else
                 displayText2 += "<br> ";
 

@@ -12,6 +12,7 @@ import fr.univtln.mapare.exceptions.timebreakexceptions.GroupTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.ManagerTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.RoomTimeBreakException;
 import fr.univtln.mapare.exceptions.timebreakexceptions.StudentTimeBreakException;
+import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -38,7 +39,7 @@ public class MoveLessonPopup extends JFrame {
 
     private JFrame thisframe = this;
 
-    public MoveLessonPopup(Timetable rootwindow, Reservation res) {
+    public MoveLessonPopup(Timetable rootwindow, Reservation res, TimeslotPopup tsp) {
         setTitle("Déplacement de cours");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -83,6 +84,7 @@ public class MoveLessonPopup extends JFrame {
                     ReservationController.moveReservation(res, dateDeb, dateFin, (Room) comboBox3.getSelectedItem());
 
                     rootwindow.refresh();
+                    tsp.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                     thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
                 } catch (NoDateSelectedException a) {
                     String message = "Veuillez sélectionner une date.";
@@ -91,7 +93,7 @@ public class MoveLessonPopup extends JFrame {
                     String message = "Veuillez choisir une heure de fin supérieure à l'heure de début de plus d'une" +
                             " heure.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (EmptySelectionListException | BadPracticesException exception) {
+                } catch (BadPracticesException exception) {
                     String message = exception.getMessage();
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
                 } catch (SQLException throwables) {
@@ -109,6 +111,8 @@ public class MoveLessonPopup extends JFrame {
                 } catch (GroupTimeBreakException groupTimeBreakException) {
                     String message = "Groupe(s) indisponible(s) pour cette horaire.";
                     JOptionPane.showMessageDialog(thisframe, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (NotChangedException notChangedException) {
+                    notChangedException.printStackTrace();
                 }
             }
         });
