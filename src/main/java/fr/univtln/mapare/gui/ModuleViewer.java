@@ -1,25 +1,26 @@
 package fr.univtln.mapare.gui;
 
-import fr.univtln.mapare.entities.Room;
+import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.entities.Session;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
-public class RoomViewer extends JFrame {
-    private JComboBox comboBox1;
+public class ModuleViewer extends JFrame {
     private JPanel panel1;
-    private JPanel panel2;
+    private JComboBox<Module> comboBox1;
     private JButton okButton;
     private JButton annulerButton;
 
     private JFrame thisframe = this;
 
-    public RoomViewer(Timetable rootwindow) {
-        setTitle("Emploi du temps d'une salle");
+    public ModuleViewer(Timetable rootwindow, List<Module> privateModules) {
+        setTitle("Emploi du temps par modules");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
@@ -33,16 +34,18 @@ public class RoomViewer extends JFrame {
             }
         });
 
-        for (Room room : Room.getRoomList())
-            comboBox1.addItem(room);
+        for (Module m : privateModules)
+            comboBox1.addItem(m);
+
         okButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                rootwindow.setToRoomAgenda((Room) comboBox1.getSelectedItem());
+                rootwindow.setToModuleAgenda((Module) comboBox1.getSelectedItem());
                 thisframe.dispatchEvent(new WindowEvent(thisframe, WindowEvent.WINDOW_CLOSING));
             }
         });
+
         this.pack();
     }
 }

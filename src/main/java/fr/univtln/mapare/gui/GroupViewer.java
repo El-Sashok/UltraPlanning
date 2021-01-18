@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.util.List;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
@@ -34,8 +33,7 @@ public class GroupViewer extends JFrame {
             }
         });
 
-        List<Group> groupList = Group.getGroupList();
-        for (Group group : groupList)
+        for (Group group : Group.getGroupList())
             comboBox1.addItem(group);
 
         okButton.addMouseListener(new MouseAdapter() {
@@ -48,10 +46,5 @@ public class GroupViewer extends JFrame {
         });
 
         this.pack();
-    }
-
-    public static void main(String[] args) {
-        GroupViewer gv = new GroupViewer(null);
-        gv.setVisible(true);
     }
 }

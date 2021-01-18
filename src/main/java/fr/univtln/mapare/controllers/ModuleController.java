@@ -1,12 +1,16 @@
 package fr.univtln.mapare.controllers;
 
 import fr.univtln.mapare.daos.ModuleDAO;
+import fr.univtln.mapare.entities.Lesson;
 import fr.univtln.mapare.entities.Module;
+import fr.univtln.mapare.entities.Reservation;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
 
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ModuleController {
 
@@ -82,5 +86,15 @@ public abstract class ModuleController {
         try (ModuleDAO moduleDAO = new ModuleDAO()) {
             moduleDAO.update(module);
         }
+    }
+
+    public static List<Module> getPersonalModules() {
+        List<Module> returnList = new ArrayList<>();
+        for (Reservation r : ReservationController.findPersonalReservations())
+            if (r instanceof Lesson)
+                for (Module m : ((Lesson)r).getModules())
+                    if (!returnList.contains(m))
+                        returnList.add(m);
+        return returnList;
     }
 }

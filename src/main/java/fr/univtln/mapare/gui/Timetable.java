@@ -2,8 +2,10 @@ package fr.univtln.mapare.gui;
 
 import fr.univtln.mapare.controllers.ControllerTools;
 import fr.univtln.mapare.controllers.LessonController;
+import fr.univtln.mapare.controllers.ModuleController;
 import fr.univtln.mapare.controllers.ReservationController;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.gui.addpopups.*;
 
 import javax.swing.*;
@@ -531,14 +533,16 @@ public class Timetable extends JFrame {
 
     Session.Status SUStatus;
 
-     private List<Reservation> privatereservations = null;
+    private List<Reservation> privatereservations = null;
+    private List<Module> privatemodules = null;
 
     private Group currgroup = null;
     private Room curroom = null;
-
+    private Module currmodule = null;
     void setToGroupAgenda(Group group) {
         currgroup = group;
         curroom = null;
+        currmodule = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
         for (Lesson l: LessonController.findByGroup(group)) {
@@ -552,6 +556,7 @@ public class Timetable extends JFrame {
     void setToRoomAgenda(Room room) {
         curroom = room;
         currgroup = null;
+        currmodule = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
         for (Reservation r: ReservationController.findByRoom(room)) {
@@ -562,13 +567,31 @@ public class Timetable extends JFrame {
         buttonFunc(lastButton);
     }
 
+    public void setToModuleAgenda(Module module) {
+        curroom = null;
+        currgroup = null;
+        currmodule = module;
+        for (int i = 0; i < 53; i++)
+            boutonChaine[i].clear();
+        for (Lesson l : LessonController.findPersonalLessonsByModule(privatereservations, module)) {
+            LocalDateTime date = l.getStartDate();
+            calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
+            boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(l);
+        }
+
+        buttonFunc(lastButton);
+    }
+
     void setToPersonalAgenda() {
         currgroup = null;
         curroom = null;
+        currmodule = null;
         for (int i = 0; i < 53; i++)
             boutonChaine[i].clear();
-        if (privatereservations == null && (SUStatus == Session.Status.TEACHER || SUStatus == Session.Status.STUDENT))
+        if (privatereservations == null) {
             privatereservations = ReservationController.findPersonalReservations();
+            privatemodules = ModuleController.getPersonalModules();
+        }
         for (Reservation r : privatereservations) {
             LocalDateTime date = r.getStartDate();
             calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
@@ -760,6 +783,8 @@ public class Timetable extends JFrame {
         JMenu addingMenu = new JMenu("Ajout");
 
         if (SUStatus == Session.Status.STUDENT || SUStatus == Session.Status.TEACHER) {
+            setToPersonalAgenda();
+
             JMenuItem persView = new JMenuItem("Emploi du Temps personnel");
             edtMenu.add(persView);
             persView.addMouseListener(new MouseAdapter() {
@@ -770,9 +795,16 @@ public class Timetable extends JFrame {
                 }
             });
 
-            setToPersonalAgenda();
+            JMenuItem courseView = new JMenuItem("Emploi du Temps par module");
+            edtMenu.add(courseView);
+            courseView.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    new ModuleViewer(thisframe, privatemodules).setVisible(true);
+                }
+            });
         }
-
 
         JMenuItem roomView = new JMenuItem("Emploi du Temps par salle");
         edtMenu.add(roomView);
@@ -1026,7 +1058,9 @@ public class Timetable extends JFrame {
             setToGroupAgenda(currgroup);
         else if (curroom != null)
             setToRoomAgenda(curroom);
-        else
+        else if (currmodule != null)
+            setToModuleAgenda(currmodule);
+        else if (SUStatus == Session.Status.TEACHER || SUStatus == Session.Status.STUDENT)
             setToPersonalAgenda();
     }
 
@@ -1039,4 +1073,6 @@ public class Timetable extends JFrame {
     public void reloadPersonalReservations() {
         privatereservations = ReservationController.findPersonalReservations();
     }
+
+
 }
