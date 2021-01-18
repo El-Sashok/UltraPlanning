@@ -295,6 +295,10 @@ public abstract class LessonController {
         }
     }
 
+    public static List<Lesson> findPersonalLessonsByModule(Module module) {
+        return findPersonalLessonsByModule(ReservationController.findPersonalReservations(), module);
+    }
+
     public static List<Lesson> findPersonalLessonsByModule(List<Reservation> privatereservations, Module module) {
         List<Lesson> returnList = new ArrayList<>();
         for (Reservation r : privatereservations)

@@ -521,6 +521,8 @@ public class Timetable extends JFrame {
     Color CTColor = new Color(248, 158, 163);
     Color[] colorTypeEnum = {TDColor, CMColor, TPColor, CCColor, CTColor, Color.white};
 
+    final Color defaultButtonColor = new JButton().getBackground();
+
     Color defaultColor = new Color(238, 238, 238);
 
     private final Timetable thisframe = this;
@@ -543,8 +545,10 @@ public class Timetable extends JFrame {
         currgroup = group;
         curroom = null;
         currmodule = null;
-        for (int i = 0; i < 53; i++)
+        for (int i = 0; i < 53; i++) {
             boutonChaine[i].clear();
+            boutons[i].setBackground(defaultButtonColor);
+        }
         for (Lesson l: LessonController.findByGroup(group)) {
             LocalDateTime date = l.getStartDate();
             calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
@@ -557,8 +561,10 @@ public class Timetable extends JFrame {
         curroom = room;
         currgroup = null;
         currmodule = null;
-        for (int i = 0; i < 53; i++)
+        for (int i = 0; i < 53; i++) {
             boutonChaine[i].clear();
+            boutons[i].setBackground(defaultButtonColor);
+        }
         for (Reservation r: ReservationController.findByRoom(room)) {
             LocalDateTime date = r.getStartDate();
             calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
@@ -571,12 +577,16 @@ public class Timetable extends JFrame {
         curroom = null;
         currgroup = null;
         currmodule = module;
-        for (int i = 0; i < 53; i++)
+        for (int i = 0; i < 53; i++) {
             boutonChaine[i].clear();
+            boutons[i].setBackground(defaultButtonColor);
+        }
         for (Lesson l : LessonController.findPersonalLessonsByModule(privatereservations, module)) {
             LocalDateTime date = l.getStartDate();
             calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-            boutonChaine[calendar.get(Calendar.WEEK_OF_YEAR) - 1].add(l);
+            int currbutton = calendar.get(Calendar.WEEK_OF_YEAR) - 1;
+            boutonChaine[currbutton].add(l);
+            boutons[currbutton].setBackground(Color.ORANGE);
         }
 
         buttonFunc(lastButton);
@@ -586,8 +596,10 @@ public class Timetable extends JFrame {
         currgroup = null;
         curroom = null;
         currmodule = null;
-        for (int i = 0; i < 53; i++)
+        for (int i = 0; i < 53; i++) {
             boutonChaine[i].clear();
+            boutons[i].setBackground(defaultButtonColor);
+        }
         if (privatereservations == null) {
             privatereservations = ReservationController.findPersonalReservations();
             privatemodules = ModuleController.getPersonalModules();
