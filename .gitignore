@@ -5,6 +5,7 @@ target/
 Thumbs.db
 database.trace.db
 *:Zone.Identifier
+loginrm.txt
 
 # built application files
 *.apk
