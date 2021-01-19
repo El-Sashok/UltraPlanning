@@ -54,6 +54,11 @@
       <artifactId>forms_rt</artifactId>
       <version>LATEST</version>
     </dependency>
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>asm-all</artifactId>
+      <version>LATEST</version>
+    </dependency>
   </dependencies>
 
   <build>
