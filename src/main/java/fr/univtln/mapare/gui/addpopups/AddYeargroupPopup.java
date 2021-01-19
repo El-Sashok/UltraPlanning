@@ -1,7 +1,7 @@
 package fr.univtln.mapare.gui.addpopups;
 
 import fr.univtln.mapare.controllers.YeargroupController;
-import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
+import fr.univtln.mapare.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

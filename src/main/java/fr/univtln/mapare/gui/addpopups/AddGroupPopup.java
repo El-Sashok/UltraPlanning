@@ -4,7 +4,7 @@ import fr.univtln.mapare.controllers.GroupController;
 import fr.univtln.mapare.entities.Yeargroup;
 import fr.univtln.mapare.exceptions.updateexceptions.EmptyAttributeException;
 import fr.univtln.mapare.exceptions.updateexceptions.NotChangedException;
-import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
+import fr.univtln.mapare.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

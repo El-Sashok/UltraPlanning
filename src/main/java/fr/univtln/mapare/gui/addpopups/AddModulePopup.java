@@ -1,7 +1,7 @@
 package fr.univtln.mapare.gui.addpopups;
 
 import fr.univtln.mapare.controllers.ModuleController;
-import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
+import fr.univtln.mapare.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -64,10 +64,5 @@ public class AddModulePopup extends JFrame {
         });
 
         this.pack();
-    }
-
-    public static void main(String[] args) {
-        AddModulePopup amp = new AddModulePopup();
-        amp.setVisible(true);
     }
 }

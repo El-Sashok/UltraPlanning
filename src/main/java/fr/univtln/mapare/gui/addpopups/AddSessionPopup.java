@@ -3,7 +3,7 @@ package fr.univtln.mapare.gui.addpopups;
 import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.Session;
 import fr.univtln.mapare.exceptions.UserAlreadyCreatedException;
-import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
+import fr.univtln.mapare.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.time.LocalTime;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 

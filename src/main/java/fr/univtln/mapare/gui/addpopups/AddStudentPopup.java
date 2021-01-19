@@ -1,7 +1,7 @@
 package fr.univtln.mapare.gui.addpopups;
 
 import fr.univtln.mapare.controllers.StudentController;
-import fr.univtln.mapare.gui.exceptions.EmptyFieldException;
+import fr.univtln.mapare.exceptions.EmptyFieldException;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -9,8 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 
 import static fr.univtln.mapare.gui.Timetable.resizeable;

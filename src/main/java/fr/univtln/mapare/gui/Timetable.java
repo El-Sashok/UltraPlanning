@@ -1076,15 +1076,7 @@ public class Timetable extends JFrame {
             setToPersonalAgenda();
     }
 
-    public static void main(String[] args) throws SQLException {
-        ControllerTools.loadDB();
-        Timetable m = new Timetable(Session.Status.MANAGER);
-        m.setVisible(true);
-    }
-
     public void reloadPersonalReservations() {
         privatereservations = ReservationController.findPersonalReservations();
     }
-
-
 }
