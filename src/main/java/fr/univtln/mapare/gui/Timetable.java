@@ -984,6 +984,16 @@ public class Timetable extends JFrame {
                 }
             });
 
+            JMenuItem addAELabel = new JMenuItem("Ajouter un Concours");
+            addingMenu.add(addAELabel);
+            addAELabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    new AddAdmissionExamLabel().setVisible(true);
+                }
+            });
+
             JMenu modGroup = new JMenu("Modifier Groupe") {
                 @Override
                 public Dimension getMaximumSize() {
