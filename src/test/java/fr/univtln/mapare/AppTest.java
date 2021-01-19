@@ -1,14 +1,16 @@
 package fr.univtln.mapare;
 
+import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.exceptions.IncorrectPasswordException;
 import org.junit.Test;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -114,6 +116,16 @@ public class AppTest
             Reservation.State.NP,
             room,
             student2);
+
+    //creates a session
+    Session session = new Session((long) 55, "test", "passwordhashé", Session.Status.INVITE);
+
+    @Test
+    public void testSession() {
+        assertEquals(session.getId(), 55);
+        assertEquals(session.getLogin(), "test");
+        assertEquals(session.getHashedPassword(), "passwordhashé");
+    }
 
     @Test
     public void testCreationConstraint() {
@@ -304,5 +316,15 @@ public class AppTest
         roomTest.setId(room.getId());
         assertEquals(roomTest, room);
         assertNotEquals(new Group(room.getId(), "test"), room);
+    }
+
+    @Test
+    public void testHashPassword() throws NoSuchAlgorithmException {
+        Session.login(session.getId(), session.getLogin(), session.getHashedPassword(), session.getStatus());
+
+        Throwable exception1 = assertThrows(IncorrectPasswordException.class, () -> {
+            SessionController.checkPassword("motdepasseprotégé");
+        });
+        assertTrue(exception1.getMessage().contains("Incorrect password"));
     }
 }
