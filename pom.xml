@@ -44,6 +44,16 @@
       <artifactId>LGoodDatePicker</artifactId>
       <version>11.1.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>javac2</artifactId>
+      <version>LATEST</version>
+    </dependency>
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>forms_rt</artifactId>
+      <version>LATEST</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -86,6 +96,13 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>fr.univtln.mapare.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -115,6 +132,20 @@
                   <target>8</target>
               </configuration>
           </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>fr.univtln.mapare.App</mainClass>
+              </manifest>
+            </archive>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+          </configuration>
+        </plugin>
       </plugins>
   </build>
 </project>
