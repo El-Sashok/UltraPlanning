@@ -61,9 +61,10 @@ public class AppTest
             new Room(6, "U1", 111, 15, "Salle info", "3 pc en panne"),
             new AdmissionExamLabel(-1, "TOEIC"));
     @Test
-    public void testCreationCronstraint() {
-        assertEquals(c1.getStartHour(), LocalDateTime.now());
-        assertEquals(c1.getEndHour(), LocalDateTime.now());
+    public void testCreationConstraint() {
+        assertEquals(c1.getDayOfTheWeek().getDayOfWeek(), LocalDate.now().getDayOfWeek());
+        assertEquals(c1.getStartHour().withNano(0), LocalTime.now().withNano(0));
+        assertEquals(c1.getEndHour().withNano(0), LocalTime.now().withNano(0));
     }
     @Test
     public void testCreationTeacher() {
