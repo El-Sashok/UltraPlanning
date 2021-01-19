@@ -27,4 +27,12 @@ public class DBCPDataSource {
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
+
+//    public static void main(String[] args) throws SQLException {
+//        try (Connection con = getConnection();
+//             java.sql.Statement stmt = con.createStatement()) {
+//            stmt.executeQuery(String.format("SCRIPT TO '%s'", (System.getProperty("user.dir") + "/Scriptdepeuplement.sql")));
+//        }
+//    }
 }
+
