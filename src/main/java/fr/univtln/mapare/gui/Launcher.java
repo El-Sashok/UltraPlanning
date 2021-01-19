@@ -77,6 +77,7 @@ public class Launcher extends JFrame {
         connexionInviteLabel.setText("<html><body><u><font color=\"#0000EE\">" + connexionInviteLabel.getText());
 
         if (new File("loginrm.txt").exists()) {
+            rememberMe.setSelected(true);
             try (BufferedReader fr = new BufferedReader(new FileReader(new File("loginrm.txt")))) {
                 emailTextField.setText(fr.readLine());
             } catch (IOException ignored) {}
