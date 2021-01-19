@@ -57,6 +57,12 @@ class ExamBoard
 
 class AdmissionExam 
 
+class AdmissionExamLabel {
+    -String label
+}
+
+AdmissionExam "*" -- "1" AdmissionExamLabel
+
 Room "1" -- "*" Reservation
 
 Student "*" --* "*" Group
