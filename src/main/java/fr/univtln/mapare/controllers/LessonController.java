@@ -222,10 +222,10 @@ public abstract class LessonController {
 
         calendar.set(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
 
-
         List<Lesson> lessonsOfDay = Lesson.getLessonsForDay(calendar.get(Calendar.DAY_OF_YEAR));
 
-        // Teste si les groupes ont le même module pendent une semaine
+        // TODO: faire en sorte que ça marche
+        // Teste si les groupes ont le même module pendent une semaine (ne marche pas bien)
         Map<Integer, List<Lesson>> lessonsOfWeek = Lesson.getLessonsForWeek(calendar.get(Calendar.WEEK_OF_YEAR) - 1);
         boolean[][] breakFlagG = new boolean[groups.size()][modules.size()];
         int[] checkAlwaysAfterSix = new int[groups.size()];
@@ -250,7 +250,7 @@ public abstract class LessonController {
                 throw new BadPracticesException("AFTER_SIX", groups.get(g));
             }
             for (int m = 0; m < modules.size(); m++){
-                if (!breakFlagG[g][m]){
+                if (breakFlagG[g][m]){
                     if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY)
                         throw new BadPracticesException(groups.get(g), modules.get(m));
                 }

@@ -1,5 +1,8 @@
 package fr.univtln.mapare.entities;
 
+import fr.univtln.mapare.controllers.ControllerTools;
+
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -121,6 +124,4 @@ public class Lesson extends Reservation {
         }
         return reservationForWeek;
     }
-
-
 }

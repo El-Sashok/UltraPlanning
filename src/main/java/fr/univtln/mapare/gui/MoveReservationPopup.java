@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import static fr.univtln.mapare.gui.Timetable.hourList;
 import static fr.univtln.mapare.gui.Timetable.resizeable;
 
-public class MoveLessonPopup extends JFrame {
+public class MoveReservationPopup extends JFrame {
     private JPanel panel1;
     private JLabel heureDebutLabel;
     private JLabel heureFinLabel;
@@ -39,8 +39,8 @@ public class MoveLessonPopup extends JFrame {
 
     private JFrame thisframe = this;
 
-    public MoveLessonPopup(Timetable rootwindow, Reservation res, TimeslotPopup tsp) {
-        setTitle("Déplacement de cours");
+    public MoveReservationPopup(Timetable rootwindow, Reservation res, TimeslotPopup tsp) {
+        setTitle("Déplacement de réservation");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
