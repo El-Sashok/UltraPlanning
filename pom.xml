@@ -141,6 +141,8 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <configuration>
+            <finalName>UltraPlanning</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
             <archive>
               <manifest>
                 <mainClass>fr.univtln.mapare.App</mainClass>

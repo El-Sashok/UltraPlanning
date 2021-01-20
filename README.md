@@ -31,3 +31,12 @@ Placez-vous à la racine du projet et taper la commande suivante
 ```
 mvn clean compile assembly:single
 ```
+
+## Execution
+
+__Attention__ : Pensez à placer le fichier database.mv.db à coter du fichier UltraPlanning.jar avant l'exécution.
+
+Double-cliquez sur UltraPlanning.jar pour lancer le programme. Ou alors exécutez la commande suivante :
+```
+java -jar UltraPlanning.jar
+```
