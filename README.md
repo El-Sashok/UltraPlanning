@@ -6,23 +6,28 @@
 Les dépendances javac2, forms_rt et asm-all peuvent être manquantes sur maven.
 Voici les commandes à exécuter pour les installer :
 
-
-ATTENTION : Il se peut que la dernière ligne provoque une erreur car la dépendance asm-all est introuvable.
-Il suffit alors, dans le dossier /lib du répertoire d'Intellij, faire une copie du fichier asm-all-[VERSION].jar et de renommer cette copie en asm-all.jar
+__ATTENTION__ : Suivant les versions d’intellij, il se peut que la dernière ligne provoque une erreur car la dépendance asm-all-9.0 est introuvable.
+Il suffit alors de changer le nom du fichier en prennent en compte votre version d’asm-all
 
 ### Linux
 ```shell
-INTELLIJ_HOME=[RÉPERRTOIRE DE INTELLIJ]
+INTELLIJ_HOME=[RACINE DU RÉPERRTOIRE D’INTELLIJ]
 mvn install:install-file -Dfile="$INTELLIJ_HOME/lib/javac2.jar" -DgroupId=com.intellij -DartifactId=javac2 -Dversion=17.1.5 -Dpackaging=jar
 mvn install:install-file -Dfile="$INTELLIJ_HOME/lib/forms_rt.jar" -DgroupId=com.intellij -DartifactId=forms_rt -Dversion=17.1.5 -Dpackaging=jar
-mvn install:install-file -Dfile="$INTELLIJ_HOME/lib/asm-all.jar" -DgroupId=com.intellij -DartifactId=asm-all -Dversion=17.1.5 -Dpackaging=jar
+mvn install:install-file -Dfile="$INTELLIJ_HOME/lib/asm-all-9.0.jar" -DgroupId=com.intellij -DartifactId=asm-all -Dversion=17.1.5 -Dpackaging=jar
 ```
 
-### Windows
+### Windows (Powershell)
 ```powershell
-INTELLIJ_HOME=[RÉPERRTOIRE DE INTELLIJ]
-mvn install:install-file -Dfile="%INTELLIJ_HOME%\lib\javac2.jar" -DgroupId=com.intellij -DartifactId=javac2 -Dversion=17.1.5 -Dpackaging=jar
-mvn install:install-file -Dfile="%INTELLIJ_HOME%\lib\forms_rt.jar" -DgroupId=com.intellij -DartifactId=forms_rt -Dversion=17.1.5 -Dpackaging=jar
-mvn install:install-file -Dfile="%INTELLIJ_HOME%\lib\asm-all.jar" -DgroupId=com.intellij -DartifactId=asm-all -Dversion=17.1.5 -Dpackaging=jar
+$env:INTELLIJ_HOME=[RACINE DU RÉPERRTOIRE D’INTELLIJ]
+mvn install:install-file -Dfile="$env:INTELLIJ_HOME\lib\javac2.jar" -DgroupId="com.intellij" -DartifactId="asm-all" -Dversion="17.1.5" -Dpackaging="jar"
+mvn install:install-file -Dfile="$env:INTELLIJ_HOME\lib\forms_rt.jar" -DgroupId="com.intellij" -DartifactId="asm-all" -Dversion="17.1.5" -Dpackaging="jar"
+mvn install:install-file -Dfile="$env:INTELLIJ_HOME\lib\asm-all-9.0.jar" -DgroupId="com.intellij" -DartifactId="asm-all" -Dversion="17.1.5" -Dpackaging="jar"
 ```
 
+### Compilation du projet
+
+Placez-vous à la racine du projet et taper la commande suivante
+```
+mvn clean compile assembly:single
+```
