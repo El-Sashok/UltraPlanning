@@ -2,6 +2,7 @@ package fr.univtln.mapare;
 
 import fr.univtln.mapare.controllers.SessionController;
 import fr.univtln.mapare.entities.*;
+import fr.univtln.mapare.entities.Module;
 import fr.univtln.mapare.exceptions.IncorrectPasswordException;
 import org.junit.Test;
 
