@@ -39,7 +39,7 @@ public class AddConstraintPopup extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
-        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
+        setIconImage(getToolkit().getImage(getClass().getResource("/icon.png")));
 
         for (String s : Constraint.JOURSDELASEMAINE)
             comboBox1.addItem(s);

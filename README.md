@@ -1,5 +1,25 @@
 # UltraPlanning
 
+## Execution
+
+Vous pouvez télécharger le fichier executable [ici](https://github.com/El-Sashok/UltraPlanning/releases/tag/1.0)
+
+__Attention__ : Pensez à placer le fichier database.mv.db à côté du fichier UltraPlanning.jar avant l'exécution.
+
+Double-cliquez sur UltraPlanning.jar pour lancer le programme. Ou alors exécutez la commande suivante :
+```
+java -jar UltraPlanning.jar
+```
+
+## Démo
+
+La database fournie pour la démo contient déjà 4 comptes utilisateurs et des cours remplis.
+
+Les comptes sont student (mot de passe: passe), teacher (mot de passe: test), manager (mot de passe: test) et admin (mot de passe admin)
+
+Pour accéder à la base de donnée de manière tierce, le nom d'utilsateur est root et le mot de passe toor.
+
+
 ## Compilation
 (Toutes les informations qui suivent proviennent de ce [lien](https://stackoverflow.com/questions/32747917/intellij-gui-designer-maven-executable-jar-export))
 
@@ -31,20 +51,3 @@ Placez-vous à la racine du projet et tapez la commande suivante
 ```
 mvn clean compile assembly:single
 ```
-
-## Execution
-
-__Attention__ : Pensez à placer le fichier database.mv.db à côté du fichier UltraPlanning.jar avant l'exécution.
-
-Double-cliquez sur UltraPlanning.jar pour lancer le programme. Ou alors exécutez la commande suivante :
-```
-java -jar UltraPlanning.jar
-```
-
-## Démo
-
-La database fournie pour la démo contient déjà 4 comptes utilisateurs et des cours remplis.
-
-Les comptes sont student (mot de passe: passe), teacher (mot de passe: test), manager (mot de passe: test) et admin (mot de passe admin)
-
-Pour accéder à la base de donnée de manière tierce, le nom d'utilsateur est root et le mot de passe toor.

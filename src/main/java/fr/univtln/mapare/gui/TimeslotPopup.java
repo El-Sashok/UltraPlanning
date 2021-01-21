@@ -42,7 +42,7 @@ public class TimeslotPopup extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
         setLocationRelativeTo(null);
-        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
+        setIconImage(getToolkit().getImage(getClass().getResource("/icon.png")));
 
         heureDebLabel.setText(res.getStartDate().getHour() + "h" + (res.getStartDate().getMinute() == 0 ? "00" : 30));
         heureFinLabel.setText(res.getEndDate().getHour() + "h" + (res.getEndDate().getMinute() == 0 ? "00" : 30));
