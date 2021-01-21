@@ -77,7 +77,7 @@ public class Launcher extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(rootPanel);
         setLocationRelativeTo(null);
-        setIconImage(((new ImageIcon(System.getProperty("user.dir") + "/icon.png")).getImage()));
+        setIconImage(getToolkit().getImage(getClass().getResource("/icon.png")));
 
         connexionInviteLabel.setText("<html><body><u><font color=\"#0000EE\">" + connexionInviteLabel.getText());
 
