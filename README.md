@@ -34,6 +34,8 @@ mvn clean compile assembly:single
 
 ## Execution
 
+Vous pouvez télécharger les fichiers binaires [ici](https://github.com/El-Sashok/UltraPlanning/releases/tag/1.0)
+
 __Attention__ : Pensez à placer le fichier database.mv.db à côté du fichier UltraPlanning.jar avant l'exécution.
 
 Double-cliquez sur UltraPlanning.jar pour lancer le programme. Ou alors exécutez la commande suivante :
