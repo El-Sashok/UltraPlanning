@@ -1,13 +1,13 @@
 # UltraPlanning
 
 ## Compilation
-(Toutes les informations qui suivent provienne de ce [lien](https://stackoverflow.com/questions/32747917/intellij-gui-designer-maven-executable-jar-export))
+(Toutes les informations qui suivent proviennent de ce [lien](https://stackoverflow.com/questions/32747917/intellij-gui-designer-maven-executable-jar-export))
 
 Les dépendances javac2, forms_rt et asm-all peuvent être manquantes sur maven.
 Voici les commandes à exécuter pour les installer :
 
 __ATTENTION__ : Suivant les versions d’intellij, il se peut que la dernière ligne provoque une erreur car la dépendance asm-all-9.0 est introuvable.
-Il suffit alors de changer le nom du fichier en prennent en compte votre version d’asm-all
+Il suffit alors de changer le nom du fichier en prenant en compte votre version d’asm-all
 
 ### Linux
 ```shell
@@ -27,16 +27,24 @@ mvn install:install-file -Dfile="$env:INTELLIJ_HOME\lib\asm-all-9.0.jar" -Dgroup
 
 ### Compilation du projet
 
-Placez-vous à la racine du projet et taper la commande suivante
+Placez-vous à la racine du projet et tapez la commande suivante
 ```
 mvn clean compile assembly:single
 ```
 
 ## Execution
 
-__Attention__ : Pensez à placer le fichier database.mv.db à coter du fichier UltraPlanning.jar avant l'exécution.
+__Attention__ : Pensez à placer le fichier database.mv.db à côté du fichier UltraPlanning.jar avant l'exécution.
 
 Double-cliquez sur UltraPlanning.jar pour lancer le programme. Ou alors exécutez la commande suivante :
 ```
 java -jar UltraPlanning.jar
 ```
+
+## Démo
+
+La database fournie pour la démo contient déjà 4 comptes utilisateurs et des cours remplis.
+
+Les comptes sont student (mot de passe: passe), teacher (mot de passe: test), manager (mot de passe: test) et admin (mot de passe admin)
+
+Pour accéder à la base de donnée de manière tierce, le nom d'utilsateur est root et le mot de passe toor.
