@@ -892,7 +892,7 @@ public class Timetable extends JFrame {
         }
 
         if (SUStatus == Session.Status.MANAGER || SUStatus == Session.Status.TEACHER) {
-            JMenu addReservation = new JMenu("Ajouter Reservation") {
+            JMenu addReservation = new JMenu("Ajouter Réservation") {
                 @Override
                 public Dimension getMaximumSize() {
                     Dimension dim = super.getMaximumSize();

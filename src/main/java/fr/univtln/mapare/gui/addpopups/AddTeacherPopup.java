@@ -33,7 +33,7 @@ public class AddTeacherPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddTeacherPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter un nouvel enseignant");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

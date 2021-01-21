@@ -30,7 +30,7 @@ public class AddStudentPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddStudentPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter un nouvel étudiant");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

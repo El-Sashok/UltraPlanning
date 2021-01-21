@@ -23,7 +23,7 @@ public class AddYeargroupPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddYeargroupPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter une nouvelle promotion");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

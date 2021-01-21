@@ -148,7 +148,7 @@ public class TimeslotPopup extends JFrame {
             });
         } else {
             annulerCoursButton.setVisible(false);
-            deplacerCoursButton.setText("Demander deplacement");
+            deplacerCoursButton.setText("Demander déplacement");
 
             deplacerCoursButton.addMouseListener(new MouseAdapter() {
                 @Override
