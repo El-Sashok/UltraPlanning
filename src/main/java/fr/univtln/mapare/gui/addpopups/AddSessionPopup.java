@@ -28,7 +28,7 @@ public class AddSessionPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddSessionPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter un nouvel utilisateur");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

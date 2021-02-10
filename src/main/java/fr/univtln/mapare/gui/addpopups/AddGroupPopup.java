@@ -27,7 +27,7 @@ public class AddGroupPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddGroupPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter un nouveau groupe");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);

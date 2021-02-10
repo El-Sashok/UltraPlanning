@@ -103,7 +103,7 @@ public class Lesson extends Reservation {
                 Calendar calendar = Calendar.getInstance(Locale.FRANCE);
                 calendar.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
                 if (weekOfYear == calendar.get(Calendar.WEEK_OF_YEAR)){
-                    reservationsForWeek.get(calendar.get(Calendar.DAY_OF_WEEK)-1).add((Lesson) r);
+                    reservationsForWeek.get(calendar.get(Calendar.DAY_OF_WEEK) - 2).add((Lesson) r);
                 }
             }
         }

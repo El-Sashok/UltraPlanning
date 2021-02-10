@@ -96,9 +96,14 @@ public class TimeslotPopup extends JFrame {
         roomLabel.setText(roomName);
         roomLabel.setToolTipText(res.getRoom().getInfo());
 
-        if (res.getState() == Reservation.State.CANCELLED) {
+        if (res.getState() == Reservation.State.CANCELLED || res.getState() == Reservation.State.POSTPONED) {
             deplacerCoursButton.setVisible(false);
-            annulerCoursButton.setText("Annuler annulation");
+
+            if (res.getState() == Reservation.State.CANCELLED) {
+                annulerCoursButton.setText("Annuler annulation");
+            } else {
+                annulerCoursButton.setVisible(false);
+            }
         }
 
         if (rootwindow.SUStatus == Session.Status.MANAGER) {
@@ -148,7 +153,7 @@ public class TimeslotPopup extends JFrame {
             });
         } else {
             annulerCoursButton.setVisible(false);
-            deplacerCoursButton.setText("Demander deplacement");
+            deplacerCoursButton.setText("Demander déplacement");
 
             deplacerCoursButton.addMouseListener(new MouseAdapter() {
                 @Override

@@ -82,7 +82,7 @@ public class RemoveConstraintPopup extends JFrame {
      */
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(10, 10, 10, 10), -1, -1));
         annulerButton = new JButton();
         annulerButton.setText("Annuler");
         panel1.add(annulerButton, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -101,4 +101,5 @@ public class RemoveConstraintPopup extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
 }

@@ -27,7 +27,7 @@ public class AddRoomPopup extends JFrame {
     private JFrame thisframe = this;
 
     public AddRoomPopup() {
-        setTitle("Ajouter un nouveau module");
+        setTitle("Ajouter une nouvelle salle");
         setResizable(resizeable);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(panel1);
